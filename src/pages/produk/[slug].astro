@@ -1,0 +1,277 @@
+---
+import Base from '../../layouts/Base.astro';
+import { Image, getImage } from 'astro:assets';
+import { img } from '../../lib/images';
+import { productSlug, productUrl, momentInfo } from '../../lib/product';
+import catalog from '../../data/catalog.json';
+import site from '../../data/site.json';
+import { rupiah } from '../../scripts/cart';
+import Icon from '../../components/Icon.astro';
+
+export function getStaticPaths() {
+  return catalog.support.map((s) => ({ params: { slug: productSlug(s.name) }, props: { sku: s.sku } }));
+}
+const { sku } = Astro.props as { sku: string };
+const p: any = catalog.support.find((s) => s.sku === sku)!;
+const m = momentInfo[p.moment];
+const thumb = (await getImage({ src: img(p.photo), width: 160, height: 160, fit: 'cover', format: 'webp' })).src;
+const full = (await getImage({ src: img(p.photo), width: 1254, format: 'webp' })).src;
+
+// choices, in the order a shopper reads them
+const opts: { id: string; label: string; price: number; qty: number }[] = [];
+if (p.sizes) p.sizes.forEach((z: any) => opts.push({ id: z.label, label: z.label, price: z.price, qty: 1 }));
+if (p.pack) {
+  opts.push({ id: 'single', label: '1 botol', price: p.price, qty: 1 });
+  opts.push({ id: 'pack', label: `${p.pack.qty} botol`, price: p.pack.price, qty: p.pack.qty });
+}
+const saving = p.pack ? p.price * p.pack.qty - p.pack.price : 0;
+// the key line mixes facts ("0 g gula · 22 kkal") and taste notes ("Fizzy · sedikit asam")
+const label = (x: string) => /gula/i.test(x) ? 'Gula' : /kkal|kalori/i.test(x) ? 'Energi' : /protein/i.test(x) ? 'Protein' : /serat/i.test(x) ? 'Serat' : 'Rasa';
+const keyFacts: { k: string; v: string }[] = [];
+for (const x of String(p.key).split('·').map((x: string) => x.trim()).filter(Boolean)) {
+  const k = label(x); const v = x.replace(/\s*(gula|protein|serat)$/i, ''); const hit = keyFacts.find((f) => f.k === k);
+  hit ? (hit.v += `, ${v}`) : keyFacts.push({ k, v });
+}
+
+const sameShelf = catalog.support.filter((s) => s.moment === p.moment && s.sku !== p.sku);
+const others = catalog.bestSellers.skus.map((k) => catalog.support.find((s) => s.sku === k)!).filter((s) => s && s.sku !== p.sku && s.moment !== p.moment);
+const related = [...sameShelf, ...others].slice(0, 4);
+const ask = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(`Halo Reset Detox, saya mau tanya soal ${p.name}.`)}`;
+const line = { sku: p.sku, name: p.name, size: p.size, price: p.price, sizes: !!p.sizes, img: thumb };
+---
+<Base title={`${p.name} ${p.size} · Reset Detox`} description={`${p.promise} ${p.size}, ${p.key}. ${p.price ? rupiah(p.price) : ''}`}>
+  <section class="pdp" data-field="stone" aria-labelledby="p-title">
+    <nav class="crumbs" aria-label="Lokasi">
+      <a href="/shop">Shop</a><span aria-hidden="true">/</span><a href={`/shop#${p.moment.replace(' ', '-')}`}>{m.label}</a><span aria-hidden="true">/</span><span aria-current="page">{p.name}</span>
+    </nav>
+
+    <div class="pdp-grid">
+      <figure class="photo" data-rise data-zoom data-field={m.field}>
+        <a href={full} target="_blank" rel="noopener" aria-label={`Buka foto ${p.name} ukuran penuh`}>
+          <Image src={img(p.photo)} alt={`${p.name}, botol ${p.size}`} widths={[600, 900, 1254]} sizes="(max-width: 860px) 100vw, 52vw" loading="eager" fetchpriority="high" />
+        </a>
+      </figure>
+
+      <div class="buy" data-buybox data-line={JSON.stringify(line)}>
+        <h1 id="p-title" class:list={[{ long: p.name.length > 18 }]} data-rise>{p.name}</h1>
+        <p class="promise" data-rise style="--i:1">{p.promise}</p>
+
+        <div class="price-row" data-rise style="--i:2">
+          <p class="num price" data-price>{p.price ? rupiah(opts[0]?.price ?? p.price) : 'Harga segera'}</p>
+          {saving > 0 && <p class="small save" data-save hidden>Hemat {rupiah(saving)} dibanding beli satuan</p>}
+        </div>
+
+        <dl class="quick">
+          {keyFacts.map((f, i) => <div data-rise style={`--i:${i + 2}`}><dt>{f.k}</dt><dd class:list={[{ big: /^\d/.test(f.v) }, 'num']}>{f.v}</dd></div>)}
+          <div data-rise style="--i:4"><dt>Isi</dt><dd class="big num">{p.size}</dd></div>
+          {keyFacts.length < 2 && <div><dt>Waktu</dt><dd>{m.label}</dd></div>}
+        </dl>
+
+        {p.price ? (
+          <>
+            {opts.length > 0 && (
+              <fieldset class="choice">
+                <legend>{p.sizes ? 'Ukuran' : 'Jumlah per pesanan'}</legend>
+                <div class="chips">
+                  {opts.map((o, i) => (
+                    <label class="chip"><input type="radio" name="opt" value={o.id} data-price={o.price} data-qty={o.qty} checked={i === 0} /><span>{o.label}<small class="num">{rupiah(o.price)}</small></span></label>
+                  ))}
+                </div>
+              </fieldset>
+            )}
+            <div class="qty-row">
+              <span>Kuantitas</span>
+              <div class="stepper" role="group" aria-label="Kuantitas">
+                <button type="button" data-step="-1" aria-label="Kurangi" disabled><Icon name="minus" /></button>
+                <output data-qty>1</output>
+                <button type="button" data-step="1" aria-label="Tambah"><Icon name="plus" /></button>
+              </div>
+            </div>
+            <div class="acts" data-rise style="--i:3">
+              <button class="btn ghost" type="button" data-add><Icon name="basket-plus" /> Masukkan keranjang</button>
+              <button class="btn" type="button" data-buy>Beli sekarang</button>
+            </div>
+          </>
+        ) : (
+          <a class="btn" href={ask} target="_blank" rel="noopener"><Icon name="chat" /> Tanya harga di WhatsApp</a>
+        )}
+
+        <ul class="assure" data-rise style="--i:3">
+          <li><Icon name="snow" /> Dikirim dingin dari dapur kami di Sunter</li>
+          <li><Icon name="truck" /> Jabodetabek, pesan sebelum {site.cutoff.hour}.00 untuk kirim {site.cutoff.daysBefore} hari kemudian</li>
+          <li><Icon name="chat" /> Pembayaran dan konfirmasi lewat WhatsApp</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="desc" data-field="paper" aria-labelledby="d-title">
+    <div class="desc-grid">
+      <div class="desc-main">
+        <h2 id="d-title" data-rise>Deskripsi produk</h2>
+        <p class="lead">{p.promise}</p>
+        <p>{p.role}</p>
+        <h3 data-rise>Kapan diminum</h3>
+        <p>{m.when}</p>
+        <h3 data-rise>Komposisi</h3>
+        <p>{p.ingredients}</p>
+        <h3 data-rise>Pengiriman</h3>
+        <p>Dikirim dingin dari dapur kami di Sunter, Jakarta Utara, ke seluruh Jabodetabek. Pesanan yang masuk sebelum pukul {site.cutoff.hour}.00 dikirim paling cepat {site.cutoff.daysBefore} hari kemudian. Pembayaran dan jadwal antar dikonfirmasi admin lewat WhatsApp.</p>
+      </div>
+      <dl class="spec">
+        <h2 class="spec-title" data-rise>Spesifikasi</h2>
+        <div><dt>Kategori</dt><dd>{m.label}</dd></div>
+        <div><dt>Ukuran</dt><dd>{p.sizes ? p.sizes.map((z: any) => z.label).join(' atau ') : p.size}</dd></div>
+        <div><dt>{keyFacts.map((f) => f.k).join(' dan ')}</dt><dd>{p.key}</dd></div>
+        <div><dt>Alergen</dt><dd>{p.allergens}</dd></div>
+        <div><dt>Cara simpan</dt><dd>{p.storage}</dd></div>
+        {p.pack && <div><dt>Paket</dt><dd>{p.pack.qty} botol {rupiah(p.pack.price)}</dd></div>}
+        <div><dt>Kode produk</dt><dd class="num">{p.sku}</dd></div>
+        <div><dt>Dikirim dari</dt><dd>Sunter, Jakarta Utara</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  {related.length > 0 && (
+    <section class="more" data-field="stone" aria-labelledby="m-title">
+      <div class="more-head" data-rise><h2 id="m-title">Cocok juga</h2><a class="link" href="/shop">Lihat semua produk</a></div>
+      <div class="more-grid">
+        {related.map((r, i) => (
+          <a class="mini" data-rise style={`--i:${i}`} href={productUrl(r.name)}>
+            <Image src={img(r.photo)} alt="" widths={[300, 500]} sizes="(max-width: 860px) 46vw, 22vw" loading="lazy" />
+            <span class="mini-name">{r.name}</span>
+            <span class="mini-meta">{r.size} · {r.key}</span>
+            <span class="num mini-price">{r.price ? rupiah(r.price) : 'Harga segera'}</span>
+          </a>
+        ))}
+      </div>
+    </section>
+  )}
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org', '@type': 'Product', name: p.name, sku: p.sku, description: `${p.promise} ${p.role}`, brand: { '@type': 'Brand', name: 'Reset Detox' },
+    ...(p.price ? { offers: { '@type': 'Offer', priceCurrency: 'IDR', price: p.price, availability: 'https://schema.org/InStock' } } : {}),
+  })} />
+</Base>
+
+<style>
+  .pdp { padding: 108px var(--m) clamp(56px, 7vw, 96px); background: var(--stone); }
+  .crumbs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; color: var(--ink-soft); }
+  .crumbs a { color: inherit; }
+  .crumbs [aria-current] { color: var(--ink); font-weight: 600; }
+  .pdp-grid { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: clamp(24px, 5vw, 72px); align-items: start; }
+
+  .photo { margin: 0; display: grid; gap: 10px; position: sticky; top: 96px; }
+  .photo a { display: block; overflow: hidden; background: #ecebe8; cursor: zoom-in; }
+  .photo img { width: 100%; aspect-ratio: 1; object-fit: contain; transition: transform 300ms var(--ease-out); transform-origin: var(--zx, 50%) var(--zy, 50%); }
+  @media (hover: hover) and (pointer: fine) { .photo.zooming img { transform: scale(2.1); transition-duration: 160ms; } }
+
+  .buy { display: grid; gap: 18px; align-content: start; }
+  .buy h1.long { font-size: clamp(2rem, 0.6rem + 3vw, 4rem); }
+  .buy h1 { font-size: clamp(2.25rem, 0.8rem + 4.4vw, 6rem); font-stretch: 112%; line-height: 0.95; }
+  .promise { font-size: 1.125rem; max-width: 44ch; }
+  .price-row { display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; padding: 16px 20px; background: var(--paper); }
+  .price { font-size: clamp(1.75rem, 1.4rem + 1vw, 2.25rem); font-weight: 800; }
+  .save { font-weight: 700; color: var(--ink); background: var(--broth); padding: 4px 8px; }
+  .quick { margin: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; }
+  .quick div { background: var(--paper); padding: 14px 16px; display: grid; gap: 4px; }
+  .quick dt { font-size: 0.9375rem; color: var(--ink-soft); font-weight: 600; }
+  .quick dd { margin: 0; font-weight: 700; font-size: 1.125rem; }
+  .quick dd.big { font-size: clamp(1.5rem, 1.1rem + 1vw, 2rem); font-weight: 800; font-stretch: 112%; line-height: 1.05; }
+  .quick dt { order: 2; }
+  .quick div { align-content: start; }
+  .choice { border: 0; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .choice legend { font-weight: 700; padding: 0; margin-bottom: 10px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { position: relative; }
+  .chip input { position: absolute; opacity: 0; }
+  .chip span { display: grid; gap: 2px; padding: 12px 18px; min-width: 120px; background: var(--paper); border: 2px solid transparent; font-weight: 700; cursor: pointer; transition: border-color 150ms ease; }
+  .chip small { font-weight: 500; color: var(--ink-soft); }
+  .chip input:checked + span { border-color: var(--ink); }
+  .chip input:focus-visible + span { outline: 2px solid var(--ink); outline-offset: 2px; }
+  .qty-row { display: flex; align-items: center; gap: 20px; }
+  .acts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .acts .btn { min-height: 56px; }
+  .assure { list-style: none; margin: 8px 0 0; padding: 18px 20px; background: color-mix(in srgb, var(--ink) 6%, transparent); display: grid; gap: 10px; }
+  .assure li { display: flex; gap: 10px; align-items: center; }
+
+  .desc { padding: clamp(64px, 8vw, 112px) var(--m); background: var(--paper); }
+  .desc-grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: clamp(32px, 6vw, 96px); align-items: start; }
+  .desc-main { display: grid; gap: 14px; max-width: 62ch; }
+  .desc-main h2, .spec-title { font-size: clamp(1.75rem, 1.2rem + 1.6vw, 2.5rem); margin-bottom: 8px; }
+  .desc-main h3 { font-size: 1.125rem; margin-top: 16px; }
+  .spec { margin: 0; display: grid; gap: 0; }
+  .spec div { display: grid; grid-template-columns: 140px 1fr; gap: 16px; padding: 14px 16px; }
+  .spec div:nth-of-type(odd) { background: var(--stone); }
+  .spec dt { color: var(--ink-soft); font-weight: 600; }
+  .spec dd { margin: 0; font-weight: 600; text-align: right; }
+
+  .more { padding: clamp(64px, 8vw, 112px) var(--m); background: var(--stone); }
+  .more-head { display: flex; justify-content: space-between; align-items: end; gap: 16px; margin-bottom: 32px; flex-wrap: wrap; }
+  .more-head h2 { font-size: clamp(2rem, 4vw, 3.5rem); font-stretch: 112%; }
+  .more-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+  .mini { display: grid; gap: 4px; background: var(--paper); padding-bottom: 16px; text-decoration: none; color: var(--ink); }
+  .mini img { width: 100%; aspect-ratio: 1; object-fit: cover; margin-bottom: 10px; transition: transform 400ms var(--ease-out); }
+  .mini:hover img { transform: scale(1.03); }
+  .mini { overflow: hidden; }
+  .mini > span { padding-inline: 14px; }
+  .mini-name { font-weight: 700; font-size: 1.0625rem; }
+  .mini-meta { color: var(--ink-soft); }
+  .mini-price { font-weight: 700; margin-top: 4px; }
+
+  @media (max-width: 860px) {
+    .pdp { padding-top: 84px; }
+    .pdp-grid, .desc-grid { grid-template-columns: 1fr; }
+    .photo { position: static; margin-inline: calc(var(--m) * -1); }
+    .photo img { aspect-ratio: auto; width: 100%; height: min(52svh, 80vw); }
+    .more-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .spec div { grid-template-columns: 120px 1fr; }
+  }
+  @media (max-width: 420px) { .acts { grid-template-columns: 1fr; } .quick { grid-template-columns: 1fr 1fr; } }
+</style>
+
+<script>
+  import { add, rupiah } from '../../scripts/cart';
+  // hover zoom: the label grows under the cursor so the small print is readable
+  const fig = document.querySelector<HTMLElement>('[data-zoom]');
+  const pic = fig?.querySelector('a');
+  if (fig && pic && matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    pic.addEventListener('mousemove', (e) => {
+      const r = pic.getBoundingClientRect();
+      fig.style.setProperty('--zx', `${((e.clientX - r.left) / r.width) * 100}%`);
+      fig.style.setProperty('--zy', `${((e.clientY - r.top) / r.height) * 100}%`);
+    });
+    pic.addEventListener('mouseenter', () => fig.classList.add('zooming'));
+    pic.addEventListener('mouseleave', () => fig.classList.remove('zooming'));
+    pic.addEventListener('click', (e) => e.preventDefault());
+  }
+
+  const box = document.querySelector<HTMLElement>('[data-buybox]')!;
+  const item = JSON.parse(box.dataset.line!);
+  let qty = 1;
+  const chosen = () => box.querySelector<HTMLInputElement>('input[name="opt"]:checked');
+  function paint() {
+    const c = chosen();
+    const unit = c ? Number(c.dataset.price) : item.price;
+    const out = box.querySelector('[data-qty]'); if (out) out.textContent = String(qty);
+    const minus = box.querySelector<HTMLButtonElement>('[data-step="-1"]'); if (minus) minus.disabled = qty <= 1;
+    const plus = box.querySelector<HTMLButtonElement>('[data-step="1"]'); if (plus) plus.disabled = qty >= 12;
+    if (item.price) box.querySelector('[data-price]')!.textContent = rupiah(unit * qty);
+    const save = box.querySelector<HTMLElement>('[data-save]'); if (save) save.hidden = c?.value !== 'pack';
+  }
+  box.addEventListener('change', paint);
+  box.addEventListener('click', (e) => {
+    const t = e.target as HTMLElement;
+    const s = t.closest<HTMLElement>('[data-step]');
+    if (s) { qty = Math.min(12, Math.max(1, qty + Number(s.dataset.step))); paint(); }
+    const go = !!t.closest('[data-buy]');
+    if (go || t.closest('[data-add]')) {
+      const c = chosen();
+      const isPack = c?.value === 'pack';
+      const meta = isPack ? `Pack ${c!.dataset.qty} botol` : item.sizes ? c!.value : undefined;
+      add({ id: `${item.sku}|${c?.value ?? ''}`, sku: item.sku, name: item.name + (!isPack && !item.sizes ? ` ${item.size}` : ''), meta, price: c ? Number(c.dataset.price) : item.price, qty, img: item.img, kind: 'support' }, undefined, { silent: go });
+      if (go) location.href = '/pesan';
+    }
+  });
+  paint();
+</script>

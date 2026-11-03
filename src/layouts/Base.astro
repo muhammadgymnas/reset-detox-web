@@ -1,0 +1,326 @@
+---
+import '../styles/global.css';
+import { getImage } from 'astro:assets';
+import logoDark from '../assets/brand/logo-reset-dot.png';
+import logoLight from '../assets/brand/logo-white.png';
+import site from '../data/site.json';
+import Icon from '../components/Icon.astro';
+import catalog from '../data/catalog.json';
+import { img } from '../lib/images';
+import { productUrl, momentInfo } from '../lib/product';
+
+interface Props { title: string; description: string; canonical?: string; }
+const { title, description, canonical } = Astro.props;
+const logoD = await getImage({ src: logoDark, width: 320, format: 'webp' });
+const logoL = await getImage({ src: logoLight, width: 320, format: 'webp' });
+const year = new Date().getFullYear();
+// everything the header search can find, with a small picture each
+const thumb = async (photo: string) => (await getImage({ src: img(photo), width: 112, height: 112, fit: 'cover', format: 'webp' })).src;
+const searchItems = [
+  ...(await Promise.all(catalog.programs.map(async (p) => ({ n: p.name, u: p.url, i: await thumb(p.photo), p: p.formulas[0].price, k: 'Program', t: `${p.lead} program reset detox ${p.days} hari` })))),
+  ...(await Promise.all(catalog.support.map(async (s) => ({ n: s.name, u: productUrl(s.name), i: await thumb(s.photo), p: s.price, k: momentInfo[s.moment]?.label ?? '', t: `${s.size} ${s.key} ${s.promise} ${s.ingredients} ${s.moment}` })))),
+  ...(await Promise.all(catalog.routines.map(async (r) => ({ n: r.name, u: '/shop#rutinitas', i: await thumb(r.photo), p: r.price, k: 'Rutinitas', t: `${r.contents} ${r.promise} intermittent fasting` })))),
+];
+const popular = catalog.bestSellers.skus.map((k) => catalog.support.find((s) => s.sku === k)?.name).filter(Boolean);
+---
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  {canonical && <link rel="canonical" href={canonical} />}
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#161514" />
+  <link rel="preload" href="/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <script is:inline>document.documentElement.classList.add('js');</script>
+  <slot name="head" />
+</head>
+<body>
+  <a class="visually-hidden" href="#main">Langsung ke isi</a>
+  <header class="site-header" data-ink="light" id="site-header">
+    <a class="logo" href="/" aria-label="Reset Detox, beranda">
+      <img class="on-light mono-black" src={logoL.src} width="140" height="24" alt="Reset Detox" />
+      <img class="on-dark" src={logoL.src} width="140" height="24" alt="Reset Detox" />
+    </a>
+    <nav aria-label="Utama">
+      {[['/program', 'Program'], ['/shop', 'Shop'], ['/cerita', 'Cerita'], ['/cara-kerja', 'Cara Kerja'], ['/kontak', 'Kontak']].map(([href, label]) => (
+        <a href={href} aria-current={Astro.url.pathname.startsWith(href) ? 'page' : undefined}>{label}</a>
+      ))}
+    </nav>
+    <div class="h-acts">
+      <button class="h-icon" type="button" data-open-search aria-label="Cari produk" aria-keyshortcuts="/"><Icon name="search" /></button>
+      <button class="h-icon cart-btn" type="button" data-open-cart aria-label="Buka keranjang">
+        <Icon name="basket" /><span class="count" data-cart-count data-zero>0</span>
+      </button>
+    </div>
+  </header>
+
+  <dialog class="search" id="search" aria-label="Cari produk">
+    <div class="search-box" role="search">
+      <Icon name="search" />
+      <input type="search" id="search-q" placeholder="Cari produk, rasa, atau bahan" autocomplete="off" spellcheck="false" role="combobox" aria-expanded="true" aria-controls="search-results" aria-autocomplete="list" aria-label="Cari produk" />
+      <button class="h-icon" type="button" data-close-search aria-label="Tutup pencarian"><Icon name="close" /></button>
+    </div>
+    <p class="search-hint" data-search-hint>Paling sering dicari</p>
+    <ul class="search-results" id="search-results" role="listbox" aria-label="Hasil pencarian"></ul>
+  </dialog>
+  <script type="application/json" id="search-data" set:html={JSON.stringify({ items: searchItems, popular })} />
+
+  <main id="main"><slot /></main>
+
+  <footer class="footer" data-field="ink">
+    <div class="f-top">
+      <div class="f-brand">
+        <p class="f-statement">Sehat, tetap enak. Dari dapur kami di Sunter, sejak 2018.</p>
+        <div class="f-contact">
+          <a class="btn light" href={`https://wa.me/${site.whatsapp}?text=${encodeURIComponent('Halo Reset Detox, saya mau tanya dulu.')}`} target="_blank" rel="noopener"><Icon name="chat" /> WhatsApp +62 811 8880 3155</a>
+          <p class="small">Admin membalas {site.serviceHours}, setiap hari.</p>
+        </div>
+      </div>
+      <nav class="f-cols" aria-label="Footer">
+        <div>
+          <p class="f-h">Shop</p>
+          <ul>
+            <li><a href="/reset-detox-5-hari">Reset 5 Hari</a></li>
+            <li><a href="/program">Semua program</a></li>
+            <li><a href="/shop">Semua produk</a></li>
+            <li><a href="/shop#best-seller">Best seller</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="f-h">Bantuan</p>
+          <ul>
+            <li><a href="/cara-kerja">Cara kerja</a></li>
+            <li><a href="/faq">FAQ</a></li>
+            <li><a href="/cek-kecocokan">Cek kecocokan</a></li>
+            <li><a href="/hari-ini">Hari Ini</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="f-h">Reset Detox</p>
+          <ul>
+            <li><a href="/cerita">Cerita</a></li>
+            <li><a href="/kontak">Kontak</a></li>
+            <li><a href="/kontak#bisnis">Kerja sama</a></li>
+            <li><a href="https://instagram.com/reset.detox" target="_blank" rel="noopener">Instagram</a></li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+    <div class="f-bottom">
+      <p>© {year} PT Reset Detox · Sunter Mas Timur Blok Z No. 5, Jakarta Utara · <a href="/privasi">Privasi</a></p>
+      <p>Reset Detox bukan pengobatan medis dan tidak dimaksudkan untuk mendiagnosis, mengobati, menyembuhkan, atau mencegah penyakit. Pengalaman tiap orang berbeda.</p>
+    </div>
+  </footer>
+
+  <div class="mbar" aria-label="Aksi cepat">
+    <a class="btn light" href="/reset-detox-5-hari">Mulai Reset 5 Hari</a>
+    <button class="btn menu" type="button" data-open-menu aria-label="Buka menu"><Icon name="menu" /></button>
+  </div>
+
+  <dialog class="menu-dialog" id="menu">
+    <button class="btn light close" type="button" data-close-menu>Tutup</button>
+    <nav aria-label="Menu">
+      <button class="btn light" type="button" data-open-search style="margin-bottom:16px"><Icon name="search" /> Cari produk</button>
+      <a href="/reset-detox-5-hari">Reset 5 Hari</a>
+      <a href="/program">Program</a>
+      <a href="/shop">Shop</a>
+      <a href="/cerita">Cerita</a>
+      <a href="/cara-kerja">Cara Kerja</a>
+      <a href="/cek-kecocokan">Cek kecocokan</a>
+      <a href="/kontak">Kontak & kerja sama</a>
+      <button class="btn light" type="button" data-open-cart style="margin-top:24px"><Icon name="basket" /> Keranjang · <span data-cart-count>0</span></button>
+    </nav>
+  </dialog>
+
+  <div class="toast" role="status" aria-live="polite" data-toast hidden></div>
+
+  <dialog class="drawer" id="cart" aria-labelledby="cart-title">
+    <header>
+      <h2 id="cart-title">Keranjang</h2>
+      <button class="icon-btn" type="button" data-close-cart aria-label="Tutup keranjang">
+        <Icon name="close" />
+      </button>
+    </header>
+    <div class="items" data-cart-items></div>
+    <footer data-cart-footer></footer>
+  </dialog>
+
+  <script>
+    import { load, setQty, count, subtotal, rupiah, hasProgram, longDate, captureRef } from '../scripts/cart';
+    import { icon } from '../scripts/icons';
+    captureRef();
+    const cartDlg = document.getElementById('cart') as HTMLDialogElement;
+    const menuDlg = document.getElementById('menu') as HTMLDialogElement;
+    const header = document.getElementById('site-header')!;
+
+    function render() {
+      const c = load();
+      const n = count(c);
+      document.querySelectorAll<HTMLElement>('[data-cart-count]').forEach((el) => {
+        const before = el.textContent;
+        el.textContent = String(n);
+        el.toggleAttribute('data-zero', n === 0);
+        if (before !== String(n) && el.classList.contains('count')) { el.classList.remove('bump'); void el.offsetWidth; el.classList.add('bump'); }
+      });
+      const items = cartDlg.querySelector('[data-cart-items]')!;
+      const foot = cartDlg.querySelector('[data-cart-footer]')!;
+      if (!n) {
+        items.innerHTML = `<div style="padding:40px 0;display:grid;gap:16px">${icon('basket', 'ico-xl')}<p class="lead">Keranjangmu masih kosong.</p><p>Kebanyakan orang mulai dari Reset 5 Hari.</p><a class="btn" href="/reset-detox-5-hari">Lihat Reset 5 Hari</a><a class="link" href="/shop">Atau lihat Shop</a></div>`;
+        foot.innerHTML = '';
+        return;
+      }
+      items.innerHTML = c.lines.map((l) => `
+        <div class="line-item">
+          ${l.img ? `<img src="${l.img}" alt="" width="64" height="64" />` : '<span></span>'}
+          <div>
+            <div style="font-weight:600">${l.name}</div>
+            ${l.meta ? `<div class="meta">${l.meta}</div>` : ''}
+            <div class="stepper" style="margin-top:10px" role="group" aria-label="Jumlah ${l.name}">
+              <button type="button" data-q="${l.id}" data-d="-1" aria-label="${l.qty === 1 ? 'Hapus' : 'Kurangi'}">${icon(l.qty === 1 ? 'trash' : 'minus')}</button>
+              <output>${l.qty}</output>
+              <button type="button" data-q="${l.id}" data-d="1" aria-label="Tambah" ${l.qty >= 12 ? 'disabled' : ''}>${icon('plus')}</button>
+            </div>
+          </div>
+          <div class="price">${rupiah(l.qty * l.price)}</div>
+        </div>`).join('');
+      foot.innerHTML = `
+        ${c.startDate ? `<div class="row small"><span>${hasProgram(c) ? 'Mulai program' : 'Tanggal kirim'}</span><strong>${longDate(c.startDate)}</strong></div>` : ''}
+        <div class="row"><span>Subtotal</span><strong class="num">${rupiah(subtotal(c))}</strong></div>
+        <div class="row small"><span>Ongkir</span><span>dikonfirmasi admin</span></div>
+        <a class="btn block" href="/pesan">Lanjut pesan ${icon('arrow')}</a>`;
+    }
+
+    cartDlg.addEventListener('click', (e) => {
+      const t = e.target as HTMLElement;
+      const b = t.closest<HTMLButtonElement>('[data-q]');
+      if (b) { const c = load(); const l = c.lines.find((x) => x.id === b.dataset.q); if (l) setQty(l.id, l.qty + Number(b.dataset.d)); return; }
+      if (t === cartDlg) cartDlg.close();
+    });
+    document.addEventListener('click', (e) => {
+      const t = e.target as HTMLElement;
+      if (t.closest('[data-open-cart]')) { if (menuDlg.open) menuDlg.close(); render(); cartDlg.showModal(); }
+      if (t.closest('[data-close-cart]')) cartDlg.close();
+      if (t.closest('[data-open-menu]')) menuDlg.showModal();
+      if (t.closest('[data-close-menu]')) menuDlg.close();
+    });
+    document.addEventListener('cart:change', render);
+    const toast = document.querySelector<HTMLElement>('[data-toast]')!;
+    const LIFE = 4500;
+    let tt = 0; let left = LIFE; let since = 0;
+    const hideToast = () => { clearTimeout(tt); toast.classList.remove('in'); toast.style.transform = ''; toast.style.opacity = ''; window.setTimeout(() => { if (!toast.classList.contains('in')) toast.hidden = true; }, 420); };
+    const runTimer = () => { since = Date.now(); clearTimeout(tt); tt = window.setTimeout(hideToast, left); };
+    document.addEventListener('cart:added', (e) => {
+      const d = (e as CustomEvent).detail as { name: string; img?: string; meta?: string; qty: number; price: number; count: number };
+      toast.innerHTML = `${d.img ? `<img src="${d.img}" alt="" width="88" height="88" />` : '<span></span>'}
+        <div><p class="t-ok">${icon('check')} Masuk keranjang</p><p class="t-name">${d.name}</p><p class="t-meta">${d.meta ? d.meta + ' · ' : ''}${d.qty} × ${rupiah(d.price)}</p></div>
+        <div class="t-acts"><button type="button" class="btn ghost" data-open-cart>${icon('basket')} Keranjang (${d.count})</button><a class="btn" href="/pesan">Pesan ${icon('arrow')}</a></div>
+        <button type="button" class="icon-btn t-x" data-toast-x aria-label="Tutup notifikasi">${icon('close')}</button>
+        <span class="t-bar" style="--t-life:${LIFE}ms"></span>`;
+      toast.hidden = false; toast.classList.remove('in'); void toast.offsetWidth; toast.classList.add('in');
+      left = LIFE; runTimer();
+    });
+    // hovering holds it; leaving lets it finish
+    toast.addEventListener('mouseenter', () => { clearTimeout(tt); left = Math.max(800, left - (Date.now() - since)); });
+    toast.addEventListener('mouseleave', () => { if (toast.classList.contains('in')) runTimer(); });
+    toast.addEventListener('click', (e) => { const t = e.target as HTMLElement; if (t.closest('[data-toast-x], [data-open-cart]')) hideToast(); });
+    // swipe it off to the right (or left)
+    let x0 = 0; let dx = 0; let dragging = false;
+    toast.addEventListener('pointerdown', (e) => { if ((e.target as HTMLElement).closest('button, a')) return; dragging = true; x0 = e.clientX; dx = 0; toast.classList.add('dragging'); toast.setPointerCapture(e.pointerId); clearTimeout(tt); });
+    toast.addEventListener('pointermove', (e) => { if (!dragging) return; dx = e.clientX - x0; toast.style.transform = `translateX(${dx}px)`; toast.style.opacity = String(Math.max(0, 1 - Math.abs(dx) / 260)); });
+    const endDrag = () => {
+      if (!dragging) return; dragging = false; toast.classList.remove('dragging');
+      if (Math.abs(dx) > 80) { toast.style.transform = `translateX(${dx > 0 ? 'calc(100% + 32px)' : 'calc(-100% - 32px)'})`; toast.style.opacity = '0'; toast.classList.remove('in'); window.setTimeout(() => { toast.hidden = true; toast.style.transform = ''; toast.style.opacity = ''; }, 420); }
+      else { toast.style.transform = ''; toast.style.opacity = ''; runTimer(); }
+    };
+    toast.addEventListener('pointerup', endDrag);
+    toast.addEventListener('pointercancel', endDrag);
+    window.addEventListener('storage', render);
+    render();
+
+    // product search: instant, on this device, over the whole catalogue
+    const searchDlg = document.getElementById('search') as HTMLDialogElement;
+    const q = document.getElementById('search-q') as HTMLInputElement;
+    const list = document.getElementById('search-results')!;
+    const hint = searchDlg.querySelector<HTMLElement>('[data-search-hint]')!;
+    type Hit = { n: string; u: string; i: string; p: number | null; k: string; t: string; fn: string; ft: string };
+    const sd = JSON.parse(document.getElementById('search-data')!.textContent!) as { items: Omit<Hit, 'fn' | 'ft'>[]; popular: string[] };
+    const fold = (x: string) => x.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    const index: Hit[] = sd.items.map((x) => ({ ...x, fn: fold(x.n), ft: fold(`${x.k} ${x.t}`) }));
+    let hits: Hit[] = []; let cur = 0;
+    function find(text: string): Hit[] {
+      const words = fold(text).split(/\s+/).filter(Boolean);
+      if (!words.length) return sd.popular.map((n) => index.find((x) => x.n === n)!).filter(Boolean);
+      const scored: { x: Hit; score: number }[] = [];
+      for (const x of index) {
+        let score = 0;
+        for (const w of words) {
+          if (x.fn.startsWith(w) || x.fn.includes(' ' + w)) score += 3;
+          else if (x.fn.includes(w)) score += 2;
+          else if (x.ft.includes(w)) score += 1;
+          else { score = -1; break; }
+        }
+        if (score > 0) scored.push({ x, score });
+      }
+      return scored.sort((a, b) => b.score - a.score || a.x.n.localeCompare(b.x.n)).slice(0, 8).map((r) => r.x);
+    }
+    function paintSearch() {
+      const text = q.value.trim();
+      hits = find(text); cur = 0;
+      hint.textContent = text ? (hits.length ? `${hits.length} hasil untuk "${text}"` : `Belum ada yang cocok dengan "${text}". Coba nama rasa, misalnya cokelat, atau bahan seperti jahe.`) : 'Paling sering dicari';
+      list.innerHTML = hits.map((x, i) => `<li role="option" id="sr-${i}" aria-selected="${i === 0}"><a href="${x.u}"><img src="${x.i}" alt="" width="56" height="56" /><span class="sr-n">${x.n}<small>${x.k}</small></span><span class="sr-p num">${x.p ? rupiah(x.p) : 'Segera'}</span></a></li>`).join('');
+      if (hits.length) q.setAttribute('aria-activedescendant', 'sr-0'); else q.removeAttribute('aria-activedescendant');
+    }
+    function moveTo(i: number) {
+      if (!hits.length) return;
+      cur = (i + hits.length) % hits.length;
+      list.querySelectorAll('[role="option"]').forEach((o, j) => o.setAttribute('aria-selected', String(j === cur)));
+      q.setAttribute('aria-activedescendant', `sr-${cur}`);
+      list.children[cur]?.scrollIntoView({ block: 'nearest' });
+    }
+    function openSearch() { if (menuDlg.open) menuDlg.close(); paintSearch(); searchDlg.showModal(); q.focus(); q.select(); }
+    q.addEventListener('input', paintSearch);
+    q.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowDown') { e.preventDefault(); moveTo(cur + 1); }
+      if (e.key === 'ArrowUp') { e.preventDefault(); moveTo(cur - 1); }
+      if (e.key === 'Enter' && hits[cur]) { e.preventDefault(); location.href = hits[cur].u; }
+    });
+    searchDlg.addEventListener('click', (e) => { const t = e.target as HTMLElement; if (t === searchDlg || t.closest('[data-close-search]')) searchDlg.close(); });
+    document.addEventListener('click', (e) => { if ((e.target as HTMLElement).closest('[data-open-search]')) openSearch(); });
+    document.addEventListener('keydown', (e) => {
+      const typing = (e.target as HTMLElement).closest('input, textarea, select, [contenteditable]');
+      if ((e.key === '/' && !typing) || ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k')) { e.preventDefault(); openSearch(); }
+    });
+
+    // header takes the ink of the chapter under it
+    const dark = new Set(['ink', 'gw', 'night']);
+    const chapters = () => Array.from(document.querySelectorAll<HTMLElement>('[data-field]'));
+    let raf = 0;
+    function ink() {
+      raf = 0;
+      const y = 32;
+      const under = chapters().find((el) => { const r = el.getBoundingClientRect(); return r.top <= y && r.bottom > y; });
+      header.dataset.ink = under && dark.has(under.dataset.field || '') ? 'light' : 'dark';
+      document.documentElement.style.setProperty('--header-ink', header.dataset.ink === 'light' ? '#e9e9e6' : '#161514');
+      document.documentElement.style.setProperty('--header-bg', under ? getComputedStyle(under).backgroundColor : 'transparent');
+    }
+    let lastY = scrollY;
+    addEventListener('scroll', () => {
+      const y = scrollY;
+      if (Math.abs(y - lastY) > 6) { document.documentElement.classList.toggle('scrolling-down', y > lastY && y > 120); lastY = y; }
+      document.documentElement.classList.toggle('show-mbar', y > 400);
+      if (!raf) raf = requestAnimationFrame(ink);
+    }, { passive: true });
+    ink();
+
+    // entrances
+    const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -8% 0px' });
+    document.querySelectorAll('[data-rise]').forEach((el) => io.observe(el));
+  </script>
+</body>
+</html>

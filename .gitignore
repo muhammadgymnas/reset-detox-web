@@ -1,0 +1,17 @@
+# dependencies and build output
+node_modules/
+dist/
+.astro/
+
+# local tooling: inspector screenshots, preview logs, the machine's Node 22 path
+.taste-skill/
+.preview.log
+.n22
+
+# editor and OS
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.env
+.env.*

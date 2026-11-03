@@ -1,0 +1,280 @@
+{
+  "whatsapp": "6281188803155",
+  "serviceHours": "08.00–20.00 WIB",
+  "cutoff": {
+    "daysBefore": 2,
+    "hour": 15,
+    "startWeekdays": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      0
+    ],
+    "blackout": [
+      "2026-12-25",
+      "2027-01-01"
+    ]
+  },
+  "zones": [
+    "Jakarta",
+    "Tangerang & Tangsel",
+    "Depok, Bekasi, Bogor",
+    "Di luar Jabodetabek"
+  ],
+  "sources": [
+    "Instagram",
+    "TikTok",
+    "Teman atau keluarga",
+    "Google",
+    "Marketplace",
+    "Komunitas atau event",
+    "Lainnya"
+  ],
+  "schedule": {
+    "note": "Jam contoh. Jadwal final tercetak di kartu panduan dalam box.",
+    "day": [
+      {
+        "time": "07.00",
+        "sku": "RD-SP-GW",
+        "name": "Golden Water Detox",
+        "field": "gw",
+        "line": "Hangat, sebelum makan apa pun.",
+        "facts": "0 g gula · 22 kkal"
+      },
+      {
+        "time": "09.30",
+        "sku": "RD-SP-GT",
+        "name": "Green Tonic",
+        "field": "tonic",
+        "line": "Segar di sela pagi.",
+        "facts": "0 g gula · 6 kkal"
+      },
+      {
+        "time": "12.00",
+        "sku": "BRM-DAY",
+        "name": "Body Reset Meal · Day",
+        "field": "day",
+        "line": "Makan siangmu. Kenyang sampai sore.",
+        "facts": "26 g protein · 375 kkal"
+      },
+      {
+        "time": "15.30",
+        "sku": "RD-SP-BB",
+        "name": "Chicken Bone Broth",
+        "field": "broth",
+        "line": "Gurih dan hangat, dengan sejumput sea salt.",
+        "facts": "11 g protein · 40 kkal"
+      },
+      {
+        "time": "18.30",
+        "sku": "BRM-NIGHT",
+        "name": "Body Reset Meal · Night",
+        "field": "night",
+        "line": "Makan malam. Habiskan sebelum jam delapan.",
+        "facts": "25 g protein · 325 kkal"
+      }
+    ]
+  },
+  "contraindications": [
+    {
+      "q": "Sedang hamil?",
+      "yes": "no"
+    },
+    {
+      "q": "Sedang menyusui?",
+      "yes": "consult",
+      "note": "Ada formula Breastfeeding Mom lewat konsultasi."
+    },
+    {
+      "q": "Usiamu di bawah 17 tahun?",
+      "yes": "no"
+    },
+    {
+      "q": "Sedang berobat rutin, termasuk insulin atau obat ginjal?",
+      "yes": "consult"
+    },
+    {
+      "q": "Pernah punya gangguan makan?",
+      "yes": "no"
+    },
+    {
+      "q": "Punya maag atau GERD?",
+      "yes": "consult",
+      "note": "Ada formula Gentle."
+    },
+    {
+      "q": "Alergi almond, mete, biji labu, atau ayam?",
+      "yes": "consult",
+      "note": "Ada formula Vegan."
+    }
+  ],
+  "faq": [
+    {
+      "q": "Baru pertama kali, sebaiknya mulai dari yang mana?",
+      "a": "Reset 1 Hari cukup untuk merasakan ritmenya tanpa komitmen panjang. Kalau sudah yakin, Reset 5 Hari adalah program lengkapnya. Reset 3 Hari ada di tengah-tengah."
+    },
+    {
+      "q": "Bakal lapar atau lemas, nggak?",
+      "a": "Kamu minum 5–6 botol sehari, termasuk dua Body Reset Meal dengan 25–26 g protein. Hari pertama biasanya paling terasa, dan itu wajar. Pendamping menyapa setiap pagi dan sore."
+    },
+    {
+      "q": "Paling lambat pesan kapan?",
+      "a": "Dua hari sebelum tanggal mulai, sebelum jam 15.00. Misalnya, untuk mulai Kamis, pesan paling lambat Selasa jam 15.00. Kalender di halaman program hanya menampilkan tanggal yang masih bisa dipilih."
+    },
+    {
+      "q": "Kapan paketnya sampai?",
+      "a": "Sehari sebelum kamu mulai. Program 5 hari dikirim dua kali: sehari sebelum mulai untuk hari 1–3, lalu di hari ketiga untuk hari 4–5."
+    },
+    {
+      "q": "Siapa yang tidak boleh ikut program?",
+      "a": "Ibu hamil, anak di bawah 17 tahun, dan orang dengan riwayat gangguan makan. Kalau kamu menyusui, sedang berobat rutin, punya maag, atau alergi kacang, tanya admin dulu, karena sering ada formula yang cocok."
+    },
+    {
+      "q": "Tahan berapa lama?",
+      "a": "Sampai 5 hari di chiller, simpan di bagian belakang, bukan di pintu kulkas. Setelah dibuka, habiskan dalam satu jam kalau di suhu ruang."
+    }
+  ],
+  "faqGroups": [
+    {
+      "title": "Produk",
+      "items": [
+        {
+          "q": "Reset Detox itu apa?",
+          "a": "Kami membuat makanan dan minuman dalam botol di dapur kami di Sunter, Jakarta Utara, sejak 2018. Ada program reset 1, 3, dan 5 hari, dan botol satuan seperti Golden Water, smoothies, mylk tea, dan kombucha untuk dinikmati setiap hari."
+        },
+        {
+          "q": "Apa bedanya dengan jus kemasan biasa?",
+          "a": "Banyak jus kemasan manisnya dari buah atau gula tambahan. Botol kami rendah gula, dan makan utamanya (Body Reset Meal) dibuat dari almond, biji-bijian, dan protein nabati, jadi benar-benar mengenyangkan, bukan cuma menyegarkan."
+        },
+        {
+          "q": "Ada gula tambahannya?",
+          "a": "Tidak ada. Manisnya dari kurma dan buah. Beberapa botol memakai sedikit stevia, dan itu tertulis di label serta di halaman tiap produk."
+        },
+        {
+          "q": "Pakai pengawet atau pewarna?",
+          "a": "Tidak. Bahannya buah, sayur, rempah, kacang, dan biji utuh. Karena itu botol kami harus selalu disimpan dingin."
+        }
+      ]
+    },
+    {
+      "title": "Program Reset",
+      "items": [
+        {
+          "q": "Baru pertama kali, sebaiknya mulai dari yang mana?",
+          "a": "Reset 1 Hari cukup untuk merasakan ritmenya tanpa komitmen panjang. Kalau sudah yakin, Reset 5 Hari adalah program lengkapnya. Reset 3 Hari ada di tengah-tengah."
+        },
+        {
+          "q": "Selama program, boleh makan yang lain?",
+          "a": "Sebaiknya tidak, supaya kebiasaan lama benar-benar berhenti sejenak. Air putih, teh tawar, dan kopi hitam tanpa gula boleh. Kalau lapar sekali di hari pertama, kabari pendamping di grup WhatsApp."
+        },
+        {
+          "q": "Bakal lapar atau lemas, nggak?",
+          "a": "Kamu minum 5–6 botol sehari, termasuk dua Body Reset Meal dengan 25–26 g protein. Hari pertama biasanya paling terasa, dan itu wajar. Pendamping menyapa setiap pagi dan sore."
+        },
+        {
+          "q": "Masih bisa kerja dan olahraga?",
+          "a": "Kerja seperti biasa, bisa. Untuk olahraga, pilih yang ringan seperti jalan kaki atau yoga selama program."
+        },
+        {
+          "q": "Apa bedanya formula perempuan dan laki-laki?",
+          "a": "Formula laki-laki punya porsi protein lebih besar dan tambahan botol Refuel. Untuk 5 hari, isinya 38 botol, sedangkan formula perempuan 33 botol."
+        }
+      ]
+    },
+    {
+      "title": "Nutrisi & Kesehatan",
+      "items": [
+        {
+          "q": "Siapa yang tidak boleh ikut program?",
+          "a": "Ibu hamil, anak di bawah 17 tahun, dan orang dengan riwayat gangguan makan. Kalau kamu menyusui, sedang berobat rutin, punya maag, atau alergi kacang, tanya admin dulu, karena sering ada formula yang cocok."
+        },
+        {
+          "q": "Botol satuan boleh diminum setiap hari?",
+          "a": "Boleh. Golden Water, smoothies, mylk tea, dan kombucha memang dibuat untuk dinikmati sehari-hari sebagai bagian dari pola makan yang seimbang."
+        },
+        {
+          "q": "Anak-anak boleh minum?",
+          "a": "Botol satuan seperti smoothies dan Sinless Dessert boleh. Program reset tidak untuk anak di bawah 17 tahun."
+        },
+        {
+          "q": "Ada kandungan kacang?",
+          "a": "Ada. Banyak produk kami berbasis almond, mete, dan biji labu. Bone Broth mengandung ayam. Daftar alergen ada di halaman setiap produk."
+        }
+      ]
+    },
+    {
+      "title": "Kesegaran & Penyimpanan",
+      "items": [
+        {
+          "q": "Kenapa harus disimpan di kulkas?",
+          "a": "Karena tanpa pengawet, dingin yang menjaga rasa dan kesegarannya. Begitu paket sampai, langsung masukkan ke kulkas."
+        },
+        {
+          "q": "Tahan berapa lama?",
+          "a": "Sampai 5 hari di chiller, simpan di bagian belakang, bukan di pintu kulkas. Setelah dibuka, habiskan dalam satu jam kalau di suhu ruang."
+        },
+        {
+          "q": "Boleh dibekukan?",
+          "a": "Body Reset Meal, Refuel, dan susu almond justru disimpan di freezer, lalu pindahkan ke chiller semalam sebelum diminum. Golden Water dan kombucha jangan dibekukan."
+        },
+        {
+          "q": "Kenapa isinya memisah?",
+          "a": "Itu wajar, karena kami tidak memakai pengental atau pengemulsi. Kocok dulu sebelum diminum."
+        }
+      ]
+    },
+    {
+      "title": "Pemesanan & Pengiriman",
+      "items": [
+        {
+          "q": "Cara pesannya bagaimana?",
+          "a": "Pilih produk di Shop, isi nama, nomor WhatsApp, dan area, lalu pesananmu terkirim ke WhatsApp admin. Admin membalas dengan total, ongkir, dan cara bayar."
+        },
+        {
+          "q": "Paling lambat pesan kapan?",
+          "a": "Dua hari sebelum tanggal mulai, sebelum jam 15.00. Misalnya, untuk mulai Kamis, pesan paling lambat Selasa jam 15.00. Kalender di halaman program hanya menampilkan tanggal yang masih bisa dipilih."
+        },
+        {
+          "q": "Kirim ke mana saja?",
+          "a": "Jakarta, Tangerang dan Tangsel, Depok, Bekasi, dan Bogor. Di luar itu, tanya admin dulu apakah pengiriman dingin bisa sampai."
+        },
+        {
+          "q": "Kapan paketnya sampai?",
+          "a": "Sehari sebelum kamu mulai. Program 5 hari dikirim dua kali: sehari sebelum mulai untuk hari 1–3, lalu di hari ketiga untuk hari 4–5."
+        },
+        {
+          "q": "Ongkirnya berapa?",
+          "a": "Tergantung alamatmu. Admin menghitungnya saat mengonfirmasi pesanan, sebelum kamu bayar."
+        },
+        {
+          "q": "Bisa ganti tanggal mulai?",
+          "a": "Bisa, kabari admin secepatnya. Karena bahan dibeli segar untuk setiap pesanan, perubahan perlu disampaikan sebelum batas pesan."
+        },
+        {
+          "q": "Paketnya sampai rusak atau tidak dingin, bagaimana?",
+          "a": "Rekam video saat membuka paket, lalu kirim ke admin dalam 24 jam bersama foto semua botol. Tanpa video, klaim tidak bisa kami proses."
+        },
+        {
+          "q": "Bisa dikirim sebagai hadiah?",
+          "a": "Bisa. Di halaman pesan, buka \"Tambahan\", centang \"Ini hadiah\", lalu isi nama dan nomor penerima serta pesan untuk kartu ucapannya."
+        }
+      ]
+    },
+    {
+      "title": "Pembayaran & Member",
+      "items": [
+        {
+          "q": "Bayarnya bagaimana?",
+          "a": "Setelah admin mengonfirmasi total dan ongkir, kamu akan menerima nomor rekening atau QRIS resmi atas nama perusahaan. Jangan transfer ke rekening pribadi siapa pun."
+        },
+        {
+          "q": "Ada program member?",
+          "a": "Ada Reset Society Club untuk yang sudah pernah menjalani program. Tanyakan manfaat terbarunya ke admin."
+        }
+      ]
+    }
+  ]
+}

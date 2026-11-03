@@ -1,0 +1,47 @@
+---
+import Base from '../layouts/Base.astro';
+import { Image } from 'astro:assets';
+import { img } from '../lib/images';
+import data from '../data/stories.json';
+---
+<Base title="Cerita · Seribu wajah Reset Detox" description="Cerita asli orang yang menjalani reset: dari story, reels, dan pesan WhatsApp mereka sendiri.">
+  <section class="ch top" data-field="shot" aria-labelledby="c-title">
+    <h1 id="c-title" data-rise>Seribu wajah.</h1>
+    <p class="lead" data-rise style="--i:1">Cerita dari posting mereka sendiri, bukan naskah kami. Hasil tiap orang berbeda.</p>
+  </section>
+  <section class="wall" data-field="paper" aria-labelledby="w-title">
+    <h2 id="w-title" class="visually-hidden">Semua cerita</h2>
+    <div class="cols">
+      {data.stories.map((s, i) => (
+        <figure class="story" style={`--field:var(--${s.field})`} data-rise>
+          <Image src={img(s.photo)} alt={`${s.name}, ${s.when}`} widths={[400, 700]} sizes="(max-width: 860px) 90vw, 30vw" loading={i < 3 ? 'eager' : 'lazy'} />
+          <figcaption data-rise style="--i:1">
+            <p class="q">{s.quote}</p>
+            <p class="small"><strong>{s.name}</strong> · {s.who} · {s.when}</p>
+            {!s.consent && <p class="draft small">Draf: menunggu izin tertulis</p>}
+          </figcaption>
+        </figure>
+      ))}
+    </div>
+    <p class="fine small" data-rise>Cerita dengan hasil medis (gula darah, kolesterol, obat) sengaja tidak kami tampilkan. Reset Detox bukan pengobatan.</p>
+  </section>
+  <section class="ch go" data-field="ink" aria-labelledby="go-title">
+    <h2 id="go-title" data-rise>Ceritamu berikutnya.</h2>
+    <a class="btn light" href="/reset-detox-5-hari" data-rise style="--i:1">Mulai Reset 5 Hari</a>
+  </section>
+</Base>
+<style>
+  .top { min-height: 64svh; display: grid; align-content: end; gap: 20px; padding-top: 140px; }
+  .top h1 { font-size: var(--s-hero); font-stretch: 118%; line-height: 0.85; letter-spacing: -0.035em; padding-bottom: 0.14em; } /* room for the descenders before the line below */
+  .wall { padding: 96px var(--m); background: var(--paper); }
+  .cols { columns: 3 300px; column-gap: 8px; }
+  .story { break-inside: avoid; margin: 0 0 8px; background: var(--field); color: var(--ink); }
+  .story[style*="gw"], .story[style*="night"] { color: var(--stone); }
+  .story img { width: 100%; height: auto; }
+  .story figcaption { padding: 20px; display: grid; gap: 8px; }
+  .q { font-size: 20px; font-weight: 700; line-height: 1.25; }
+  .draft { justify-self: start; padding: 2px 8px; background: var(--ink); color: var(--paper); }
+  .fine { margin-top: 32px; color: var(--ink-soft); }
+  .go { display: flex; justify-content: space-between; align-items: end; gap: 24px; flex-wrap: wrap; min-height: 50svh; }
+  .go h2 { font-size: clamp(3rem, 8vw, 8rem); font-stretch: 116%; }
+</style>

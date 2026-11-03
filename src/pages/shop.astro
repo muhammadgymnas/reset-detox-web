@@ -1,0 +1,356 @@
+---
+import Base from '../layouts/Base.astro';
+import { Image, getImage } from 'astro:assets';
+import { img } from '../lib/images';
+import catalog from '../data/catalog.json';
+import { rupiah } from '../scripts/cart';
+import Icon from '../components/Icon.astro';
+import { productUrl } from '../lib/product';
+
+const moments = [
+  { id: 'pagi', label: 'Pagi', line: 'Untuk membuka hari dan menggantikan sarapan.', field: 'gw' },
+  { id: 'siang', label: 'Siang', line: 'Makan siang dalam botol, kenyang sampai sore.', field: 'day' },
+  { id: 'sore', label: 'Sore', line: 'Yang hangat dan gurih.', field: 'broth' },
+  { id: 'camilan', label: 'Camilan', line: 'Manis yang tidak membuatmu menyesal.', field: 'shot' },
+  { id: 'malam', label: 'Malam', line: 'Penutup hari.', field: 'night' },
+  { id: 'kapan saja', label: 'Kapan saja', line: 'Segar di sela hari, termasuk kombucha.', field: 'tonic' },
+];
+const slug = (s: string) => s.replace(' ', '-');
+type Item = (typeof catalog.support)[number];
+const thumbs: Record<string, string> = {};
+for (const s of [...catalog.support, ...catalog.routines]) thumbs[s.sku] = (await getImage({ src: img(s.photo), width: 160, height: 160, fit: 'cover', format: 'webp' })).src;
+const packThumb = (await getImage({ src: img('s-gw'), width: 160, height: 160, fit: 'cover', format: 'webp' })).src;
+const bySku = Object.fromEntries(catalog.support.map((s) => [s.sku, s]));
+const best = catalog.bestSellers.skus.map((k) => bySku[k]).filter(Boolean) as Item[];
+const choiceNames = Object.fromEntries(catalog.support.map((s) => [s.sku, s.name]));
+const hasOptions = (s: any) => !!(s.variants || s.pack || s.sizes);
+---
+<Base title="Shop · semua program dan produk Reset Detox" description="Semua program Reset dan ReNourish, smoothies, mylk tea, kombucha, sinless dessert, Support Pack, dan rutinitas ringan, lengkap dengan harga.">
+  <section class="ch intro" data-field="tonic" aria-labelledby="s-title">
+    <h1 id="s-title" data-rise>Shop</h1>
+    <p class="lead" data-rise style="--i:1">Semua yang keluar dari dapur kami di Sunter, dengan harganya. Program Reset dulu, lalu botol untuk setiap hari, disusun menurut jam minumnya.</p>
+    <nav class="moment-nav" data-rise style="--i:2" aria-label="Bagian shop">
+      <a href="#best-seller">Best seller</a>
+      <a href="#program">Program</a>
+      {moments.map((m) => <a href={`#${slug(m.id)}`}>{m.label}</a>)}
+      <a href="#pack">Support Pack</a>
+      <a href="#rutinitas">Rutinitas</a>
+    </nav>
+  </section>
+
+  <section class="shelf" id="best-seller" data-field="paper" aria-labelledby="h-best">
+    <div class="shelf-head"><h2 id="h-best" data-rise>Best seller</h2><p data-rise style="--i:1">Yang paling sering dipesan ulang.</p></div>
+    <div class="cards">
+      {best.map((s) => (
+        <article class="card">
+          <a class="card-hit" href={productUrl(s.name)} tabindex="-1" aria-hidden="true">
+            <Image src={img(s.photo)} alt="" widths={[360, 600]} sizes="(max-width: 860px) 46vw, 22vw" loading="lazy" />
+          </a>
+          <div class="card-body">
+            <h3><a class="title-link" href={productUrl(s.name)}>{s.name}</a></h3>
+            <p class="small key">{s.size} · {s.key}</p>
+            <p class="num price">{rupiah(s.price!)}</p>
+            <div class="acts"><button class="btn icon-only ghost" type="button" data-add={s.sku} aria-label={`Tambah ${s.name} ke keranjang`}><Icon name="basket-plus" /></button><button class="btn buy" type="button" data-buy={s.sku}><span class="buy-l">Beli sekarang</span><span class="buy-s">Beli</span></button></div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="shelf" id="program" data-field="stone" aria-labelledby="h-program">
+    <div class="shelf-head"><h2 id="h-program" data-rise>Program</h2><p data-rise style="--i:1">Harga untuk formula perempuan. Formula laki-laki dipilih di halaman program.</p></div>
+    <div class="cards programs">
+      {catalog.programs.map((p) => (
+        <article class="card prog">
+          <a href={p.url} class="card-hit" aria-label={p.name}><Image src={img(p.photo)} alt={`Isi ${p.name}`} widths={[500, 900]} sizes="(max-width: 860px) 90vw, 32vw" loading="lazy" /></a>
+          <div class="card-body">
+            <h3>{p.name}</h3>
+            <p>{p.lead}</p>
+            <p class="small key num">{p.formulas[0].bottles ? `${p.formulas[0].bottles} botol · ` : ''}{rupiah(Math.round(p.formulas[0].price / p.days / 100) * 100)} per hari</p>
+            <div class="buyrow"><span class="num price">{rupiah(p.formulas[0].price)}</span><a class="btn" href={p.url}><Icon name="calendar" /> Pilih tanggal</a></div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  {moments.map((m) => {
+    const items = catalog.support.filter((s) => s.moment === m.id);
+    if (!items.length) return null;
+    return (
+      <section class="shelf" id={slug(m.id)} data-field={m.field} aria-labelledby={`h-${slug(m.id)}`}>
+        <div class="shelf-head"><h2 id={`h-${slug(m.id)}`} data-rise>{m.label}</h2><p data-rise style="--i:1">{m.line}</p></div>
+        <div class="cards">
+          {items.map((s) => (
+            <article class="card" id={s.sku}>
+              <a class="card-hit" href={productUrl(s.name)} tabindex="-1" aria-hidden="true">
+                <Image src={img(s.photo)} alt="" widths={[360, 600]} sizes="(max-width: 860px) 46vw, 22vw" loading="lazy" />
+              </a>
+              <div class="card-body">
+                <h3><a class="title-link" href={productUrl(s.name)}>{s.name}</a></h3>
+                <p class="small key">{s.size} · {s.key}</p>
+                <p class="num price">{s.price ? rupiah(s.price) : 'Harga segera'}</p>
+                {s.price ? <div class="acts"><button class="btn icon-only ghost" type="button" data-add={s.sku} aria-label={`Tambah ${s.name} ke keranjang`}><Icon name="basket-plus" /></button><button class="btn buy" type="button" data-buy={s.sku}><span class="buy-l">Beli sekarang</span><span class="buy-s">Beli</span></button></div> : <p class="small">Tanya admin untuk harga</p>}
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+    );
+  })}
+
+  <section class="shelf" id="pack" data-field="paper" aria-labelledby="h-pack">
+    <div class="shelf-head"><h2 id="h-pack" data-rise>Support Pack</h2><p data-rise style="--i:1">Pilih bebas 6 atau 12 botol dari Golden Water, Green Tonic, dan Coco Iskiate.</p></div>
+    <div class="pack">
+      <div class="seg" role="radiogroup" aria-label="Ukuran pack">
+        {catalog.packs.map((p, i) => (<><input type="radio" name="pack" id={`pk-${p.qty}`} value={p.sku} data-qty={p.qty} data-price={p.price} data-name={p.name} checked={i === 0} /><label for={`pk-${p.qty}`}>{p.qty} botol · {rupiah(p.price)}</label></>))}
+      </div>
+      <ul class="pack-list">
+        {catalog.packs[0].choices.map((sku) => (
+          <li>
+            <Image src={img(bySku[sku].photo)} alt="" width={72} height={72} />
+            <span>{choiceNames[sku]}</span>
+            <div class="stepper" role="group" aria-label={`Jumlah ${choiceNames[sku]}`}>
+              <button type="button" data-pk={sku} data-d="-1" aria-label={`Kurangi ${choiceNames[sku]}`} disabled><Icon name="minus" /></button>
+              <output data-pko={sku}>0</output>
+              <button type="button" data-pk={sku} data-d="1" aria-label={`Tambah ${choiceNames[sku]}`}><Icon name="plus" /></button>
+            </div>
+          </li>
+        ))}
+      </ul>
+      <button class="btn block" type="button" data-pack-add data-img={packThumb} disabled>Pilih 6 botol lagi</button>
+    </div>
+  </section>
+
+  <section class="shelf" id="rutinitas" data-field="broth" aria-labelledby="h-rut">
+    <div class="shelf-head"><h2 id="h-rut" data-rise>Rutinitas</h2><p data-rise style="--i:1">Untuk intermittent fasting atau sesudah Reset. Ini bukan program detox.</p></div>
+    <div class="cards">
+      {catalog.routines.map((r) => (
+        <article class="card">
+          <Image src={img(r.photo)} alt={r.name} widths={[360, 600]} sizes="(max-width: 860px) 46vw, 22vw" loading="lazy" />
+          <div class="card-body">
+            <h3>{r.name}</h3>
+            <p class="small key">{r.contents}</p>
+            <p class="num price">{rupiah(r.price)}</p>
+            <div class="acts"><button class="btn icon-only ghost" type="button" data-quick={r.sku} data-name={r.name} data-price={r.price} data-meta={r.contents} data-img={thumbs[r.sku]} aria-label={`Tambah ${r.name} ke keranjang`}><Icon name="basket-plus" /></button><button class="btn buy" type="button" data-quick={r.sku} data-go data-name={r.name} data-price={r.price} data-meta={r.contents} data-img={thumbs[r.sku]}><span class="buy-l">Beli sekarang</span><span class="buy-s">Beli</span></button></div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <dialog class="sheet" id="detail" aria-labelledby="d-title">
+    <form method="dialog" class="sheet-body" data-detail-form>
+      <button class="icon-btn close" value="cancel" aria-label="Tutup"><Icon name="close" /></button>
+      <img data-d-img alt="" width="480" height="480" class="d-img" />
+      <h2 id="d-title" data-d-name></h2>
+      <p data-d-promise></p>
+      <fieldset class="opts" data-d-opts></fieldset>
+      <div class="row">
+        <div class="stepper" role="group" aria-label="Jumlah">
+          <button type="button" data-qty="-1" aria-label="Kurangi"><Icon name="minus" /></button>
+          <output data-d-qty>1</output>
+          <button type="button" data-qty="1" aria-label="Tambah"><Icon name="plus" /></button>
+        </div>
+        <p class="num d-total" data-d-total></p>
+      </div>
+      <div class="d-acts">
+        <button class="btn ghost" type="button" data-d-add><Icon name="basket-plus" /> Tambah ke keranjang</button>
+        <button class="btn" type="button" data-d-buy>Beli sekarang</button>
+      </div>
+      <details class="facts">
+        <summary>Bahan, alergen, dan cara simpan</summary>
+        <dl>
+          <div><dt>Bahan</dt><dd data-d-ing></dd></div>
+          <div><dt>Alergen</dt><dd data-d-all></dd></div>
+          <div><dt>Simpan</dt><dd data-d-sto></dd></div>
+          <div><dt>Catatan</dt><dd data-d-role></dd></div>
+        </dl>
+      </details>
+    </form>
+  </dialog>
+  <script type="application/json" id="support-data" set:html={JSON.stringify({ items: catalog.support, thumbs, urls: Object.fromEntries(catalog.support.map((s) => [s.sku, productUrl(s.name)])), big: Object.fromEntries(await Promise.all(catalog.support.map(async (s) => [s.sku, (await getImage({ src: img(s.photo), width: 480, height: 480, fit: 'cover', format: 'webp' })).src]))) })} />
+</Base>
+
+<style>
+  .intro { display: grid; align-content: end; gap: 24px; padding-top: 140px; padding-bottom: 72px; }
+  .intro h1 { font-size: var(--s-hero); font-stretch: 118%; line-height: 0.85; letter-spacing: -0.035em; padding-bottom: 0.14em; } /* room for the descenders before the line below */
+  .moment-nav { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+  .moment-nav a { padding: 12px 18px; background: color-mix(in srgb, var(--ink) 12%, transparent); font-weight: 700; text-decoration: none; transition: background-color 200ms ease, transform 140ms var(--ease-out); }
+  .moment-nav a:hover { background: var(--ink); color: var(--paper); }
+  .moment-nav a:active { transform: scale(0.96); }
+  @media (max-width: 860px) { .intro { padding-bottom: 112px; } }
+
+  .shelf { padding: clamp(64px, 8vw, 112px) var(--m); background: var(--field); color: var(--on); }
+  .shelf[data-field="gw"] { --field: var(--gw); --on: var(--stone); }
+  .shelf[data-field="day"] { --field: var(--day); --on: var(--ink); }
+  .shelf[data-field="broth"] { --field: var(--broth); --on: var(--ink); }
+  .shelf[data-field="night"] { --field: var(--night); --on: var(--stone); }
+  .shelf[data-field="tonic"] { --field: var(--tonic); --on: var(--ink); }
+  .shelf[data-field="shot"] { --field: var(--shot); --on: var(--ink); }
+  .shelf[data-field="paper"] { --field: var(--paper); --on: var(--ink); }
+  .shelf[data-field="stone"] { --field: var(--stone); --on: var(--ink); }
+  .shelf-head { display: flex; justify-content: space-between; align-items: end; gap: 16px 32px; flex-wrap: wrap; margin-bottom: 40px; }
+  .shelf-head h2 { font-size: clamp(2.75rem, 6vw, 6rem); font-stretch: 116%; }
+  .shelf-head p { max-width: 42ch; font-size: 18px; }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 24px 16px; }
+  .cards.programs { grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 24px; }
+  .card { background: var(--paper); color: var(--ink); display: grid; grid-template-rows: auto 1fr; scroll-margin-top: 96px; }
+  .card:target { outline: 3px solid var(--ink); outline-offset: 4px; }
+  .card-hit { display: block; padding: 0; border: 0; background: none; cursor: pointer; overflow: hidden; }
+  .title-link { text-decoration: none; color: inherit; }
+  .title-link:hover { text-decoration: underline; text-underline-offset: 3px; }
+  .title-link::after { content: ''; position: absolute; inset: 0; }
+  .card { position: relative; }
+  .card .acts { position: relative; z-index: 1; }
+  .card img { width: 100%; aspect-ratio: 1; object-fit: cover; background: var(--stone); transition: transform 400ms var(--ease-out); }
+  .card-hit:hover img { transform: scale(1.04); }
+  .prog img { aspect-ratio: 4 / 3; }
+  .card-body { padding: 18px 18px 20px; display: grid; gap: 6px; align-content: start; }
+  .prog .card-body { padding: 24px 24px 26px; gap: 10px; }
+  .card-body h3 { font-size: 1.125rem; }
+  .prog .card-body h3 { font-size: 1.5rem; }
+  .key { font-weight: 600; color: var(--ink-soft); }
+  .buyrow { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 10px; }
+  .buyrow .btn { white-space: nowrap; min-height: 44px; padding: 0 18px; }
+  .price { font-weight: 700; font-size: 1.125rem; margin-top: 6px; }
+  .acts { display: grid; grid-template-columns: 44px 1fr; gap: 6px; margin-top: 8px; }
+  .acts .btn { min-height: 44px; }
+  .acts .buy { padding: 0 12px; white-space: nowrap; }
+  .buy-s { display: none; }
+  @container (max-width: 200px) { .buy-l { display: none; } .buy-s { display: inline; } }
+  .card-body { container-type: inline-size; }
+  .d-total { font-weight: 700; font-size: 1.25rem; }
+  .d-acts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .d-acts .btn { padding: 0 12px; }
+  .prog .price { font-size: 1.5rem; }
+  @media (max-width: 600px) {
+    .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 8px; }
+    .cards.programs { grid-template-columns: 1fr; }
+    .buyrow { flex-direction: column; align-items: stretch; gap: 8px; }
+    .d-acts { grid-template-columns: 1fr; }
+    .card-body { padding: 12px 12px 14px; }
+  }
+
+  .pack { display: grid; gap: 16px; max-width: 720px; }
+  .pack .seg { justify-self: start; }
+  .pack-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+  .pack-list li { display: grid; grid-template-columns: 72px 1fr auto; gap: 16px; align-items: center; padding: 6px 8px 6px 6px; background: var(--stone); font-weight: 600; }
+  .pack-list img { width: 72px; height: 72px; object-fit: cover; mix-blend-mode: multiply; }
+
+  .sheet { border: 0; padding: 0; margin: auto 0 0 auto; width: min(480px, 100%); max-height: 100dvh; height: 100dvh; background: var(--paper); color: var(--ink); transform: translateX(100%); transition: transform 360ms var(--ease-drawer), overlay 360ms allow-discrete, display 360ms allow-discrete; overflow: auto; }
+  .sheet:not([open]) { display: none; }
+  .sheet[open] { transform: none; }
+  @starting-style { .sheet[open] { transform: translateX(100%); } }
+  .sheet::backdrop { background: rgb(22 21 20 / 0.45); }
+  .sheet-body { padding: 0 24px 32px; display: grid; gap: 16px; position: relative; }
+  .d-img { width: calc(100% + 48px); max-width: none; margin: 0 -24px; aspect-ratio: 1; object-fit: cover; background: var(--stone); }
+  .sheet-body h2 { font-size: 2rem; font-stretch: 108%; }
+  .sheet .close { position: absolute; top: 12px; right: 12px; background: var(--paper); z-index: 1; }
+  .facts summary { cursor: pointer; font-weight: 700; padding: 8px 0; }
+  .facts dl { margin: 8px 0 0; display: grid; gap: 10px; }
+  .facts dl div { display: grid; grid-template-columns: 90px 1fr; gap: 12px; }
+  .facts dt { font-weight: 700; }
+  .facts dd { margin: 0; }
+  .opts { border: 0; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+  .opts:empty { display: none; }
+  :global(.opt) { position: relative; }
+  :global(.opt input) { position: absolute; opacity: 0; }
+  :global(.opt span) { display: inline-block; padding: 10px 14px; background: var(--stone); font-weight: 600; cursor: pointer; transition: background-color 150ms ease; }
+  :global(.opt input:checked + span) { background: var(--ink); color: var(--paper); }
+  :global(.opt input:focus-visible + span) { outline: 2px solid var(--ink); outline-offset: 2px; }
+  @media (max-width: 600px) { .sheet { margin: auto 0 0; width: 100%; height: auto; max-height: 92dvh; transform: translateY(100%); } .sheet[open] { transform: none; } @starting-style { .sheet[open] { transform: translateY(100%); } } }
+</style>
+
+<script>
+  import { add, rupiah } from '../scripts/cart';
+  const hasOpts = (x: any) => !!(x.variants || x.pack || x.sizes);
+  const data = JSON.parse(document.getElementById('support-data')!.textContent!);
+  const dlg = document.getElementById('detail') as HTMLDialogElement;
+  const $ = (s: string) => dlg.querySelector<HTMLElement>(s)!;
+  let cur: any = null; let qty = 1;
+
+  type Opt = { id: string; label: string; price: number; qty: number };
+  function opts(item: any): Opt[] {
+    const o: Opt[] = [];
+    if (item.variants) item.variants.forEach((v: string) => o.push({ id: v, label: v, price: item.price, qty: 1 }));
+    if (item.sizes) item.sizes.forEach((z: any) => o.push({ id: z.label, label: `${z.label} · ${rupiah(z.price)}`, price: z.price, qty: 1 }));
+    if (item.pack) { o.push({ id: 'single', label: `1 botol · ${rupiah(item.price)}`, price: item.price, qty: 1 }); o.push({ id: 'pack', label: `${item.pack.qty} botol · ${rupiah(item.pack.price)}`, price: item.pack.price, qty: item.pack.qty }); }
+    return o;
+  }
+  function openDetail(sku: string) {
+    cur = data.items.find((x: any) => x.sku === sku); if (!cur || !cur.price) return; qty = 1;
+    ($('[data-d-img]') as HTMLImageElement).src = data.big[sku];
+    ($('[data-d-img]') as HTMLImageElement).alt = cur.name;
+    $('[data-d-name]').textContent = cur.name;
+    $('[data-d-promise]').textContent = `${cur.promise} ${cur.size} · ${cur.key}.`;
+    $('[data-d-ing]').textContent = cur.ingredients; $('[data-d-all]').textContent = cur.allergens;
+    $('[data-d-sto]').textContent = cur.storage; $('[data-d-role]').textContent = cur.role;
+    const o = opts(cur);
+    $('[data-d-opts]').innerHTML = o.length ? `<legend class="visually-hidden">Pilihan</legend>` + o.map((x, i) => `<label class="opt"><input type="radio" name="opt" value="${x.id}" ${i === 0 ? 'checked' : ''}><span>${x.label}</span></label>`).join('') : '';
+    paint(); dlg.showModal();
+  }
+  function chosen() { const o = opts(cur); const id = dlg.querySelector<HTMLInputElement>('input[name="opt"]:checked')?.value; return o.find((x) => x.id === id); }
+  function paint() { const c = chosen(); $('[data-d-qty]').textContent = String(qty); $('[data-d-total]').textContent = rupiah((c?.price ?? cur.price) * qty); }
+  dlg.addEventListener('change', paint);
+  dlg.addEventListener('click', (e) => {
+    const t = e.target as HTMLElement;
+    if (t === dlg) dlg.close();
+    const q = t.closest<HTMLElement>('[data-qty]'); if (q) { qty = Math.min(12, Math.max(1, qty + Number(q.dataset.qty))); paint(); }
+    const go = !!t.closest('[data-d-buy]');
+    if (go || t.closest('[data-d-add]')) {
+      const c = chosen();
+      const isPack = c?.id === 'pack';
+      const meta = cur.variants ? `Rasa: ${c!.label}` : isPack ? `Pack ${c!.qty} botol` : cur.sizes ? c!.id : undefined;
+      add({ id: `${cur.sku}|${c?.id ?? ''}`, sku: cur.sku, name: cur.name + (cur.size && !isPack && !cur.sizes ? ` ${cur.size}` : ''), meta, price: c?.price ?? cur.price, qty, img: data.thumbs[cur.sku], kind: 'support' }, undefined, { silent: go });
+      dlg.close();
+      if (go) location.href = '/pesan';
+    }
+  });
+  document.querySelectorAll<HTMLElement>('[data-detail]').forEach((b) => b.addEventListener('click', () => openDetail(b.dataset.detail!)));
+  // card buttons: products with choices open the panel; the rest go straight in
+  const quickAdd = (x: any, go: boolean) => {
+    add({ id: `${x.sku}|`, sku: x.sku, name: `${x.name} ${x.size}`, price: x.price, img: data.thumbs[x.sku], kind: 'support' }, undefined, { silent: go });
+    if (go) location.href = '/pesan';
+  };
+  document.querySelectorAll<HTMLElement>('[data-add], [data-buy]').forEach((b) => b.addEventListener('click', () => {
+    const sku = b.dataset.add || b.dataset.buy!;
+    const x = data.items.find((i: any) => i.sku === sku);
+    if (!x) return;
+    if (hasOpts(x)) openDetail(sku); else quickAdd(x, !!b.dataset.buy);
+  }));
+  document.querySelectorAll<HTMLElement>('[data-quick]').forEach((b) => b.addEventListener('click', () => {
+    const go = b.hasAttribute('data-go');
+    add({ id: b.dataset.quick!, sku: b.dataset.quick!, name: b.dataset.name!, meta: b.dataset.meta, price: Number(b.dataset.price), img: b.dataset.img, kind: 'support' }, undefined, { silent: go });
+    if (go) location.href = '/pesan';
+  }));
+  // old links like /shop#RD-SP-GW go to that product's page
+  const hashSku = decodeURIComponent(location.hash.slice(1));
+  const hashItem = data.items.find((x: any) => x.sku === hashSku);
+  if (hashItem) location.replace(data.urls[hashItem.sku]);
+
+  // pack builder
+  const packCounts: Record<string, number> = {};
+  const packBtn = document.querySelector<HTMLButtonElement>('[data-pack-add]')!;
+  const packSel = () => document.querySelector<HTMLInputElement>('input[name="pack"]:checked')!;
+  const pTotal = () => Object.values(packCounts).reduce((a, b) => a + b, 0);
+  function paintPack() {
+    const need = Number(packSel().dataset.qty);
+    document.querySelectorAll<HTMLButtonElement>('[data-pk]').forEach((b) => { const n = packCounts[b.dataset.pk!] || 0; b.disabled = b.dataset.d === '-1' ? n === 0 : pTotal() >= need; });
+    document.querySelectorAll<HTMLOutputElement>('[data-pko]').forEach((o) => (o.textContent = String(packCounts[o.dataset.pko!] || 0)));
+    const left = need - pTotal();
+    packBtn.disabled = left !== 0;
+    packBtn.textContent = left > 0 ? `Pilih ${left} botol lagi` : left < 0 ? `Kurangi ${-left} botol` : `Tambah pack · ${rupiah(Number(packSel().dataset.price))}`;
+  }
+  document.addEventListener('click', (e) => { const b = (e.target as HTMLElement).closest<HTMLElement>('[data-pk]'); if (!b) return; packCounts[b.dataset.pk!] = Math.max(0, (packCounts[b.dataset.pk!] || 0) + Number(b.dataset.d)); paintPack(); });
+  document.querySelectorAll('input[name="pack"]').forEach((r) => r.addEventListener('change', paintPack));
+  const names: Record<string, string> = { 'RD-SP-GW': 'Golden Water', 'RD-SP-GT': 'Green Tonic', 'RD-SP-CI': 'Coco Iskiate' };
+  packBtn.addEventListener('click', () => {
+    const s = packSel();
+    const meta = Object.entries(packCounts).filter(([, n]) => n).map(([k, n]) => `${names[k]} ×${n}`).join(', ');
+    add({ id: `${s.value}|${meta}`, sku: s.value, name: s.dataset.name!, meta, price: Number(s.dataset.price), img: packBtn.dataset.img, kind: 'support' });
+    Object.keys(packCounts).forEach((k) => (packCounts[k] = 0)); paintPack();
+  });
+  paintPack();
+</script>
