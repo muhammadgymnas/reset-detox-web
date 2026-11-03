@@ -1,0 +1,30 @@
+# Netlify builds the site from source; `astro build` writes every page as HTML into dist/.
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  # Astro 7 needs Node 22
+  NODE_VERSION = "22"
+
+# old addresses, answered by the CDN before any page loads
+[[redirects]]
+  from = "/support"
+  to = "/shop"
+  status = 301
+
+[[redirects]]
+  from = "/katalog"
+  to = "/shop"
+  status = 301
+
+[[redirects]]
+  from = "/bisnis"
+  to = "/kontak#bisnis"
+  status = 301
+
+# hashed build assets never change, so browsers may keep them for a year
+[[headers]]
+  for = "/_astro/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
