@@ -225,12 +225,23 @@ const supportList = [
 </Base>
 
 <style>
-  .hero { min-height: 100svh; display: grid; grid-template-rows: 1fr auto; gap: clamp(48px, 7vh, 96px); padding-top: 112px; padding-bottom: 32px; padding-inline: 0; overflow: hidden; }
+  /* 240px of air between the header and the headline, but never at the cost of the shelf:
+     the hero may not grow past the screen, so on short screens the spacer gives way first */
+  .hero { --gap: clamp(24px, 4vh, 64px); display: flex; flex-direction: column; gap: var(--gap); max-height: max(100svh, 640px); padding-top: calc(84px + 40px); padding-bottom: 24px; padding-inline: 0; overflow: hidden; }
+  .hero::before { content: ''; flex: 0 1 calc(200px - var(--gap)); min-height: 0; }
+  .hero-top, .hero > .shelf-run { flex: none; }
+  /* short laptop screens (1366×657, 1280×720): tighter padding and smaller bottles so the shelf still fits */
+  @media (min-width: 861px) and (max-height: 760px) {
+    .hero { padding-top: calc(84px + 20px); padding-bottom: 8px; }
+    .hero .shelf-track { padding-block: 12px 0; }
+    .hero .shelf-track li { width: clamp(120px, min(15vw, 19vh), 230px); }
+  }
   .hero-top { display: grid; grid-template-columns: 1fr minmax(340px, 30%); gap: 40px; align-items: end; padding-inline: var(--m); }
-  .hero-title { font-size: clamp(4rem, 0.5rem + 10.5vw, 10rem); font-stretch: 118%; line-height: 0.84; letter-spacing: -0.035em; display: grid; }
+  .hero-title { font-size: clamp(4rem, min(0.5rem + 10.5vw, 17vh), 10rem); font-stretch: 118%; line-height: 0.84; letter-spacing: -0.035em; display: grid; }
   .hero-title > span { white-space: nowrap; }
   .hero-title .pale { color: #7d7871; }
-  .hero-side { display: grid; gap: 24px; }
+  .hero-side { display: grid; gap: 24px; justify-self: end; } /* headline on the left margin, this block on the right */
+  .hero-side .lead { font-size: clamp(1.125rem, 0.85rem + 0.7vw, 1.5rem); max-width: 34ch; }
   .hero-actions { display: flex; gap: 8px; flex-wrap: wrap; }
   .hero-actions .btn { white-space: nowrap; }
   .shelf-run { overflow-x: auto; scrollbar-width: none; cursor: grab; outline-offset: -4px; --fade: max(var(--m), 48px); -webkit-mask-image: linear-gradient(90deg, transparent, #000 var(--fade), #000 calc(100% - var(--fade)), transparent); mask-image: linear-gradient(90deg, transparent, #000 var(--fade), #000 calc(100% - var(--fade)), transparent); } /* taste-skill-ignore: alpha mask for the edge fade, not a colour fill */
@@ -238,7 +249,7 @@ const supportList = [
   .shelf-run::-webkit-scrollbar { display: none; }
   .shelf-run.dragging { cursor: grabbing; }
   .shelf-track { list-style: none; margin: 0; padding: 24px 0 8px; display: flex; gap: 8px; width: max-content; }
-  .shelf-track li { width: clamp(150px, 15vw, 230px); flex: none; }
+  .shelf-track li { width: clamp(120px, min(15vw, 22vh), 230px); flex: none; }
   .shelf-track a { display: grid; justify-items: center; gap: 4px; text-decoration: none; padding: 0; -webkit-user-drag: none; user-select: none; }
   .shelf-track img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; transform-origin: 50% 90%; transition: transform 380ms var(--ease-out); pointer-events: none; }
   .shelf-track a:hover img, .shelf-track a:focus-visible img { transform: translateY(-14px) scale(1.06); }
@@ -246,8 +257,11 @@ const supportList = [
   .sr-price { font-size: var(--s-sm); }
   .shelf-track a:hover .sr-name { text-decoration: underline; text-underline-offset: 0.25em; }
   @media (max-width: 860px) {
-    .hero { min-height: auto; padding-top: 96px; }
+    .hero { max-height: none; padding-top: calc(64px + 40px); }
+    .hero::before { display: none; }
     .hero-top { grid-template-columns: 1fr; gap: 24px; }
+    .hero-side { justify-self: stretch; }
+    .shelf-track li { width: 150px; }
     .hero-title { font-size: 16.5vw; font-stretch: 100%; }
     .hero-actions .btn { flex: 1 1 100%; }
   }
@@ -315,20 +329,21 @@ const supportList = [
   .plans-head { grid-column: 1 / span 2; grid-row: 1; align-self: start; display: grid; gap: 24px; justify-items: start; }
   .plan { grid-row: 1; position: relative; display: flex; flex-direction: column; background: var(--field); color: var(--ink); text-decoration: none; overflow: hidden; transition: transform 300ms var(--ease-out); }
   .plan:hover { transform: translateY(-6px); }
-  .plan-0 { grid-column: 1; height: 440px; margin-top: 360px; }
-  .plan-1 { grid-column: 2; height: 560px; margin-top: 240px; }
-  .plan-2 { grid-column: 3; height: 800px; }
+  /* a staircase by minimum height, bottoms aligned; a card grows if its copy wraps, so the strip is never cut */
+  .plan-0 { grid-column: 1; min-height: 440px; }
+  .plan-1 { grid-column: 2; min-height: 560px; }
+  .plan-2 { grid-column: 3; min-height: 800px; }
   .plan-body { padding: 28px; display: grid; gap: 8px; position: relative; z-index: 1; }
   .plan-body h3 { font-size: 28px; }
   .plan-price { font-size: clamp(2.25rem, 3.6vw, 3.5rem); font-weight: 700; letter-spacing: -0.03em; line-height: 1; }
-  .plan-img { margin-top: auto; width: 100%; height: 46%; object-fit: cover; mix-blend-mode: multiply; }
-  .plan-strip { display: flex; align-items: center; height: 64px; padding: 0 28px; background: var(--ink); color: var(--paper); font-weight: 700; transition: background-color 200ms ease; }
+  .plan-img { flex: 1 1 0; min-height: 160px; width: 100%; object-fit: cover; mix-blend-mode: multiply; }
+  .plan-strip { flex: none; display: flex; align-items: center; height: 64px; padding: 0 28px; background: var(--ink); color: var(--paper); font-weight: 700; transition: background-color 200ms ease; }
   .plan:hover .plan-strip { background: var(--ink-soft); }
   @media (max-width: 860px) {
     .plans-grid { grid-template-columns: 1fr; }
     .plans-head { grid-column: 1; }
-    .plan { grid-column: 1 !important; grid-row: auto; height: auto !important; margin-top: 0 !important; }
-    .plan-img { height: 240px; }
+    .plan { grid-column: 1 !important; grid-row: auto; min-height: 0 !important; }
+    .plan-img { flex: none; height: 240px; }
   }
 
   .best-head { display: flex; justify-content: space-between; align-items: end; gap: 24px; flex-wrap: wrap; margin-bottom: 48px; }
