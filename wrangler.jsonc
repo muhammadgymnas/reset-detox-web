@@ -1,0 +1,9 @@
+// Cloudflare Workers: serve the static site that `npm run build` writes to dist/.
+// No Worker code; Cloudflare serves the files and reads public/_redirects and public/_headers from dist.
+{
+  "name": "reset-detox-web",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./dist"
+  }
+}
