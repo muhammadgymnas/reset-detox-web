@@ -1,0 +1,467 @@
+---
+import Base from '../layouts/Base.astro';
+import { Image, getImage } from 'astro:assets';
+import { img } from '../lib/images';
+import catalog from '../data/catalog.json';
+import site from '../data/site.json';
+import { rupiah } from '../scripts/cart';
+import Icon from '../components/Icon.astro';
+import { productUrl } from '../lib/product';
+
+const [p5, p3, p1] = catalog.programs;
+const mosaic = await getImage({ src: img('reset-5d'), width: 1800, height: 1200, fit: 'cover', position: 'bottom', format: 'webp' });
+const day = site.schedule.day;
+// crop of the 1-day render where each bottle stands (object-position)
+// "0 g gula · 22 kkal" → [{ v: '0 g', k: 'gula' }, { v: '22', k: 'kkal' }] so the numbers can lead
+const stats = (facts: string) => facts.split('·').map((x) => x.trim()).filter(Boolean).map((x) => {
+  const m = x.match(/^([\d.,]+)\s*(g|ml|mg)?\s*(.*)$/i);
+  return m ? { v: `${m[1]}${m[2] ? ' ' + m[2] : ''}`, k: m[3] || '' } : { v: x, k: '' };
+});
+const dayPhoto: Record<string, string> = { gw: 's-gw', tonic: 's-gt', day: 's-brm-day', broth: 's-broth', night: 's-brm-night' };
+const bySku = Object.fromEntries(catalog.support.map((x) => [x.sku, x]));
+const shelf = catalog.heroShelf.map((k) => bySku[k]).filter(Boolean);
+const best = catalog.bestSellers.skus.map((k) => bySku[k]).filter(Boolean);
+const videos = [
+  { src: '/video/testi-2025-a.mp4', who: 'Pelanggan Reset 5 Hari', when: 'Juni 2025' },
+  { src: '/video/testi-2025-b.mp4', who: 'Pelanggan Reset 5 Hari', when: 'Juni 2025' },
+  { src: '/video/testi-2026-a.mp4', who: 'Pelanggan Reset', when: 'Juli 2026' },
+  { src: '/video/testi-2022-a.mp4', who: 'Pelanggan Reset', when: 'Maret 2022' },
+];
+const supportList = [
+  { name: 'Golden Water', detail: 'Rp48.000' },
+  { name: 'Green Tonic', detail: 'Rp48.000' },
+  { name: 'Bone Broth', detail: 'Rp55.000' },
+  { name: 'Kombucha', detail: 'Rp35.000' },
+  { name: 'Night Shot', detail: '5 botol Rp195.000' },
+  { name: 'Support Pack', detail: '6 botol Rp250.000' },
+];
+---
+<Base title="Reset Detox · Reset 5 hari, diantar dingin di Jakarta" description="Program reset 5 hari: semua makan dan minummu dalam botol, dijadwalkan per jam, diantar dingin di Jabodetabek. Bukan diet. Ini reset.">
+
+  <!-- 1. Hero: the statement, and the shelf that never stops moving (drag or swipe it) -->
+  <section class="ch hero" data-field="stone" aria-labelledby="hero-title">
+    <div class="hero-top">
+      <h1 id="hero-title" class="hero-title">
+        <span class="pale" data-rise>Bukan diet.</span>
+        <span data-rise style="--i:1">Ini reset<span class="dot">.</span></span>
+      </h1>
+      <div class="hero-side" data-rise style="--i:2">
+        <p class="lead">Makan dan minum dalam botol, sehat tapi tetap enak. Program reset 1–5 hari dan botol untuk setiap hari, diantar dingin di Jabodetabek.</p>
+        <div class="hero-actions">
+          <a class="btn" href="/shop">See All Products &amp; Pricing <Icon name="arrow" /></a>
+          <a class="btn ghost" href="/program/reset-1-hari">Coba Reset 1 Hari</a>
+        </div>
+      </div>
+    </div>
+    <div class="shelf-run" data-shelf tabindex="0" role="region" aria-label="Produk Reset Detox. Geser untuk melihat, pilih untuk membuka di Shop.">
+      <ul class="shelf-track">
+        {[0, 1].map((copy) => shelf.map((x) => (
+          <li aria-hidden={copy === 1 ? 'true' : undefined}>
+            <a href={productUrl(x.name)} tabindex={copy === 1 ? -1 : undefined} draggable="false">
+              <Image src={img(x.photo)} alt={copy === 1 ? '' : x.name} widths={[240, 400]} sizes="(max-width: 860px) 40vw, 16vw" loading={copy === 0 ? 'eager' : 'lazy'} draggable="false" />
+              <span class="sr-name">{x.name}</span>
+              <span class="sr-price num">{x.price ? rupiah(x.price) : 'Segera'}</span>
+            </a>
+          </li>
+        )))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- 1b. Healthy, still delicious. The six client benefits live inside the copy, never as a list:
+       sweetness · low sugar/carb · practical · product role · habit · steady energy -->
+  <section class="ch tasty" data-field="broth" aria-labelledby="tasty-title">
+    <div class="tasty-grid">
+      <Image src={img('fullmeal')} alt="Fullmeal, satu makan utuh dalam botol" widths={[600, 1000]} sizes="(max-width: 860px) 90vw, 46vw" loading="lazy" class="tasty-img" />
+      <div class="tasty-text">
+        <h2 id="tasty-title" data-rise>Sehat, tetap enak.</h2>
+        <p class="statement" data-rise style="--i:1">Manisnya dari kurma, bukan dari gula. Buka tutupnya, nikmati kapan saja.</p>
+        <p data-rise style="--i:2">Sebagai sarapan, makan siang, atau teman sore. Rendah gula dan rendah karbo, tapi rasanya tidak minta dimaafkan. Pelan-pelan, kopi gula aren dan gorengan jam empat sore tidak lagi terasa wajib. Kenyangnya bertahan sampai jam makan berikutnya, jadi tidak ada lapar mendadak di tengah hari.</p>
+        <p class="tasty-links" data-rise style="--i:3"><a class="btn" href="/shop">Pilih untuk setiap hari</a> <a class="link" href="/reset-detox-5-hari">Atau mulai dengan Reset 5 Hari</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. The live thing: one day, hour by hour -->
+  <section class="ch dayline" data-field={day[0].field} id="sehari" aria-labelledby="day-title">
+    <div class="dayline-grid">
+      <div class="dayline-text">
+        <h2 id="day-title">Satu hari, jam demi jam.</h2>
+        <p class="lead now" data-now aria-live="polite">Pilih jam untuk melihat botolnya.</p>
+        <div class="hours" role="tablist" aria-label="Jadwal sehari">
+          {day.map((d, i) => (
+            <button type="button" role="tab" class="hour" aria-selected={i === 0 ? 'true' : 'false'} data-i={i} data-field-to={d.field} aria-controls="hour-panel">
+              <span class="num">{d.time}</span>
+            </button>
+          ))}
+        </div>
+        <div id="hour-panel" role="tabpanel" class="hour-panel">
+          {day.map((d, i) => (
+            <div class="hour-card" data-card={i} hidden={i !== 0}>
+              <p class="hour-time num">{d.time}</p>
+              <h3>{d.name}</h3>
+              <dl class="stats">
+                {stats(d.facts).map((f) => <div><dt>{f.k}</dt><dd class="num">{f.v}</dd></div>)}
+              </dl>
+              <p>{d.line}</p>
+            </div>
+          ))}
+        </div>
+        <p class="small fine">{site.schedule.note} Hari 4 dan 5 menambah Coco Iskiate, Sparkling Tea, dan Black Detox.</p>
+      </div>
+      <figure class="dayline-photo">
+        {day.map((d, i) => (
+          <Image src={img(dayPhoto[d.field])} alt={`${d.name}, botol jam ${d.time}`} widths={[640, 1000]} sizes="(max-width: 860px) 100vw, 760px" data-photo={i} class={i === 0 ? 'on' : ''} loading={i === 0 ? 'eager' : 'lazy'} />
+        ))}
+      </figure>
+    </div>
+  </section>
+
+  <!-- 3. What's in the box: one picture across tiles -->
+  <section class="ch box" data-field="stone" aria-labelledby="box-title">
+    <Image src={img('reset-5d')} alt="Isi box Reset 5 Hari" widths={[480, 800]} sizes="100vw" loading="eager" class="mosaic-m" />
+    <div class="mosaic" style={`--pic:url(${mosaic.src})`}>
+      {Array.from({ length: 24 }, (_, i) => {
+        const c = i % 6, r = Math.floor(i / 6);
+        const pos = `${(c / 5) * 100}% ${(r / 3) * 100}%`;
+        if (i === 0) return <div class="tile t-head" style="background:var(--day)"><h2 id="box-title">Isi box 5 hari</h2></div>;
+        if (i === 8) return <div class="tile t-fact" style="background:var(--broth)"><p><strong class="num">33 botol</strong><br />formula perempuan, 38 untuk laki-laki</p></div>;
+        if (i === 13) return <div class="tile t-fact" style="background:var(--tonic)"><p><strong>Dua kali kirim</strong><br />H-1 dan H+2, supaya tetap segar</p></div>;
+        if (i === 17) return <div class="tile t-fact" style="background:var(--shot)"><p><strong>Cooler bag</strong><br />langsung masuk kulkas begitu sampai</p></div>;
+        if (i === 22) return <a class="tile t-act" href="/reset-detox-5-hari#isi"><span>Lihat isi lengkap</span></a>;
+        return <div class="tile t-pic" aria-hidden="true"><span style={`background-position:${pos}`}></span></div>;
+      })}
+    </div>
+  </section>
+
+  <!-- 4. Plans that step up -->
+  <section class="ch plans" data-field="paper" aria-labelledby="plans-title">
+    <div class="plans-grid">
+      <div class="plans-head">
+        <h2 id="plans-title">Pilih durasi.</h2>
+        <div class="seg" role="radiogroup" aria-label="Formula">
+          <input type="radio" name="formula-home" id="fh-f" value="F" checked /><label for="fh-f">Perempuan</label>
+          <input type="radio" name="formula-home" id="fh-m" value="M" /><label for="fh-m">Laki-laki</label>
+        </div>
+      </div>
+      {[p1, p3, p5].map((p, i) => (
+        <a class={`plan plan-${i}`} href={p.url} style={`--field:var(--${p.field})`}>
+          <div class="plan-body">
+            <h3>{p.name}</h3>
+            <p class="plan-price num" data-price-f={rupiah(p.formulas[0].price)} data-price-m={rupiah(p.formulas[1].price)}>{rupiah(p.formulas[0].price)}</p>
+            <p class="small num" data-bottles-f={`${p.formulas[0].bottles} botol`} data-bottles-m={`${p.formulas[1].bottles} botol`}>{p.formulas[0].bottles} botol</p>
+            <p>{p.lead}</p>
+          </div>
+          <Image class="plan-img" src={img(p.photo)} alt="" widths={[480, 800]} sizes="(max-width: 860px) 90vw, 30vw" loading="lazy" />
+          <span class="plan-strip">Pilih {p.name}</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- 5. Best sellers -->
+  <section class="ch best" data-field="night" aria-labelledby="best-title">
+    <div class="best-head">
+      <h2 id="best-title">Best seller</h2>
+      <a class="btn light" href="/shop#best-seller">Lihat semua best seller <Icon name="arrow" /></a>
+    </div>
+    <ul class="best-grid">
+      {best.map((x, i) => (
+        <li data-rise style={`--i:${i % 4}`}>
+          <a href={productUrl(x.name)} class="best-card">
+            <Image src={img(x.photo)} alt={x.name} widths={[360, 600]} sizes="(max-width: 860px) 46vw, 23vw" loading="lazy" />
+            <span class="bc-name">{x.name}</span>
+            <span class="bc-meta small">{x.size} · {x.key}</span>
+            <span class="bc-row"><span class="bc-price num">{rupiah(x.price)}</span><span class="bc-cta"><Icon name="basket-plus" /></span></span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <!-- 6. Stories that play -->
+  <section class="ch vids" data-field="day" aria-labelledby="stories-title">
+    <div class="vids-head">
+      <h2 id="stories-title">Seribu wajah.</h2>
+      <p class="lead">Video dari pelanggan sendiri, dikirim lewat WhatsApp setelah reset. Hasil tiap orang berbeda.</p>
+    </div>
+    <ul class="vid-row">
+      {videos.map((v, i) => (
+        <li class="vid" data-rise style={`--i:${i}`}>
+          <video data-src={v.src} muted loop playsinline preload="none" aria-label={`Video testimoni ${v.who}, ${v.when}`}></video>
+          <button type="button" class="vid-sound" aria-pressed="false" aria-label="Nyalakan suara"><Icon name="volume-off" class="v-off" /><Icon name="volume" class="v-on" /></button>
+          <p class="small"><strong>{v.who}</strong> · {v.when}</p>
+          <p class="draft small">Draf: menunggu izin tertulis</p>
+        </li>
+      ))}
+    </ul>
+    <p><a class="btn" href="/cerita">Semua cerita</a></p>
+  </section>
+
+  <!-- 7. Questions -->
+  <section class="ch faq" data-field="paper" aria-labelledby="faq-title">
+    <div class="faq-grid">
+      <h2 id="faq-title">Pertanyaan populer</h2>
+      <div class="faq-list">
+        {site.faq.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <p>{f.a}</p>
+          </details>
+        ))}
+        <a class="btn ghost" href="/faq">Lihat semua pertanyaan</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. The idea again, inverted -->
+  <section class="ch close" data-field="day" aria-labelledby="close-title">
+    <h2 id="close-title" class="close-title">Titik.<br />Mulai Senin.</h2>
+    <div class="close-foot">
+      <p class="lead">Pilih tanggal mulai. Botolnya datang sehari sebelumnya, dingin.</p>
+      <a class="btn" href="/reset-detox-5-hari"><Icon name="calendar" /> Pilih tanggal mulai</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero { min-height: 100svh; display: grid; grid-template-rows: 1fr auto; gap: clamp(48px, 7vh, 96px); padding-top: 112px; padding-bottom: 32px; padding-inline: 0; overflow: hidden; }
+  .hero-top { display: grid; grid-template-columns: 1fr minmax(340px, 30%); gap: 40px; align-items: end; padding-inline: var(--m); }
+  .hero-title { font-size: clamp(4rem, 0.5rem + 10.5vw, 10rem); font-stretch: 118%; line-height: 0.84; letter-spacing: -0.035em; display: grid; }
+  .hero-title > span { white-space: nowrap; }
+  .hero-title .pale { color: #7d7871; }
+  .hero-side { display: grid; gap: 24px; }
+  .hero-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .hero-actions .btn { white-space: nowrap; }
+  .shelf-run { overflow-x: auto; scrollbar-width: none; cursor: grab; outline-offset: -4px; --fade: max(var(--m), 48px); -webkit-mask-image: linear-gradient(90deg, transparent, #000 var(--fade), #000 calc(100% - var(--fade)), transparent); mask-image: linear-gradient(90deg, transparent, #000 var(--fade), #000 calc(100% - var(--fade)), transparent); } /* taste-skill-ignore: alpha mask for the edge fade, not a colour fill */
+  /* the shelf runs edge to edge, past the page column; bottles fade in and out at the screen edges */
+  .shelf-run::-webkit-scrollbar { display: none; }
+  .shelf-run.dragging { cursor: grabbing; }
+  .shelf-track { list-style: none; margin: 0; padding: 24px 0 8px; display: flex; gap: 8px; width: max-content; }
+  .shelf-track li { width: clamp(150px, 15vw, 230px); flex: none; }
+  .shelf-track a { display: grid; justify-items: center; gap: 4px; text-decoration: none; padding: 0; -webkit-user-drag: none; user-select: none; }
+  .shelf-track img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; transform-origin: 50% 90%; transition: transform 380ms var(--ease-out); pointer-events: none; }
+  .shelf-track a:hover img, .shelf-track a:focus-visible img { transform: translateY(-14px) scale(1.06); }
+  .sr-name { font-weight: 700; font-size: var(--s-sm); text-align: center; line-height: 1.2; margin-top: 6px; }
+  .sr-price { font-size: var(--s-sm); }
+  .shelf-track a:hover .sr-name { text-decoration: underline; text-underline-offset: 0.25em; }
+  @media (max-width: 860px) {
+    .hero { min-height: auto; padding-top: 96px; }
+    .hero-top { grid-template-columns: 1fr; gap: 24px; }
+    .hero-title { font-size: 16.5vw; font-stretch: 100%; }
+    .hero-actions .btn { flex: 1 1 100%; }
+  }
+
+  .tasty-grid { display: grid; grid-template-columns: 6fr 5fr; gap: clamp(32px, 6vw, 96px); align-items: center; }
+  .tasty-img { width: 100%; aspect-ratio: 1; object-fit: cover; mix-blend-mode: multiply; }
+  .tasty-text { display: grid; gap: 28px; }
+  .tasty-text h2 { font-size: clamp(2.75rem, 5.2vw, 5.25rem); font-stretch: 108%; }
+  .statement { font-size: clamp(1.5rem, 1rem + 1.4vw, 2.25rem); font-weight: 600; line-height: 1.2; letter-spacing: -0.015em; }
+  .tasty-text > p:not(.statement):not(.tasty-links) { font-size: 18px; }
+  .tasty-links { display: flex; gap: 24px; align-items: center; flex-wrap: wrap; }
+  @media (max-width: 860px) { .tasty-grid { grid-template-columns: 1fr; } }
+
+  .dayline { transition: background-color 360ms ease, color 360ms ease; min-height: 92svh; }
+  .dayline-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(24px, 4vw, 64px); align-items: stretch; }
+  .dayline-text { display: grid; gap: 28px; align-content: start; }
+  .hours { display: flex; flex-wrap: wrap; gap: 8px; }
+  .hour { position: relative; min-height: 48px; padding: 0 18px; border: 0; background: color-mix(in srgb, currentColor 12%, transparent); color: inherit; font-weight: 700; font-size: var(--s-lead); cursor: pointer; transition: transform 140ms var(--ease-out), background-color 200ms ease; }
+  .hour:hover { background: color-mix(in srgb, currentColor 20%, transparent); }
+  .hour:active { transform: scale(0.96); }
+  .hour[aria-selected="true"] { background: currentColor; }
+  .hour[aria-selected="true"] span { color: var(--field); }
+  .hour[data-now]::after { content: ''; position: absolute; top: 6px; right: 6px; width: 8px; height: 8px; border-radius: 50%; background: var(--dot); }
+  .hour-card[hidden] { display: none; }
+  .hour-card { display: grid; gap: 10px; animation: card-in 420ms var(--ease-out); }
+  .hour-time { font-size: clamp(4rem, 9vw, 8rem); font-weight: 700; font-stretch: 118%; line-height: 0.9; letter-spacing: -0.04em; }
+  .hour-card h3 { font-size: clamp(1.5rem, 1rem + 1.6vw, 2.25rem); }
+  @keyframes card-in { from { opacity: 0; transform: translateY(12px); filter: blur(4px); } to { opacity: 1; transform: none; filter: none; } }
+  .fine { opacity: 0.85; }
+  .stats { margin: 6px 0 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .stats div { display: grid; padding: 14px 20px 12px; min-width: 132px; background: color-mix(in srgb, currentColor 12%, transparent); }
+  .stats dt { order: 2; font-weight: 600; font-size: 1rem; }
+  .stats dd { margin: 0; font-size: clamp(2rem, 1.4rem + 1.6vw, 3rem); font-weight: 800; font-stretch: 112%; line-height: 1; letter-spacing: -0.02em; }
+  /* every bottle photo is square, so a square frame shows the whole bottle at any width */
+  .dayline-grid { align-items: center; }
+  .dayline-photo { margin: 0; position: relative; width: min(100%, 760px, 80svh); aspect-ratio: 1; justify-self: end; overflow: hidden; background: var(--stone); }
+  .dayline-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform: scale(1.04); opacity: 0; transition: opacity 500ms var(--ease-out), transform 900ms var(--ease-out); }
+  .dayline-photo img.on { opacity: 1; transform: none; }
+  @media (max-width: 860px) {
+    .dayline-grid { grid-template-columns: 1fr; }
+    .dayline-photo { width: 100%; justify-self: stretch; order: -1; }
+  }
+
+  .box { padding-inline: 12px; }
+  .mosaic-m { display: none; }
+  .mosaic { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; }
+  .mosaic .tile { aspect-ratio: 1; overflow: hidden; position: relative; }
+  .t-pic span { position: absolute; inset: 0; background-image: var(--pic); background-size: 600% 400%; transition: transform 500ms var(--ease-out); }
+  .t-pic:hover span { transform: scale(1.08); }
+  .t-head, .t-fact, .t-act { padding: 16px; display: flex; }
+  .t-head h2 { font-size: clamp(1.5rem, 2.8vw, 3rem); font-stretch: 112%; }
+  .t-fact { align-items: flex-end; font-size: 18px; line-height: 1.3; }
+  .t-act { background: var(--ink); color: var(--paper); align-items: flex-end; font-weight: 700; font-size: var(--s-lead); text-decoration: none; transition: background-color 200ms ease; }
+  .t-act:hover { background: var(--ink-soft); }
+  @media (max-width: 860px) {
+    .mosaic { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+    .t-pic { display: none; }
+    .mosaic-m { display: block !important; width: 100%; aspect-ratio: 1; object-fit: cover; margin-bottom: 6px; }
+    .t-fact { font-size: 14px; padding: 10px; }
+    .mosaic .t-head { grid-column: span 3; aspect-ratio: auto; min-height: 0; padding: 20px; }
+    .t-head h2 { font-size: 9vw; }
+  }
+
+  .plans-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; align-items: end; }
+  .plans-head { grid-column: 1 / span 2; grid-row: 1; align-self: start; display: grid; gap: 24px; justify-items: start; }
+  .plan { grid-row: 1; position: relative; display: flex; flex-direction: column; background: var(--field); color: var(--ink); text-decoration: none; overflow: hidden; transition: transform 300ms var(--ease-out); }
+  .plan:hover { transform: translateY(-6px); }
+  .plan-0 { grid-column: 1; height: 440px; margin-top: 360px; }
+  .plan-1 { grid-column: 2; height: 560px; margin-top: 240px; }
+  .plan-2 { grid-column: 3; height: 800px; }
+  .plan-body { padding: 28px; display: grid; gap: 8px; position: relative; z-index: 1; }
+  .plan-body h3 { font-size: 28px; }
+  .plan-price { font-size: clamp(2.25rem, 3.6vw, 3.5rem); font-weight: 700; letter-spacing: -0.03em; line-height: 1; }
+  .plan-img { margin-top: auto; width: 100%; height: 46%; object-fit: cover; mix-blend-mode: multiply; }
+  .plan-strip { display: flex; align-items: center; height: 64px; padding: 0 28px; background: var(--ink); color: var(--paper); font-weight: 700; transition: background-color 200ms ease; }
+  .plan:hover .plan-strip { background: var(--ink-soft); }
+  @media (max-width: 860px) {
+    .plans-grid { grid-template-columns: 1fr; }
+    .plans-head { grid-column: 1; }
+    .plan { grid-column: 1 !important; grid-row: auto; height: auto !important; margin-top: 0 !important; }
+    .plan-img { height: 240px; }
+  }
+
+  .best-head { display: flex; justify-content: space-between; align-items: end; gap: 24px; flex-wrap: wrap; margin-bottom: 48px; }
+  .best-head h2 { font-size: clamp(3rem, 8vw, 8rem); font-stretch: 118%; }
+  .best-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px 16px; }
+  .best-card { display: grid; gap: 6px; text-decoration: none; }
+  .best-card img { width: 100%; aspect-ratio: 1; object-fit: cover; background: var(--stone); transition: transform 400ms var(--ease-out); }
+  .best-card:hover img { transform: scale(1.03); }
+  .bc-name { font-weight: 700; font-size: var(--s-lead); line-height: 1.15; margin-top: 8px; }
+  .bc-meta { opacity: 0.85; }
+  .bc-price { font-weight: 700; }
+  .bc-row { display: flex; justify-content: space-between; align-items: center; margin-top: 4px; }
+  .bc-cta { display: grid; place-items: center; width: 44px; height: 44px; background: var(--stone); color: var(--ink); transition: transform 160ms var(--ease-out), background-color 200ms ease; }
+  .best-card:hover .bc-cta { background: var(--paper); transform: scale(1.06); }
+  @media (max-width: 860px) { .best-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+  .vids-head { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 5vw, 80px); align-items: end; margin-bottom: 48px; }
+  .vids-head h2 { font-size: clamp(3rem, 8vw, 8rem); font-stretch: 118%; padding-bottom: 0.1em; }
+  .vid-row { list-style: none; margin: 0 0 40px; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+  .vid { position: relative; display: grid; gap: 8px; align-content: start; }
+  .vid video { width: 100%; aspect-ratio: 9 / 16; object-fit: cover; background: var(--ink); }
+  .vid-sound { position: absolute; top: 10px; right: 10px; width: 44px; height: 44px; display: grid; place-items: center; padding: 0; border: 0; background: var(--ink); color: var(--paper); font-weight: 600; font-size: 13px; cursor: pointer; transition: transform 140ms var(--ease-out); }
+  .vid-sound:active { transform: scale(0.94); }
+  .vid-sound[aria-pressed="true"] { background: var(--paper); color: var(--ink); }
+  .vid-sound :global(.ico) { width: 22px; height: 22px; }
+  .vid-sound :global(.v-on), .vid-sound[aria-pressed="true"] :global(.v-off) { display: none; }
+  .vid-sound[aria-pressed="true"] :global(.v-on) { display: block; }
+  .draft { justify-self: start; padding: 2px 8px; background: var(--ink); color: var(--paper); }
+  @media (max-width: 860px) {
+    .vids-head { grid-template-columns: 1fr; }
+    .vid-row { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 70%; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 8px; }
+    .vid { scroll-snap-align: start; }
+  }
+
+  .faq-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(40px, 7vw, 128px); align-items: start; }
+  .faq-grid h2 { font-size: clamp(2.75rem, 4.4vw, 5.5rem); }
+  .faq-list { display: grid; gap: 4px; }
+  .faq-list details { background: var(--stone); }
+  .faq-list summary { list-style: none; cursor: pointer; padding: 22px 24px; font-weight: 700; font-size: clamp(1.1rem, 1rem + 0.4vw, 1.35rem); display: flex; justify-content: space-between; gap: 16px; }
+  .faq-list summary::-webkit-details-marker { display: none; }
+  .faq-list summary::after { content: '+'; font-weight: 400; font-size: 26px; line-height: 1; transition: transform 220ms var(--ease-out); }
+  .faq-list details[open] summary::after { transform: rotate(45deg); }
+  .faq-list details p { padding: 0 24px 24px; font-size: 18px; }
+  .faq-list .link { margin-top: 16px; justify-self: start; }
+  @media (max-width: 860px) { .faq-grid { grid-template-columns: 1fr; } }
+
+  .close { min-height: 90svh; display: grid; grid-template-rows: 1fr auto; }
+  .close-title { font-size: clamp(3.5rem, 10vw, 10rem); font-stretch: 118%; line-height: 0.9; letter-spacing: -0.035em; }
+  .close-foot { display: flex; justify-content: space-between; align-items: end; gap: 24px; flex-wrap: wrap; }
+  .btn.coral { --btn-bg: var(--dot); --btn-fg: var(--ink); --btn-hover: #f2876b; min-height: 56px; }
+  @media (max-width: 860px) { .close { min-height: auto; gap: 48px; } .close-title { font-size: 12vw; font-stretch: 100%; } .close .btn { width: 100%; } }
+</style>
+
+<script>
+  // day timeline: pick an hour, the chapter takes that bottle's colour; the current hour is marked
+  const section = document.getElementById('sehari')!;
+  const tabs = Array.from(section.querySelectorAll<HTMLButtonElement>('.hour'));
+  const cards = Array.from(section.querySelectorAll<HTMLElement>('[data-card]'));
+  const photos = Array.from(section.querySelectorAll<HTMLElement>('[data-photo]'));
+  const now = section.querySelector<HTMLElement>('[data-now]')!;
+  function pick(i: number, focus = false) {
+    tabs.forEach((t, j) => { t.setAttribute('aria-selected', String(i === j)); t.tabIndex = i === j ? 0 : -1; });
+    cards.forEach((c, j) => (c.hidden = i !== j));
+    photos.forEach((p, j) => p.classList.toggle('on', i === j));
+    section.dataset.field = tabs[i].dataset.fieldTo;
+    if (focus) tabs[i].focus();
+    dispatchEvent(new Event('scroll'));
+  }
+  tabs.forEach((t, i) => {
+    t.addEventListener('click', () => pick(i));
+    t.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') pick((i + 1) % tabs.length, true);
+      if (e.key === 'ArrowLeft') pick((i - 1 + tabs.length) % tabs.length, true);
+    });
+  });
+  const mins = (s: string) => { const [h, m] = s.split('.').map(Number); return h * 60 + m; };
+  const d = new Date(); const t = d.getHours() * 60 + d.getMinutes();
+  const times = tabs.map((b) => mins(b.textContent!.trim()));
+  let cur = times.findIndex((x, i) => t >= x && (i === times.length - 1 || t < times[i + 1]));
+  const hh = `${String(d.getHours()).padStart(2, '0')}.${String(d.getMinutes()).padStart(2, '0')}`;
+  if (cur === -1) { cur = 0; now.textContent = `Sekarang ${hh}. Kalau kamu sedang reset, botol berikutnya Golden Water, besok pagi.`; }
+  else { now.textContent = `Sekarang ${hh}. Kalau kamu sedang reset, ini botolmu.`; }
+  tabs[cur].dataset.now = '';
+  tabs[cur].setAttribute('aria-label', `${tabs[cur].textContent!.trim()}, sekarang`);
+  pick(cur);
+
+  // plans: formula toggle
+  document.querySelectorAll<HTMLInputElement>('input[name="formula-home"]').forEach((r) => r.addEventListener('change', () => {
+    const k = r.value === 'M' ? 'M' : 'F';
+    document.querySelectorAll<HTMLElement>('[data-price-f]').forEach((el) => (el.textContent = (k === 'M' ? el.dataset.priceM : el.dataset.priceF) ?? ''));
+    document.querySelectorAll<HTMLElement>('[data-bottles-f]').forEach((el) => (el.textContent = (k === 'M' ? el.dataset.bottlesM : el.dataset.bottlesF) ?? ''));
+  }));
+
+  // hero shelf: drifts on its own, stops while you touch, drag, hover or focus it
+  const run = document.querySelector<HTMLElement>('[data-shelf]')!;
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let pausedUntil = 0, hover = false, x = run.scrollLeft;
+  const pause = (ms = 2500) => { pausedUntil = performance.now() + ms; };
+  run.addEventListener('pointerenter', () => (hover = true));
+  run.addEventListener('pointerleave', () => (hover = false));
+  run.addEventListener('focusin', () => pause(6000));
+  run.addEventListener('wheel', () => { pause(); x = run.scrollLeft; }, { passive: true });
+  run.addEventListener('touchstart', () => pause(4000), { passive: true });
+  run.addEventListener('scroll', () => { if (performance.now() < pausedUntil) x = run.scrollLeft; }, { passive: true });
+  let down = false, sx = 0, sl = 0, moved = false;
+  run.addEventListener('pointerdown', (e) => { if (e.pointerType !== 'mouse') return; down = true; moved = false; sx = e.clientX; sl = run.scrollLeft; run.classList.add('dragging'); pause(); });
+  addEventListener('pointermove', (e) => { if (!down) return; const dx = e.clientX - sx; if (Math.abs(dx) > 4) moved = true; run.scrollLeft = sl - dx; x = run.scrollLeft; pause(); });
+  addEventListener('pointerup', () => { down = false; run.classList.remove('dragging'); });
+  run.addEventListener('click', (e) => { if (moved) { e.preventDefault(); moved = false; } }, true);
+  function drift() {
+    const half = run.scrollWidth / 2;
+    if (!still && !hover && !down && performance.now() > pausedUntil) { x += 0.45; run.scrollLeft = x; }
+    if (half > 0 && run.scrollLeft >= half) { x -= half; run.scrollLeft = x; }
+    requestAnimationFrame(drift);
+  }
+  requestAnimationFrame(drift);
+
+  // testimonial videos: load and play when on screen, pause when off
+  const vio = new IntersectionObserver((es) => es.forEach((e) => {
+    const v = e.target as HTMLVideoElement;
+    if (e.isIntersecting) { if (!v.src) v.src = v.dataset.src!; if (!still) v.play().catch(() => {}); }
+    else v.pause();
+  }), { threshold: 0.35 });
+  const vids = Array.from(document.querySelectorAll<HTMLVideoElement>('.vid video'));
+  vids.forEach((v) => vio.observe(v));
+  const sounds = Array.from(document.querySelectorAll<HTMLButtonElement>('.vid-sound'));
+  sounds.forEach((b) => b.addEventListener('click', () => {
+    const v = b.parentElement!.querySelector('video')!;
+    vids.forEach((o) => { if (o !== v) o.muted = true; });
+    sounds.forEach((o) => { if (o !== b) { o.setAttribute('aria-pressed', 'false'); o.setAttribute('aria-label', 'Nyalakan suara'); } });
+    if (!v.src) v.src = v.dataset.src!;
+    v.muted = !v.muted; v.play().catch(() => {});
+    b.setAttribute('aria-pressed', String(!v.muted));
+    b.setAttribute('aria-label', v.muted ? 'Nyalakan suara' : 'Matikan suara');
+  }));
+</script>

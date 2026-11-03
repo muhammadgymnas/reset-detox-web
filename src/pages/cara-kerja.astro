@@ -1,0 +1,80 @@
+---
+import Base from '../layouts/Base.astro';
+import { Image } from 'astro:assets';
+import { img } from '../lib/images';
+import site from '../data/site.json';
+const steps = [
+  { t: 'Pesan di website', d: 'Pilih program, formula, rasa, dan tanggal mulai. Pesanan terkirim ke WhatsApp admin dalam satu pesan bernomor.', field: 'stone', photo: 'reset-5d' },
+  { t: 'Admin konfirmasi', d: 'Admin membalas dengan total, ongkir, dan cara bayar resmi. Kalau ada kondisi kesehatan, di sinilah ditanyakan.', field: 'paper', photo: 'fullmeal' },
+  { t: 'Dikirim dingin, H-1', d: 'Botol diantar dalam cooler bag sehari sebelum kamu mulai. Program 5 hari dikirim lagi di H+2.', field: 'tonic', photo: 'reset-3d' },
+  { t: 'Jalani jam demi jam', d: 'Setiap botol berlabel jamnya. Tim pendamping menyapa lewat grup WhatsApp setiap pagi dan sore.', field: 'day', photo: 'reset-1d' },
+  { t: 'Sesudahnya', d: 'Di hari kelima, ketujuh, dan keempat belas admin menyapa lagi. Tanpa paksaan untuk membeli apa pun.', field: 'broth', photo: 'renourish-3d' },
+];
+---
+<Base title="Cara kerja, penyimpanan & FAQ · Reset Detox" description="Dari pesan sampai hari kelima: batas pesan, pengiriman dingin, penyimpanan, klaim kerusakan, dan jawaban pertanyaan yang sering muncul.">
+  <section class="ch top" data-field="ink" aria-labelledby="ck-title">
+    <h1 id="ck-title" data-rise>Cara kerja</h1>
+    <p class="lead">Dari pesan sampai hari kelima, tanpa belanja dan tanpa masak.</p>
+  </section>
+  {steps.map((s, i) => (
+    <section class="step" data-field={s.field} aria-labelledby={`st-${i}`}>
+      <h2 id={`st-${i}`} data-rise>{s.t}</h2>
+      <div class="st-text"><p class="lead" data-rise style="--i:1">{s.d}</p><Image src={img(s.photo)} alt="" widths={[500, 900]} sizes="(max-width: 860px) 90vw, 45vw" loading="lazy" class="st-img" /></div>
+    </section>
+  ))}
+  <section class="ch store" data-field="night" aria-labelledby="store-h">
+    <div class="store-grid">
+      <div>
+        <h2 id="store-h" data-rise>Begitu sampai, masuk kulkas.</h2>
+        <ul class="rules">
+          <li><strong>Chiller</strong> Golden Water, Sparkling Tea, Black Detox. Jangan dibekukan.</li>
+          <li><strong>Freezer</strong> Body Reset Meal Day dan Night, Almond Mylk. Pindahkan ke chiller semalam sebelum diminum.</li>
+          <li><strong>Bebas</strong> Green Tonic, Bone Broth, Coco Iskiate: chiller atau freezer.</li>
+          <li><strong>5 hari</strong> paling lama di chiller, di bagian belakang, bukan di pintu kulkas.</li>
+          <li><strong>1 jam</strong> paling lama di suhu ruang setelah dibuka.</li>
+        </ul>
+        <p class="claim">Ada yang rusak? Rekam video saat membuka paket, kirim ke admin dalam 24 jam bersama foto semua botol.</p>
+      </div>
+      <Image src={img('fridge')} alt="Botol Reset Detox tersusun di kulkas" widths={[500, 900]} sizes="(max-width: 860px) 90vw, 40vw" loading="lazy" />
+    </div>
+  </section>
+  <section class="faq" data-field="paper" aria-labelledby="faq-h">
+    <div class="faq-side"><h2 id="faq-h" data-rise>Pertanyaan populer</h2><a class="btn ghost" href="/faq">Lihat semua pertanyaan</a></div>
+    <div class="faq-list">
+      {site.faq.map((f) => (
+        <details>
+          <summary>{f.q}</summary>
+          <p>{f.a}</p>
+        </details>
+      ))}
+    </div>
+  </section>
+</Base>
+<style>
+  .top { min-height: 70svh; display: grid; align-content: end; gap: 20px; padding-top: 140px; }
+  .top h1 { font-size: var(--s-hero); font-stretch: 118%; line-height: 0.85; letter-spacing: -0.035em; padding-bottom: 0.14em; } /* room for the descenders before the line below */
+  .step { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: end; min-height: 46svh; padding: 72px var(--m); background: var(--field); }
+  .step[data-field="stone"] { --field: var(--stone); } .step[data-field="paper"] { --field: var(--paper); }
+  .step[data-field="tonic"] { --field: var(--tonic); } .step[data-field="day"] { --field: var(--day); } .step[data-field="broth"] { --field: var(--broth); }
+  .st-text { display: grid; gap: 24px; }
+  .st-img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; mix-blend-mode: multiply; }
+  .store-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: clamp(24px, 5vw, 80px); align-items: center; }
+  .store-grid img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+  .rules { list-style: none; margin: 40px 0; padding: 0; display: grid; gap: 4px; }
+  .rules li { display: grid; grid-template-columns: 110px 1fr; gap: 16px; padding: 16px 0; }
+  .rules li:nth-child(odd) { background: rgb(236 233 228 / 0.06); padding-inline: 12px; }
+  .claim { padding: 20px; background: var(--broth); color: var(--ink); font-weight: 600; }
+  .faq { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(40px, 7vw, 128px); padding: clamp(72px, 9vw, 128px) var(--m); background: var(--paper); }
+  .faq-side { display: grid; gap: 24px; justify-items: start; align-content: start; }
+  .faq-list { display: grid; gap: 4px; }
+  .faq-list details { background: var(--stone); }
+  .faq-list summary { list-style: none; cursor: pointer; padding: 22px 24px; font-weight: 700; font-size: 1.2rem; display: flex; justify-content: space-between; gap: 16px; }
+  .faq-list summary::-webkit-details-marker { display: none; }
+  .faq-list summary::after { content: '+'; font-weight: 400; font-size: 26px; line-height: 1; transition: transform 220ms var(--ease-out); }
+  .faq-list details[open] summary::after { transform: rotate(45deg); }
+  .faq-list details p { padding: 0 24px 24px; font-size: 18px; }
+  @media (max-width: 860px) {
+    .step, .store-grid, .faq { grid-template-columns: 1fr; }
+    .rules li { grid-template-columns: 1fr; gap: 2px; }
+  }
+</style>

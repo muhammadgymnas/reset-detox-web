@@ -1,0 +1,55 @@
+---
+import Base from '../layouts/Base.astro';
+import site from '../data/site.json';
+---
+<Base title="Hari Ini · Reset Detox" description="Dibuka dari QR di box: hari keberapa, botol berikutnya, dan jamnya.">
+  <section class="today" data-field="gw" aria-labelledby="t-title" data-today>
+    <p class="lead" data-day>Hari ke-? dari 5</p>
+    <h1 id="t-title" data-next>Botol berikutnya</h1>
+    <p class="big num" data-time>--.--</p>
+    <p class="lead" data-line></p>
+    <ol class="rest" data-rest></ol>
+    <p class="small">{site.schedule.note} Masukkan botol ke kulkas, habiskan dalam satu jam setelah dibuka.</p>
+    <a class="btn light" target="_blank" rel="noopener" href={`https://wa.me/${site.whatsapp}?text=${encodeURIComponent('Halo Reset Detox, saya sedang menjalani program dan mau tanya.')}`}>Tanya pendamping</a>
+  </section>
+</Base>
+<style>
+  .today { min-height: 100svh; padding: 120px var(--m) 96px; background: var(--field, var(--gw)); color: var(--on, var(--stone)); display: grid; align-content: center; gap: 20px; transition: background-color 400ms ease; }
+  .today[data-field="gw"] { --field: var(--gw); --on: var(--stone); }
+  .today[data-field="night"] { --field: var(--night); --on: var(--stone); }
+  .today[data-field="tonic"] { --field: var(--tonic); --on: var(--ink); }
+  .today[data-field="day"] { --field: var(--day); --on: var(--ink); }
+  .today[data-field="broth"] { --field: var(--broth); --on: var(--ink); }
+  .today h1 { font-size: clamp(2.5rem, 6vw, 5.5rem); font-stretch: 115%; }
+  .big { font-size: clamp(5rem, 16vw, 13rem); font-weight: 800; font-stretch: 118%; letter-spacing: -0.04em; line-height: 0.85; }
+  .rest { margin: 0; padding-left: 1.2em; display: grid; gap: 4px; }
+  .rest li[data-done] { opacity: 0.55; text-decoration: line-through; }
+  .today .btn { justify-self: start; }
+</style>
+<script>
+  import site from '../data/site.json';
+  import { fromIso, iso } from '../scripts/cart';
+  const el = document.querySelector<HTMLElement>('[data-today]')!;
+  const p = new URLSearchParams(location.search);
+  const total = p.get('p') === '1d' ? 1 : p.get('p') === '3d' ? 3 : 5;
+  const start = p.get('m');
+  const now = new Date();
+  let dayN = 1;
+  if (start) { dayN = Math.floor((fromIso(iso(now)).getTime() - fromIso(start).getTime()) / 864e5) + 1; }
+  const dayEl = el.querySelector('[data-day]')!;
+  if (start && dayN < 1) dayEl.textContent = `Program mulai ${-dayN + 1} hari lagi. Botol datang sehari sebelumnya.`;
+  else if (start && dayN > total) dayEl.textContent = 'Program sudah selesai. Bagaimana rasanya? Ceritakan ke admin.';
+  else dayEl.textContent = start ? `Hari ke-${dayN} dari ${total}` : 'Jadwal sehari';
+  const mins = (s: string) => { const [h, m] = s.split('.').map(Number); return h * 60 + m; };
+  const t = now.getHours() * 60 + now.getMinutes();
+  const list = site.schedule.day;
+  let next = list.findIndex((d) => mins(d.time) >= t - 20);
+  if (next === -1) next = 0;
+  const n = list[next];
+  el.dataset.field = n.field;
+  el.querySelector('[data-next]')!.textContent = n.name;
+  el.querySelector('[data-time]')!.textContent = n.time;
+  el.querySelector('[data-line]')!.textContent = `${n.line} ${n.facts}.`;
+  el.querySelector('[data-rest]')!.innerHTML = list.map((d, i) => `<li ${i < next ? 'data-done' : ''}><span class="num">${d.time}</span> · ${d.name}</li>`).join('');
+  dispatchEvent(new Event('scroll'));
+</script>

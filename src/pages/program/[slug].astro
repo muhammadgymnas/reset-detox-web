@@ -1,0 +1,9 @@
+---
+import ProgramPage from '../../components/ProgramPage.astro';
+import catalog from '../../data/catalog.json';
+export function getStaticPaths() {
+  return catalog.programs.filter((p) => p.slug !== 'reset-5-hari').map((p) => ({ params: { slug: p.slug } }));
+}
+const { slug } = Astro.params;
+---
+<ProgramPage slug={slug!} />

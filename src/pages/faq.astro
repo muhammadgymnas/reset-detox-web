@@ -1,0 +1,51 @@
+---
+import Base from '../layouts/Base.astro';
+import site from '../data/site.json';
+const slug = (s: string) => s.toLowerCase().replace(/&/g, 'dan').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+---
+<Base title="Pertanyaan umum · Reset Detox" description="Jawaban soal produk, program reset, nutrisi, penyimpanan, pemesanan, pengiriman, dan pembayaran Reset Detox.">
+  <section class="faq-page" data-field="paper" aria-labelledby="faq-title">
+    <div class="faq-side">
+      <h1 id="faq-title" data-rise>Pertanyaan umum</h1>
+      <nav aria-label="Kategori pertanyaan" class="cats" data-rise style="--i:1">
+        {site.faqGroups.map((g) => <a href={`#${slug(g.title)}`}>{g.title}</a>)}
+      </nav>
+      <p class="ask" data-rise style="--i:2">Tidak ketemu jawabannya? <a class="link" href={`https://wa.me/${site.whatsapp}?text=${encodeURIComponent('Halo Reset Detox, saya mau tanya dulu.')}`} target="_blank" rel="noopener">Tanya admin di WhatsApp</a>.</p>
+    </div>
+    <div class="groups">
+      {site.faqGroups.map((g) => (
+        <div class="group" id={slug(g.title)}>
+          <h2 data-rise>{g.title}</h2>
+          {g.items.map((f) => (
+            <details>
+              <summary>{f.q}</summary>
+              <p>{f.a}</p>
+            </details>
+          ))}
+        </div>
+      ))}
+    </div>
+  </section>
+  <script type="application/ld+json" set:html={JSON.stringify({ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: site.faqGroups.flatMap((g) => g.items.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } }))) })} />
+</Base>
+<style>
+  .faq-page { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: clamp(32px, 6vw, 96px); padding: 128px var(--m) 112px; background: var(--paper); align-items: start; }
+  .faq-side { position: sticky; top: 96px; display: grid; gap: 28px; }
+  .faq-side h1 { font-size: clamp(2.75rem, 1.8rem + 3.4vw, 5.25rem); font-stretch: 112%; }
+  .cats { display: grid; gap: 4px; justify-items: start; }
+  .cats a { font-weight: 600; text-decoration: none; padding: 6px 0; }
+  .cats a:hover { text-decoration: underline; text-underline-offset: 0.25em; }
+  .ask { color: var(--ink-soft); }
+  .groups { display: grid; gap: 64px; }
+  .group { display: grid; gap: 0; scroll-margin-top: 96px; }
+  .group h2 { font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem); font-stretch: 105%; letter-spacing: -0.02em; margin-bottom: 16px; }
+  .group details { background: var(--stone); }
+  .group details + details { margin-top: 4px; }
+  summary { list-style: none; cursor: pointer; padding: 18px 20px; font-weight: 600; font-size: 1.0625rem; display: flex; justify-content: space-between; gap: 16px; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: '+'; font-weight: 400; font-size: 22px; line-height: 1; transition: transform 220ms var(--ease-out); }
+  details[open] summary::after { transform: rotate(45deg); }
+  summary:hover { text-decoration: underline; text-underline-offset: 0.25em; }
+  details p { padding: 0 20px 20px; font-size: 1.0625rem; max-width: none; }
+  @media (max-width: 860px) { .faq-page { grid-template-columns: 1fr; padding-top: 104px; } .faq-side { position: static; } .cats { grid-auto-flow: row; } }
+</style>

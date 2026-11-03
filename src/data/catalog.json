@@ -1,0 +1,724 @@
+{
+  "price_as_of": "2026-11-01",
+  "programs": [
+    {
+      "slug": "reset-5-hari",
+      "url": "/reset-detox-5-hari",
+      "line": "reset-program",
+      "name": "Reset 5 Hari",
+      "days": 5,
+      "lead": "Programnya. Lima hari makan dan minum dari botol, dijadwalkan per jam, diantar dingin dua kali.",
+      "photo": "reset-5d",
+      "field": "day",
+      "delivery": "Dua kali kirim: H-1 untuk hari 1–3, H+2 untuk hari 4–5",
+      "formulas": [
+        {
+          "id": "F",
+          "label": "Perempuan",
+          "sku": "RD-RST-5D-F",
+          "price": 2188000,
+          "bottles": 33
+        },
+        {
+          "id": "M",
+          "label": "Laki-laki",
+          "sku": "RD-RST-5D-M",
+          "price": 2388000,
+          "bottles": 38
+        }
+      ],
+      "flavorPicks": 5,
+      "includes": [
+        "Golden Water setiap pagi",
+        "Green Tonic",
+        "Body Reset Meal Day dan Night",
+        "Chicken Bone Broth",
+        "Coco Iskiate, Sparkling Tea, Black Detox di hari 4–5",
+        "Refuel untuk formula laki-laki",
+        "Detox Journal dan sachet sea salt",
+        "Grup pendampingan WhatsApp"
+      ]
+    },
+    {
+      "slug": "reset-3-hari",
+      "url": "/program/reset-3-hari",
+      "line": "reset-program",
+      "name": "Reset 3 Hari",
+      "days": 3,
+      "lead": "Tiga hari untuk kembali ke jalur, dengan jadwal dan pendampingan yang sama.",
+      "photo": "reset-3d",
+      "field": "tonic",
+      "delivery": "Satu kali kirim, H-1",
+      "formulas": [
+        {
+          "id": "F",
+          "label": "Perempuan",
+          "sku": "RD-RST-3D-F",
+          "price": 1488000,
+          "bottles": 18
+        },
+        {
+          "id": "M",
+          "label": "Laki-laki",
+          "sku": "RD-RST-3D-M",
+          "price": 1588000,
+          "bottles": 21
+        }
+      ],
+      "flavorPicks": 3,
+      "includes": [
+        "Golden Water setiap pagi",
+        "Green Tonic",
+        "Body Reset Meal Day dan Night",
+        "Chicken Bone Broth",
+        "Refuel untuk formula laki-laki",
+        "Grup pendampingan WhatsApp"
+      ]
+    },
+    {
+      "slug": "reset-1-hari",
+      "url": "/program/reset-1-hari",
+      "line": "reset-program",
+      "name": "Reset 1 Hari",
+      "days": 1,
+      "lead": "Satu hari untuk menjawab satu pertanyaan: apakah aku kuat? Biasanya jawabannya iya.",
+      "photo": "reset-1d",
+      "field": "broth",
+      "delivery": "Satu kali kirim, H-1",
+      "formulas": [
+        {
+          "id": "F",
+          "label": "Perempuan",
+          "sku": "RD-RST-1D-F",
+          "price": 499000,
+          "bottles": 7
+        },
+        {
+          "id": "M",
+          "label": "Laki-laki",
+          "sku": "RD-RST-1D-M",
+          "price": 549000,
+          "bottles": 8
+        }
+      ],
+      "flavorPicks": 1,
+      "variants": [
+        "Classic",
+        "Gentle",
+        "Vegan"
+      ],
+      "includes": [
+        "Golden Water",
+        "Green Tonic",
+        "Body Reset Meal Day dan Night",
+        "Chicken Bone Broth",
+        "Night Burn Shot",
+        "Panduan jam demi jam"
+      ]
+    },
+    {
+      "slug": "renourish-5-hari",
+      "url": "/program/renourish-5-hari",
+      "line": "renourish",
+      "name": "ReNourish 5 Hari",
+      "days": 5,
+      "lead": "Langkah kedua setelah Reset: meal replacement yang di-blend dengan buah dan superfood.",
+      "photo": "renourish-5d",
+      "field": "shot",
+      "delivery": "Dua kali kirim: H-1 dan H+2",
+      "formulas": [
+        {
+          "id": "F",
+          "label": "Perempuan",
+          "sku": "RD-RNR-5D-F",
+          "price": 2438000,
+          "bottles": null
+        },
+        {
+          "id": "M",
+          "label": "Laki-laki",
+          "sku": "RD-RNR-5D-M",
+          "price": 2638000,
+          "bottles": null
+        }
+      ],
+      "flavorPicks": 5,
+      "flavors": [
+        "Avocado Hope",
+        "Passion Berries",
+        "Love Beet",
+        "Overwhelm Acai",
+        "WheatGrace"
+      ],
+      "includes": [
+        "Body Nourish Meal dengan buah dan superfood",
+        "Golden Water",
+        "Green Tonic",
+        "Chicken Bone Broth",
+        "Grup pendampingan WhatsApp"
+      ]
+    },
+    {
+      "slug": "renourish-3-hari",
+      "url": "/program/renourish-3-hari",
+      "line": "renourish",
+      "name": "ReNourish 3 Hari",
+      "days": 3,
+      "lead": "Tiga hari ReNourish, untuk variasi rasa dan nutrisi setelah Reset.",
+      "photo": "renourish-3d",
+      "field": "shot",
+      "delivery": "Satu kali kirim, H-1",
+      "formulas": [
+        {
+          "id": "F",
+          "label": "Perempuan",
+          "sku": "RD-RNR-3D-F",
+          "price": 1638000,
+          "bottles": null
+        },
+        {
+          "id": "M",
+          "label": "Laki-laki",
+          "sku": "RD-RNR-3D-M",
+          "price": 1738000,
+          "bottles": null
+        }
+      ],
+      "flavorPicks": 3,
+      "flavors": [
+        "Avocado Hope",
+        "Passion Berries",
+        "Love Beet",
+        "Overwhelm Acai",
+        "WheatGrace"
+      ],
+      "includes": [
+        "Body Nourish Meal dengan buah dan superfood",
+        "Golden Water",
+        "Green Tonic",
+        "Chicken Bone Broth",
+        "Grup pendampingan WhatsApp"
+      ]
+    }
+  ],
+  "mealFlavors": [
+    "Original",
+    "Dark Cacao",
+    "Cold Brew Coffee",
+    "Matcha",
+    "Mocha",
+    "Choco Mint",
+    "Jasmine Earl Grey",
+    "Chai Masala"
+  ],
+  "support": [
+    {
+      "sku": "RD-SP-GW",
+      "name": "Golden Water Detox",
+      "moment": "pagi",
+      "size": "250 ml",
+      "price": 48000,
+      "key": "0 g gula · 22 kkal",
+      "promise": "Ritual herbal pagi. Diminum hangat, sebelum makan.",
+      "ingredients": "Kunyit, jahe merah, cayenne, cengkeh, kayu manis, lada hitam, rosella, ACV, VCO",
+      "allergens": "Tidak ada alergen utama",
+      "storage": "Chiller. Jangan dibekukan.",
+      "role": "Botol pertama setiap pagi di Reset 5 Hari.",
+      "photo": "s-gw"
+    },
+    {
+      "sku": "RD-SM-MB",
+      "name": "Smoothie Mixed Berries",
+      "photo": "s-mixed-berry",
+      "promise": "Berry campur, kurma, dan almond. Kental dan segar.",
+      "size": "500 ml",
+      "price": 80000,
+      "moment": "pagi",
+      "key": "Buah asli · tanpa gula tambahan",
+      "ingredients": "Almond, kurma, buah asli, ekstrak vanila, garam Himalaya; konfirmasi per rasa",
+      "allergens": "Almond (kacang pohon)",
+      "storage": "Freezer; pindahkan ke chiller semalam sebelum diminum",
+      "role": "Pengganti sarapan yang mengenyangkan."
+    },
+    {
+      "sku": "RD-SM-SB",
+      "name": "Smoothie Strawberry Banana",
+      "photo": "s-strawberry-banana",
+      "promise": "Stroberi dan pisang, creamy tanpa susu sapi.",
+      "size": "500 ml",
+      "price": 80000,
+      "moment": "pagi",
+      "key": "Buah asli · tanpa gula tambahan",
+      "ingredients": "Almond, kurma, buah asli, ekstrak vanila, garam Himalaya; konfirmasi per rasa",
+      "allergens": "Almond (kacang pohon)",
+      "storage": "Freezer; pindahkan ke chiller semalam sebelum diminum",
+      "role": "Pengganti sarapan yang mengenyangkan."
+    },
+    {
+      "sku": "RD-SM-ST",
+      "name": "Smoothie Strawberry",
+      "photo": "s-strawberry",
+      "promise": "Stroberi asli, manisnya dari buah.",
+      "size": "500 ml",
+      "price": 80000,
+      "moment": "pagi",
+      "key": "Buah asli · tanpa gula tambahan",
+      "ingredients": "Almond, kurma, buah asli, ekstrak vanila, garam Himalaya; konfirmasi per rasa",
+      "allergens": "Almond (kacang pohon)",
+      "storage": "Freezer; pindahkan ke chiller semalam sebelum diminum",
+      "role": "Pengganti sarapan yang mengenyangkan."
+    },
+    {
+      "sku": "RD-SM-CB",
+      "name": "Smoothie Choco Banana",
+      "photo": "s-choco-banana",
+      "promise": "Cokelat dan pisang, seperti dessert untuk sarapan.",
+      "size": "500 ml",
+      "price": 80000,
+      "moment": "pagi",
+      "key": "Buah asli · tanpa gula tambahan",
+      "ingredients": "Almond, kurma, buah asli, ekstrak vanila, garam Himalaya; konfirmasi per rasa",
+      "allergens": "Almond (kacang pohon)",
+      "storage": "Freezer; pindahkan ke chiller semalam sebelum diminum",
+      "role": "Pengganti sarapan yang mengenyangkan."
+    },
+    {
+      "sku": "RD-SM-AC",
+      "name": "Smoothie Avocado Choco",
+      "photo": "s-avocado-choco",
+      "promise": "Alpukat dan cokelat, lembut dan mengenyangkan.",
+      "size": "500 ml",
+      "price": 80000,
+      "moment": "pagi",
+      "key": "Buah asli · tanpa gula tambahan",
+      "ingredients": "Almond, kurma, buah asli, ekstrak vanila, garam Himalaya; konfirmasi per rasa",
+      "allergens": "Almond (kacang pohon)",
+      "storage": "Freezer; pindahkan ke chiller semalam sebelum diminum",
+      "role": "Pengganti sarapan yang mengenyangkan."
+    },
+    {
+      "sku": "RD-SM-CN",
+      "name": "Smoothie Coco Nut",
+      "photo": "s-coconut",
+      "promise": "Kelapa dan almond, gurih-manis.",
+      "size": "500 ml",
+      "price": 80000,
+      "moment": "pagi",
+      "key": "Buah asli · tanpa gula tambahan",
+      "ingredients": "Almond, kurma, buah asli, ekstrak vanila, garam Himalaya; konfirmasi per rasa",
+      "allergens": "Almond (kacang pohon)",
+      "storage": "Freezer; pindahkan ke chiller semalam sebelum diminum",
+      "role": "Pengganti sarapan yang mengenyangkan."
+    },
+    {
+      "sku": "RD-SP-FM",
+      "name": "Fullmeal",
+      "moment": "siang",
+      "size": "500 ml",
+      "price": null,
+      "key": "30–33 g protein · ±450 kkal",
+      "promise": "Satu makan utuh dalam botol. Baru.",
+      "ingredients": "Konfirmasi dengan label",
+      "allergens": "Konfirmasi dengan label",
+      "storage": "Freezer",
+      "role": "Dipakai di paket Simple Meal.",
+      "photo": "s-full-meal"
+    },
+    {
+      "sku": "RD-SP-RF",
+      "name": "Refuel Protein Mylk",
+      "moment": "siang",
+      "size": "250 ml",
+      "price": 55000,
+      "pack": {
+        "qty": 6,
+        "price": 270000
+      },
+      "key": "22 g protein",
+      "promise": "Protein tambahan untuk kenyang lebih lama dan pemulihan.",
+      "ingredients": "Almond, pepita, kurma, protein nabati, stevia, ekstrak vanila, sea salt",
+      "allergens": "Almond (kacang pohon)",
+      "storage": "Freezer",
+      "role": "Ditambahkan di formula laki-laki.",
+      "photo": "s-refuel"
+    },
+    {
+      "sku": "RD-MT-CH",
+      "name": "Mylk Tea Chai",
+      "photo": "s-chai-tea",
+      "promise": "Rempah chai hangat dalam susu almond.",
+      "size": "500 ml",
+      "price": 65000,
+      "moment": "siang",
+      "key": "Light meal replacement",
+      "ingredients": "Almond, teh, kurma; konfirmasi komposisi lengkap dengan label",
+      "allergens": "Almond (kacang pohon)",
+      "storage": "Freezer; pindahkan ke chiller semalam sebelum diminum",
+      "role": "Pengganti makan siang yang ringan, di luar program."
+    },
+    {
+      "sku": "RD-MT-EG",
+      "name": "Mylk Tea Earl Grey",
+      "photo": "s-earl-grey",
+      "promise": "Bergamot dan teh hitam, creamy.",
+      "size": "500 ml",
+      "price": 65000,
+      "moment": "siang",
+      "key": "Light meal replacement",
+      "ingredients": "Almond, teh, kurma; konfirmasi komposisi lengkap dengan label",
+      "allergens": "Almond (kacang pohon)",
+      "storage": "Freezer; pindahkan ke chiller semalam sebelum diminum",
+      "role": "Pengganti makan siang yang ringan, di luar program."
+    },
+    {
+      "sku": "RD-MT-JS",
+      "name": "Mylk Tea Jasmine",
+      "photo": "s-jasmine",
+      "promise": "Teh melati yang harum dan lembut.",
+      "size": "500 ml",
+      "price": 65000,
+      "moment": "siang",
+      "key": "Light meal replacement",
+      "ingredients": "Almond, teh, kurma; konfirmasi komposisi lengkap dengan label",
+      "allergens": "Almond (kacang pohon)",
+      "storage": "Freezer; pindahkan ke chiller semalam sebelum diminum",
+      "role": "Pengganti makan siang yang ringan, di luar program."
+    },
+    {
+      "sku": "RD-MT-GM",
+      "name": "Mylk Tea Genmaicha",
+      "photo": "s-genmaicha",
+      "promise": "Teh hijau dengan beras sangrai, gurih.",
+      "size": "500 ml",
+      "price": 65000,
+      "moment": "siang",
+      "key": "Light meal replacement",
+      "ingredients": "Almond, teh, kurma; konfirmasi komposisi lengkap dengan label",
+      "allergens": "Almond (kacang pohon)",
+      "storage": "Freezer; pindahkan ke chiller semalam sebelum diminum",
+      "role": "Pengganti makan siang yang ringan, di luar program."
+    },
+    {
+      "sku": "RD-MT-PD",
+      "name": "Mylk Tea Pandan",
+      "photo": "s-pandan",
+      "promise": "Pandan yang familiar, manisnya pas.",
+      "size": "500 ml",
+      "price": 65000,
+      "moment": "siang",
+      "key": "Light meal replacement",
+      "ingredients": "Almond, teh, kurma; konfirmasi komposisi lengkap dengan label",
+      "allergens": "Almond (kacang pohon)",
+      "storage": "Freezer; pindahkan ke chiller semalam sebelum diminum",
+      "role": "Pengganti makan siang yang ringan, di luar program."
+    },
+    {
+      "sku": "RD-SP-BB",
+      "name": "Chicken Bone Broth",
+      "moment": "sore",
+      "size": "250 ml",
+      "price": 55000,
+      "pack": {
+        "qty": 6,
+        "price": 270000
+      },
+      "key": "11 g protein · 40 kkal",
+      "promise": "Kaldu ayam hangat untuk sore. Tanpa tambahan MSG.",
+      "ingredients": "Ayam kampung, wortel, sea salt, ACV",
+      "allergens": "Ayam",
+      "storage": "Chiller atau freezer. Dihangatkan sebelum diminum.",
+      "role": "Bagian gurih di setiap hari program.",
+      "photo": "s-broth"
+    },
+    {
+      "sku": "NTL-SD-ET",
+      "name": "Sinless Es Teler",
+      "photo": "s-es-teler",
+      "promise": "Es teler dengan alpukat dan kelapa, tanpa krim susu.",
+      "size": "250 ml",
+      "price": 48000,
+      "moment": "camilan",
+      "key": "Low sugar · bebas susu sapi",
+      "ingredients": "Susu almond evaporasi buatan sendiri; isi sesuai rasa (konfirmasi dengan label)",
+      "allergens": "Almond (kacang pohon)",
+      "storage": "Chiller",
+      "role": "Camilan manis tanpa rasa bersalah."
+    },
+    {
+      "sku": "NTL-SD-KM",
+      "name": "Sinless Es Kelapa Muda",
+      "photo": "s-es-kelapa-muda",
+      "promise": "Kelapa muda dan susu almond, dingin dan ringan.",
+      "size": "250 ml",
+      "price": 48000,
+      "moment": "camilan",
+      "key": "Low sugar · bebas susu sapi",
+      "ingredients": "Susu almond evaporasi buatan sendiri; isi sesuai rasa (konfirmasi dengan label)",
+      "allergens": "Almond (kacang pohon)",
+      "storage": "Chiller",
+      "role": "Camilan manis tanpa rasa bersalah."
+    },
+    {
+      "sku": "NTL-SD-CJ",
+      "name": "Sinless Es Coffee Jelly",
+      "photo": "s-es-coffee-jelly",
+      "promise": "Kopi dan jeli untuk teman sore.",
+      "size": "250 ml",
+      "price": 48000,
+      "moment": "camilan",
+      "key": "Low sugar · bebas susu sapi",
+      "ingredients": "Susu almond evaporasi buatan sendiri; isi sesuai rasa (konfirmasi dengan label)",
+      "allergens": "Almond (kacang pohon)",
+      "storage": "Chiller",
+      "role": "Camilan manis tanpa rasa bersalah."
+    },
+    {
+      "sku": "NTL-SD-JB",
+      "name": "Sinless Jasmine Boba",
+      "photo": "s-jasmine-boba",
+      "promise": "Teh melati dengan boba, versi yang lebih ringan.",
+      "size": "250 ml",
+      "price": 48000,
+      "moment": "camilan",
+      "key": "Low sugar · bebas susu sapi",
+      "ingredients": "Susu almond evaporasi buatan sendiri; isi sesuai rasa (konfirmasi dengan label)",
+      "allergens": "Almond (kacang pohon)",
+      "storage": "Chiller",
+      "role": "Camilan manis tanpa rasa bersalah."
+    },
+    {
+      "sku": "NTL-MYLK",
+      "name": "Signature Mylk",
+      "photo": "s-almond",
+      "promise": "Susu almond mentah ±25%, manisnya dari kurma.",
+      "size": "250 ml",
+      "price": 45000,
+      "moment": "camilan",
+      "key": "Tanpa gula tambahan · vegan",
+      "ingredients": "Almond mentah, kurma, air mineral, ekstrak vanila organik, sea salt",
+      "allergens": "Almond (kacang pohon)",
+      "storage": "Freezer; pindahkan ke chiller semalam sebelum diminum",
+      "role": "Bonus akhir pekan di Reset 5 Hari.",
+      "sizes": [
+        {
+          "label": "250 ml",
+          "price": 45000
+        },
+        {
+          "label": "500 ml",
+          "price": 65000
+        }
+      ]
+    },
+    {
+      "sku": "RD-SP-NS",
+      "name": "Night Burn Shot",
+      "moment": "malam",
+      "size": "5 × 125 ml",
+      "price": 195000,
+      "key": "Chamomile, lavender, rose",
+      "promise": "Shot herbal untuk penutup hari.",
+      "ingredients": "Chamomile, lavender, rose, amla, haritaki, bibhitaki, ACV, kayu manis, stevia, L-theanine, spearmint",
+      "allergens": "Tidak ada alergen utama",
+      "storage": "Chiller",
+      "role": "Penutup hari di Reset 1 Hari.",
+      "photo": "s-night-shot"
+    },
+    {
+      "sku": "RD-SP-GT",
+      "name": "Green Tonic",
+      "moment": "kapan saja",
+      "size": "250 ml",
+      "price": 48000,
+      "key": "0 g gula · 6 kkal",
+      "promise": "Segar, sedikit asam. Green tea, lidah buaya, jeruk nipis.",
+      "ingredients": "Green tea, aloe vera, lime, kalium, stevia, garam Himalaya",
+      "allergens": "Tidak ada alergen utama",
+      "storage": "Chiller atau freezer",
+      "role": "Diminum di sela makan selama program.",
+      "photo": "s-gt"
+    },
+    {
+      "sku": "RD-SP-CI",
+      "name": "Coco Iskiate",
+      "moment": "kapan saja",
+      "size": "250 ml",
+      "price": 48000,
+      "key": "0 g gula · 37 kkal",
+      "promise": "Kelapa, chia seed, air rosella, lemon.",
+      "ingredients": "Kelapa, chia seed, air rosella, lemon",
+      "allergens": "Tidak ada alergen utama",
+      "storage": "Chiller atau freezer",
+      "role": "Muncul di hari 4 dan 5 Reset 5 Hari.",
+      "photo": "s-isk"
+    },
+    {
+      "sku": "RD-KB-GF",
+      "name": "Kombucha Ginger Fizz",
+      "photo": "s-ginger-fizz",
+      "promise": "Jahe yang menggigit, fizzy.",
+      "size": "250 ml",
+      "price": 35000,
+      "ingredients": "Teh fermentasi (kombucha); tambahan sesuai rasa",
+      "allergens": "Tidak ada alergen utama",
+      "storage": "Chiller. Jangan dibekukan.",
+      "moment": "kapan saja",
+      "key": "Fizzy · sedikit asam",
+      "role": "Kombucha dari dapur yang sama dengan program."
+    },
+    {
+      "sku": "RD-KB-PB",
+      "name": "Kombucha Poppin' Berry",
+      "photo": "s-poppin-berry",
+      "promise": "Berry yang manis-asam.",
+      "size": "250 ml",
+      "price": 35000,
+      "ingredients": "Teh fermentasi (kombucha); tambahan sesuai rasa",
+      "allergens": "Tidak ada alergen utama",
+      "storage": "Chiller. Jangan dibekukan.",
+      "moment": "kapan saja",
+      "key": "Fizzy · sedikit asam",
+      "role": "Kombucha dari dapur yang sama dengan program."
+    },
+    {
+      "sku": "RD-KB-LB",
+      "name": "Kombucha Lavender Blitz",
+      "photo": "s-lavender",
+      "promise": "Lavender yang wangi dan menenangkan.",
+      "size": "250 ml",
+      "price": 35000,
+      "ingredients": "Teh fermentasi (kombucha); tambahan sesuai rasa",
+      "allergens": "Tidak ada alergen utama",
+      "storage": "Chiller. Jangan dibekukan.",
+      "moment": "kapan saja",
+      "key": "Fizzy · sedikit asam",
+      "role": "Kombucha dari dapur yang sama dengan program."
+    },
+    {
+      "sku": "RD-KB-ST",
+      "name": "Sparkling Tea",
+      "photo": "s-sparkling-tea",
+      "promise": "Kombucha original, ringan dan bersih.",
+      "size": "250 ml",
+      "price": 35000,
+      "ingredients": "Teh fermentasi (kombucha); tambahan sesuai rasa",
+      "allergens": "Tidak ada alergen utama",
+      "storage": "Chiller. Jangan dibekukan.",
+      "moment": "kapan saja",
+      "key": "Fizzy · 18 kkal (BPCG)",
+      "role": "Botol 150 ml di hari 5 Reset 5 Hari."
+    },
+    {
+      "sku": "RD-KB-BD",
+      "name": "Black Detox",
+      "photo": "s-black-detox",
+      "promise": "Kombucha dengan basil, mint, dan charcoal. Hitam pekat.",
+      "size": "250 ml",
+      "price": 35000,
+      "ingredients": "Teh fermentasi (kombucha); tambahan sesuai rasa",
+      "allergens": "Tidak ada alergen utama",
+      "storage": "Chiller. Jangan dibekukan.",
+      "moment": "kapan saja",
+      "key": "Fizzy · basil & mint",
+      "role": "Botol 150 ml di hari 5 Reset 5 Hari."
+    }
+  ],
+  "packs": [
+    {
+      "sku": "RD-SP-PK6",
+      "name": "Support Pack 6",
+      "qty": 6,
+      "price": 250000,
+      "choices": [
+        "RD-SP-GW",
+        "RD-SP-GT",
+        "RD-SP-CI"
+      ]
+    },
+    {
+      "sku": "RD-SP-PK12",
+      "name": "Support Pack 12",
+      "qty": 12,
+      "price": 500000,
+      "choices": [
+        "RD-SP-GW",
+        "RD-SP-GT",
+        "RD-SP-CI"
+      ]
+    }
+  ],
+  "routines": [
+    {
+      "sku": "RD-AS-EF1",
+      "name": "Easy Fast 1",
+      "contents": "6 Golden Water",
+      "price": 250000,
+      "promise": "Awal yang ringan untuk intermittent fasting.",
+      "photo": "s-gw"
+    },
+    {
+      "sku": "RD-AS-EF2",
+      "name": "Easy Fast 2",
+      "contents": "6 Golden Water + 6 Green Tonic",
+      "price": 500000,
+      "promise": "Pagi dan sela hari, dua minggu.",
+      "photo": "s-gt",
+      "confirm": true
+    },
+    {
+      "sku": "RD-AS-SM3",
+      "name": "Simple Meal 3",
+      "contents": "3 Golden Water + 3 Fullmeal",
+      "price": 399000,
+      "promise": "Sarapan dan satu makan utama, tanpa repot.",
+      "photo": "simple-meal-3"
+    },
+    {
+      "sku": "RD-AS-SM5",
+      "name": "Simple Meal 5",
+      "contents": "5 Golden Water + 5 Fullmeal",
+      "price": 699000,
+      "promise": "Lima hari rutinitas sederhana.",
+      "photo": "simple-meal-5",
+      "confirm": true
+    }
+  ],
+  "renourishFlavorPhotos": {
+    "Avocado Hope": "s-avocado-hope",
+    "Passion Berries": "s-passion-berry",
+    "Love Beet": "s-lovebeet",
+    "Overwhelm Acai": "s-overwhelm-acai",
+    "WheatGrace": "s-wheatgrace"
+  },
+  "bestSellers": {
+    "note": "Konfirmasi dengan data penjualan sebelum tayang.",
+    "skus": [
+      "RD-SP-GW",
+      "NTL-MYLK",
+      "RD-SM-MB",
+      "RD-KB-GF",
+      "RD-SP-BB",
+      "RD-MT-PD",
+      "NTL-SD-ET",
+      "RD-SP-RF"
+    ]
+  },
+  "heroShelf": [
+    "RD-SP-GW",
+    "RD-SP-GT",
+    "RD-SM-MB",
+    "RD-MT-JS",
+    "RD-SP-BB",
+    "NTL-SD-ET",
+    "RD-KB-GF",
+    "RD-SP-FM",
+    "RD-SM-CB",
+    "RD-MT-PD",
+    "RD-SP-CI",
+    "RD-KB-PB",
+    "NTL-MYLK",
+    "RD-SP-NS",
+    "RD-SM-SB",
+    "RD-KB-LB"
+  ]
+}

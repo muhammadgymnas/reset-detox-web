@@ -1,0 +1,220 @@
+---
+import Base from '../layouts/Base.astro';
+import site from '../data/site.json';
+import Icon from '../components/Icon.astro';
+---
+<Base title="Detail pengiriman · Reset Detox" description="Satu formulir pendek, lalu pesananmu terkirim ke WhatsApp admin Reset Detox.">
+  <section class="co" data-field="stone" aria-labelledby="co-title">
+    <div class="co-grid">
+      <div class="co-main">
+        <h1 id="co-title">Hampir selesai</h1>
+        <p class="lead">Tiga isian, lalu WhatsApp terbuka dengan pesananmu. Bayar setelah admin konfirmasi total dan ongkir.</p>
+
+        <div class="empty" data-empty hidden>
+          <p class="lead">Keranjangmu masih kosong.</p>
+          <a class="btn" href="/reset-detox-5-hari">Lihat Reset 5 Hari</a>
+        </div>
+
+        <form class="co-form" id="co" novalidate>
+          <div class="field">
+            <label for="name">Nama</label>
+            <input id="name" name="name" autocomplete="name" required />
+            <p class="err" data-err="name" hidden>Tulis namamu dulu.</p>
+          </div>
+          <div class="field">
+            <label for="phone">Nomor WhatsApp</label>
+            <input id="phone" name="phone" inputmode="tel" autocomplete="tel" placeholder="0812 3456 7890" required />
+            <p class="err" data-err="phone" hidden>Nomor ini sepertinya belum lengkap.</p>
+          </div>
+          <div class="field">
+            <label for="zone">Area kirim</label>
+            <select id="zone" name="zone" required>
+              <option value="">Pilih area</option>
+              {site.zones.map((z) => <option>{z}</option>)}
+            </select>
+            <p class="err" data-err="zone" hidden>Pilih area pengirimanmu.</p>
+          </div>
+          <p class="note small" data-outside hidden>Di luar Jabodetabek? Pesanmu dikirim sebagai pertanyaan dulu, admin akan cek apakah pengiriman dingin bisa sampai.</p>
+          <div class="field" data-date-field hidden>
+            <label for="start">Tanggal mulai</label>
+            <input type="date" id="start" name="start" />
+            <p class="err" data-err="start" hidden>Batas pesan untuk tanggal ini sudah lewat. Pilih tanggal lain.</p>
+          </div>
+
+          <details class="more">
+            <summary>Tambahan (opsional)</summary>
+            <div class="more-body">
+              <div class="field"><label for="address">Alamat lengkap</label><textarea id="address" name="address" rows="2" autocomplete="street-address" placeholder="Boleh juga dikirim di chat"></textarea></div>
+              <div class="field"><label for="source">Tahu Reset Detox dari mana?</label><select id="source" name="source"><option value="">Pilih</option>{site.sources.map((x) => <option>{x}</option>)}</select></div>
+              <div class="field"><label for="member">Kode member atau referral</label><input id="member" name="member" /></div>
+              <label class="check"><input type="checkbox" name="gift" data-gift-toggle /> <span>Ini hadiah untuk orang lain</span></label>
+              <div class="gift" data-gift hidden>
+                <div class="field"><label for="gto">Nama penerima</label><input id="gto" name="gto" /></div>
+                <div class="field"><label for="gphone">WhatsApp penerima</label><input id="gphone" name="gphone" inputmode="tel" /></div>
+                <div class="field"><label for="gcard">Isi kartu ucapan</label><input id="gcard" name="gcard" maxlength="120" /></div>
+              </div>
+            </div>
+          </details>
+
+          <button class="btn block send" type="submit"><Icon name="chat" /> Kirim pesanan ke WhatsApp</button>
+          <p class="small fine-print" data-fit-note>Hamil, menyusui, atau sedang berobat rutin? Admin akan menanyakannya sebelum konfirmasi. Dengan mengirim, kamu setuju data ini dipakai untuk memproses pesanan (<a class="link" href="/privasi" target="_blank">privasi</a>).</p>
+        </form>
+      </div>
+
+      <aside class="summary" aria-label="Ringkasan pesanan">
+        <div class="row"><h2>Pesananmu</h2><a class="link small" href="#" data-open-cart>Ubah keranjang</a></div>
+        <div data-summary></div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="sent" data-field="ink" data-sent hidden aria-labelledby="sent-title">
+    <h2 id="sent-title" class="sent-title">Terkirim ke WhatsApp<span class="dot">.</span></h2>
+    <p class="lead">No. order <strong class="num" data-no></strong>. Admin membalas di jam layanan ({site.serviceHours}) dengan total, ongkir, dan cara bayar.</p>
+    <ol class="next">
+      <li><strong>Konfirmasi</strong> total dan pembayaran lewat admin.</li>
+      <li><strong>Pengiriman dingin</strong> sehari sebelum kamu mulai.</li>
+      <li><strong>Panduan harian</strong> ada di box dan di <a class="link" href="/hari-ini" data-today>halaman Hari Ini</a>.</li>
+    </ol>
+    <div class="sent-actions">
+      <a class="btn light" href="#" data-ics download="reset-detox.ics">Simpan ke kalender</a>
+      <a class="btn ghost" href="#" data-wa-again target="_blank" rel="noopener">WhatsApp tidak terbuka? Kirim lagi</a>
+      <button class="btn ghost" type="button" data-copy>Salin pesan</button>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .co { padding: 104px var(--m) 96px; background: var(--stone); }
+  .co-grid { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(300px, 1fr); gap: clamp(24px, 5vw, 80px); align-items: start; }
+  .co-main { display: grid; gap: 24px; }
+  .co-main h1 { font-size: clamp(2.25rem, 1.6rem + 2.4vw, 3.75rem); font-stretch: 112%; }
+  .co-form { max-width: 520px; }
+  .more { background: var(--paper); }
+  .more summary { cursor: pointer; padding: 16px 18px; font-weight: 700; }
+  .more-body { display: grid; gap: 16px; padding: 4px 18px 18px; }
+  .fine-print { color: var(--ink-soft); }
+  .co-form { display: grid; gap: 20px; max-width: 640px; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .gift { display: grid; gap: 16px; }
+  .fit { border: 0; padding: 20px; margin: 0; background: var(--paper); }
+  .fit legend { float: left; padding: 0; margin-bottom: 8px; }
+  .note { padding: 14px 16px; background: var(--broth); }
+  .send { min-height: 60px; font-size: var(--s-lead); }
+  .summary { position: sticky; top: 88px; background: var(--paper); padding: 28px; display: grid; gap: 16px; }
+  .summary h2 { font-size: var(--s-lead); font-stretch: 100%; letter-spacing: -0.01em; }
+  :global(.sum-line) { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; padding: 12px 0; }
+  :global(.sum-line:nth-child(even)) { background: var(--stone); margin-inline: -12px; padding-inline: 12px; }
+  :global(.sum-line .meta) { grid-column: 1; font-size: var(--s-sm); color: var(--ink-soft); }
+  .sent { min-height: 100svh; padding: 140px var(--m) 96px; background: var(--ink); color: var(--stone); display: grid; align-content: center; gap: 32px; }
+  .sent-title { font-size: clamp(2.25rem, 7vw, 7rem); font-stretch: 116%; max-width: 14ch; }
+  @media (max-width: 600px) { .sent-title { font-size: 9vw; font-stretch: 100%; } }
+  .next { margin: 0; padding-left: 1.4em; display: grid; gap: 8px; font-size: var(--s-lead); }
+  .sent-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+  @media (max-width: 900px) { .co-grid { grid-template-columns: 1fr; } .summary { position: static; order: -1; } .two { grid-template-columns: 1fr; } }
+</style>
+
+<script>
+  import { load, subtotal, rupiah, hasProgram, longDate, deliveries, shortDate, isValidStart, earliestStart, setDate, orderNumber, message, waLink, captureRef, type Order } from '../scripts/cart';
+  import site from '../data/site.json';
+  import catalog from '../data/catalog.json';
+  const form = document.getElementById('co') as HTMLFormElement;
+  const sum = document.querySelector('[data-summary]')!;
+  const ref = captureRef();
+  const fitResult = (() => { try { return sessionStorage.getItem('rd_fit') || ''; } catch { return ''; } })();
+
+  const programDays = () => {
+    const c = load();
+    const skus = c.lines.filter((l) => l.kind === 'program').map((l) => l.sku);
+    return Math.max(0, ...catalog.programs.filter((p) => p.formulas.some((f) => skus.includes(f.sku))).map((p) => p.days));
+  };
+
+  function paintSummary() {
+    const c = load();
+    const empty = !c.lines.length;
+    document.querySelector<HTMLElement>('[data-empty]')!.hidden = !empty;
+    form.hidden = empty;
+    if (empty) { sum.innerHTML = '<p>Belum ada item.</p>'; return; }
+    const dv = c.startDate && hasProgram(c) ? deliveries(c.startDate, programDays()) : [];
+    sum.innerHTML = c.lines.map((l) => `<div class="sum-line"><span><strong>${l.qty}× ${l.name}</strong></span><span class="num">${rupiah(l.qty * l.price)}</span>${l.meta ? `<span class="meta">${l.meta}</span>` : ''}</div>`).join('') +
+      `${c.startDate ? `<div class="row small"><span>${hasProgram(c) ? 'Mulai' : 'Kirim'}</span><strong>${longDate(c.startDate)}</strong></div>` : ''}
+       ${dv.length ? `<div class="row small"><span>Dikirim</span><span>${dv.map(shortDate).join(' dan ')}</span></div>` : ''}
+       <div class="row"><span>Subtotal</span><strong class="num">${rupiah(subtotal(c))}</strong></div>
+       <div class="row small"><span>Ongkir</span><span>dikonfirmasi admin</span></div>`;
+    const dateField = form.querySelector<HTMLElement>('[data-date-field]')!;
+    const start = form.querySelector<HTMLInputElement>('#start')!;
+    const needDate = !c.startDate || !isValidStart(c.startDate, site.cutoff);
+    dateField.hidden = !needDate;
+    dateField.querySelector('label')!.textContent = hasProgram(c) ? 'Tanggal mulai' : 'Tanggal kirim';
+    start.min = earliestStart(site.cutoff);
+    const note = form.querySelector<HTMLElement>('[data-fit-note]')!;
+    if (!hasProgram(c) || fitResult === 'ok') note.innerHTML = 'Dengan mengirim, kamu setuju data ini dipakai untuk memproses pesanan (<a class="link" href="/privasi" target="_blank">privasi</a>).';
+  }
+  document.addEventListener('cart:change', paintSummary);
+  paintSummary();
+
+  form.querySelector('[data-gift-toggle]')!.addEventListener('change', (e) => { form.querySelector<HTMLElement>('[data-gift]')!.hidden = !(e.target as HTMLInputElement).checked; });
+  form.querySelector('#zone')!.addEventListener('change', (e) => { form.querySelector<HTMLElement>('[data-outside]')!.hidden = (e.target as HTMLSelectElement).value !== 'Di luar Jabodetabek'; });
+  const src = form.querySelector<HTMLSelectElement>('#source')!;
+  if (ref) { const r = ref.toLowerCase(); const m = r.startsWith('ig') || r.includes('instagram') ? 'Instagram' : r.includes('tiktok') ? 'TikTok' : r.includes('google') ? 'Google' : ''; if (m) src.value = m; }
+
+  const normPhone = (s: string) => { const d = s.replace(/\D/g, ''); return d.startsWith('62') ? d : d.startsWith('0') ? '62' + d.slice(1) : d; };
+  function err(name: string, show: boolean) {
+    const el = form.querySelector<HTMLElement>(`[data-err="${name}"]`); if (el) el.hidden = !show;
+    const input = form.querySelector<HTMLElement>(`[name="${name}"]`); input?.setAttribute('aria-invalid', String(show));
+    return show;
+  }
+
+  let lastMsg = '';
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const c = load();
+    const f = new FormData(form);
+    const start = String(f.get('start') || '');
+    if (start) setDate(start);
+    const c2 = load();
+    const bad = [
+      err('name', !String(f.get('name')).trim()),
+      err('phone', normPhone(String(f.get('phone'))).length < 10),
+      err('zone', !f.get('zone')),
+      err('start', !c2.startDate || !isValidStart(c2.startDate, site.cutoff)),
+    ];
+    if (bad.some(Boolean)) { form.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus(); return; }
+    const outside = f.get('zone') === 'Di luar Jabodetabek';
+    const o: Order = {
+      name: String(f.get('name')).trim(), phone: normPhone(String(f.get('phone'))), zone: String(f.get('zone')), district: String(f.get('district') || '').trim(),
+      address: String(f.get('address') || ''), source: String(f.get('source') || '') || (ref ? 'Website (ref)' : 'Website'), ref, member: String(f.get('member') || '').trim() || undefined,
+      gift: f.get('gift') ? { to: String(f.get('gto')), phone: String(f.get('gphone')), card: String(f.get('gcard') || '') || undefined } : undefined,
+      fit: fitResult === 'ok' ? 'sudah lolos' : fitResult === 'consult' ? 'perlu konsultasi' : 'belum, mohon ditanyakan',
+    };
+    const no = orderNumber(c2.startDate);
+    let text = message(c2, o, no, programDays());
+    if (outside) text = text.replace('Halo Reset Detox, saya mau pesan.', 'Halo Reset Detox, saya mau tanya dulu: apakah bisa kirim ke area saya? Ini pesanan yang saya inginkan.');
+    lastMsg = text;
+    const url = waLink(site.whatsapp, text);
+    // analytics hook without personal data
+    (window as any).dataLayer?.push({ event: 'generate_lead', value: subtotal(c2), currency: 'IDR' });
+    window.open(url, '_blank', 'noopener');
+    showSent(no, url, c2.startDate!);
+  });
+
+  function showSent(no: string, url: string, start: string) {
+    document.querySelector<HTMLElement>('.co')!.hidden = true;
+    const sent = document.querySelector<HTMLElement>('[data-sent]')!;
+    sent.hidden = false;
+    sent.querySelector('[data-no]')!.textContent = no;
+    (sent.querySelector('[data-wa-again]') as HTMLAnchorElement).href = url;
+    const days = programDays() || 1;
+    const p = hasProgram(load()) ? (days >= 5 ? '5d' : days >= 3 ? '3d' : '1d') : '';
+    (sent.querySelector('[data-today]') as HTMLAnchorElement).href = p ? `/hari-ini?p=${p}&m=${start}` : '/hari-ini';
+    const dt = start.replace(/-/g, '');
+    const ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Reset Detox//ID', 'BEGIN:VEVENT', `UID:${no}@resetdetox.id`, `DTSTART;VALUE=DATE:${dt}`, `SUMMARY:Mulai Reset Detox (${no})`, 'DESCRIPTION:Botol dikirim sehari sebelumnya. Masukkan ke kulkas begitu sampai.', 'END:VEVENT', 'END:VCALENDAR'].join('\r\n');
+    (sent.querySelector('[data-ics]') as HTMLAnchorElement).href = 'data:text/calendar;charset=utf-8,' + encodeURIComponent(ics);
+    scrollTo({ top: 0 });
+    sent.querySelector<HTMLElement>('.sent-title')!.setAttribute('tabindex', '-1');
+    sent.querySelector<HTMLElement>('.sent-title')!.focus();
+  }
+  document.querySelector('[data-copy]')!.addEventListener('click', async (e) => {
+    try { await navigator.clipboard.writeText(lastMsg); (e.target as HTMLElement).textContent = 'Tersalin'; } catch {}
+  });
+</script>

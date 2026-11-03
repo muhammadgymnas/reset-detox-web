@@ -1,0 +1,374 @@
+---
+import Base from '../layouts/Base.astro';
+import { Image, getImage } from 'astro:assets';
+import { img } from '../lib/images';
+import catalog from '../data/catalog.json';
+import site from '../data/site.json';
+import { rupiah } from '../scripts/cart';
+import Icon from '../components/Icon.astro';
+
+interface Props { slug: string; }
+const p = catalog.programs.find((x) => x.slug === Astro.props.slug)!;
+const thumb = await getImage({ src: img(p.photo), width: 160, height: 160, fit: 'cover', format: 'webp' });
+const flavors: string[] = (p as any).flavors ?? catalog.mealFlavors;
+const variants: string[] | undefined = (p as any).variants;
+const perDay = (n: number) => rupiah(Math.round(n / p.days / 100) * 100);
+const others = catalog.programs.filter((x) => x.slug !== p.slug && x.line === p.line);
+const isReset = p.line === 'reset-program';
+const boxPhotos = p.line === 'renourish'
+  ? Object.entries((catalog as any).renourishFlavorPhotos as Record<string, string>).map(([n, ph]) => ({ n, ph }))
+  : [{ n: 'Golden Water Detox', ph: 's-gw' }, { n: 'Green Tonic', ph: 's-gt' }, { n: 'Chicken Bone Broth', ph: 's-broth' }, { n: 'Refuel (laki-laki)', ph: 's-refuel' }, { n: 'Coco Iskiate (hari 4–5)', ph: 's-isk' }, { n: 'Night Burn Shot', ph: 's-night-shot' }].slice(0, p.days >= 5 ? 6 : 4);
+const title = p.slug === 'reset-5-hari' ? 'Reset Detox 5 Hari · program reset rendah gula, diantar dingin' : `${p.name} · Reset Detox`;
+---
+<Base title={title} description={`${p.name}: ${p.lead} Mulai ${rupiah(p.formulas[0].price)}.`}>
+  <section class="buy" data-field="stone" aria-labelledby="p-title">
+    <div class="buy-grid">
+      <figure class="buy-media">
+        <Image src={img(p.photo)} alt={`Isi ${p.name}`} widths={[640, 1000, 1400]} sizes="(max-width: 960px) 100vw, 56vw" loading="eager" />
+      </figure>
+
+      <form class="panel" id="buy" data-sku-f={p.formulas[0].sku} data-sku-m={p.formulas[1].sku}
+        data-price-f={p.formulas[0].price} data-price-m={p.formulas[1].price}
+        data-bottles-f={p.formulas[0].bottles ?? ''} data-bottles-m={p.formulas[1].bottles ?? ''}
+        data-name={p.name} data-days={p.days} data-picks={p.flavorPicks} data-img={thumb.src} novalidate>
+        <h1 id="p-title" data-rise>{p.name}</h1>
+        <p class="lead" data-rise style="--i:1">{p.lead}</p>
+        <div class="price-row" data-rise style="--i:2">
+          <p class="price num" data-price>{rupiah(p.formulas[0].price)}</p>
+          <p class="num per">{perDay(p.formulas[0].price)} per hari<span data-bottles>{p.formulas[0].bottles ? ` · ${p.formulas[0].bottles} botol` : ''}</span></p>
+        </div>
+
+        <fieldset class="step">
+          <legend>Formula</legend>
+          <div class="seg">
+            <input type="radio" name="formula" id="f-f" value="F" checked /><label for="f-f">Perempuan</label>
+            <input type="radio" name="formula" id="f-m" value="M" /><label for="f-m">Laki-laki</label>
+          </div>
+          <p class="hint small">Formula laki-laki punya porsi protein lebih besar dan tambahan Refuel.</p>
+        </fieldset>
+
+        {variants && (
+          <fieldset class="step">
+            <legend>Jenis</legend>
+            <div class="seg">
+              {variants.map((v, i) => (<><input type="radio" name="variant" id={`v-${i}`} value={v} checked={i === 0} /><label for={`v-${i}`}>{v}</label></>))}
+            </div>
+            <p class="hint small">Gentle untuk pencernaan sensitif, Vegan tanpa bahan hewani.</p>
+          </fieldset>
+        )}
+
+        <fieldset class="step flavors">
+          <legend>Rasa meal <span class="small num" data-pick-count>0 dari {p.flavorPicks}</span></legend>
+          <label class="check auto"><input type="checkbox" name="auto" checked /> <span>Pilihkan untuk saya</span></label>
+          <ul class="flavor-list" data-flavors hidden>
+            {flavors.map((f) => (
+              <li>
+                <span>{f}</span>
+                <div class="stepper" role="group" aria-label={`Jumlah ${f}`}>
+                  <button type="button" data-f={f} data-d="-1" aria-label={`Kurangi ${f}`} disabled><Icon name="minus" /></button>
+                  <output data-out={f}>0</output>
+                  <button type="button" data-f={f} data-d="1" aria-label={`Tambah ${f}`}><Icon name="plus" /></button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </fieldset>
+
+        <fieldset class="step">
+          <legend><Icon name="calendar" /> Tanggal mulai</legend>
+          <div class="chips" data-date-chips></div>
+          <div class="field">
+            <label for="start" class="visually-hidden">Tanggal lain</label>
+            <input type="date" id="start" name="start" aria-describedby="start-hint" />
+            <p class="hint" id="start-hint" data-cutoff></p>
+            <p class="err" data-date-err hidden></p>
+          </div>
+          <p class="small deliv"><Icon name="truck" /><span data-deliv></span></p>
+        </fieldset>
+
+        <div class="buy-acts"><button class="btn add" type="submit" data-add disabled>Pilih tanggal mulai dulu</button><button class="btn ghost buynow" type="button" data-buynow disabled>Beli sekarang</button></div>
+
+        <div class="acc">
+          <details id="isi" open>
+            <summary>Isi box</summary>
+            <ul>{p.includes.map((x) => <li>{x}</li>)}</ul>
+            <p class="small">{p.delivery}.</p>
+          </details>
+          <details>
+            <summary>Cara menjalani</summary>
+            <p>Setiap botol berlabel jam minumnya. Ikuti urutannya, minum perlahan, dan tambah air putih sebanyak yang kamu mau. Tim pendamping menyapa lewat WhatsApp pagi dan sore.</p>
+          </details>
+          <details>
+            <summary>Siapa yang tidak disarankan</summary>
+            <p>Tidak disarankan untuk ibu hamil, anak di bawah 17 tahun, dan orang dengan riwayat gangguan makan. Menyusui, berobat rutin, punya maag, atau alergi kacang? Tanya admin dulu, atau <a class="link" href="/cek-kecocokan">cek kecocokan</a>.</p>
+          </details>
+          <details>
+            <summary><span><Icon name="snow" /> Penyimpanan</span></summary>
+            <p>Masukkan ke kulkas begitu sampai. Body Reset Meal ke freezer, Golden Water jangan dibekukan. Di chiller tahan sampai 5 hari.</p>
+          </details>
+        </div>
+        <p class="fit">Hamil, menyusui, atau punya kondisi medis? <a class="link" href="/cek-kecocokan">Cek kecocokan dulu, 60 detik</a>.</p>
+      </form>
+    </div>
+  </section>
+
+  {isReset && (
+    <section class="ch claim" data-field="ink" aria-labelledby="claim-title">
+      <h2 id="claim-title" data-rise>Ini reset. Bukan diet.</h2>
+      <dl class="nums">
+        <div data-rise><dt class="num">{p.days}</dt><dd>hari tanpa pola lama</dd></div>
+        <div data-rise><dt class="num">{p.formulas[0].bottles}</dt><dd>botol, formula perempuan</dd></div>
+        <div data-rise><dt class="num">26 g</dt><dd>protein di makan siangmu (label Body Reset Meal Day)</dd></div>
+        <div data-rise><dt class="num">0</dt><dd>belanja dan masak. Semuanya sudah di botol.</dd></div>
+        <div data-rise><dt class="num">{p.days >= 5 ? 2 : 1}×</dt><dd>dikirim dingin ke rumahmu</dd></div>
+        <div data-rise><dt class="num">1</dt><dd>grup pendamping WhatsApp setiap hari</dd></div>
+      </dl>
+    </section>
+  )}
+
+  <section class="ch inbox" data-field="stone" aria-labelledby="inbox-title">
+    <h2 id="inbox-title" data-rise>{p.line === 'renourish' ? 'Rasa ReNourish' : 'Di dalam box'}</h2>
+    <ul class="inbox-row">
+      {boxPhotos.map((b, i) => (
+        <li data-rise style={`--i:${i}`}><Image src={img(b.ph)} alt={b.n} widths={[300, 500]} sizes="(max-width: 860px) 45vw, 16vw" loading="lazy" /><span>{b.n}</span></li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="ch sched" data-field="paper" aria-labelledby="sched-title">
+    <div class="sched-grid">
+      <h2 id="sched-title" data-rise>Satu harimu</h2>
+      <ol class="timeline">
+        {site.schedule.day.map((d) => (
+          <li style={`--field:var(--${d.field})`} data-rise>
+            <span class="t num">{d.time}</span>
+            <span class="n">{d.name}</span>
+            <span class="l">{d.line} <span class="num small">{d.facts}</span></span>
+          </li>
+        ))}
+      </ol>
+      <p class="small note">{site.schedule.note}</p>
+    </div>
+  </section>
+
+  {others.length > 0 && (
+    <section class="ch others" data-field="broth" aria-labelledby="others-title">
+      <h2 id="others-title">Atau pilih lamanya</h2>
+      <div class="others-row">
+        {others.map((o) => (
+          <a class="other" href={o.url} data-rise>
+            <Image src={img(o.photo)} alt="" widths={[400, 700]} sizes="(max-width: 860px) 90vw, 30vw" loading="lazy" />
+            <span class="lead">{o.name}</span>
+            <span class="num">{rupiah(o.formulas[0].price)}</span>
+          </a>
+        ))}
+      </div>
+    </section>
+  )}
+
+  <dialog class="added" id="added" aria-labelledby="added-title">
+    <h2 id="added-title">Masuk keranjang.</h2>
+    <p data-added-text></p>
+    <div class="added-actions">
+      <button class="btn" type="button" data-open-cart data-close-added><Icon name="basket" /> Lihat keranjang</button>
+      <a class="btn ghost" href="/pesan">Lanjut pesan <Icon name="arrow" /></a>
+    </div>
+  </dialog>
+</Base>
+
+<style>
+  .buy { padding: 96px var(--m) 96px; background: var(--stone); }
+  .buy-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(360px, 1fr); gap: clamp(24px, 4vw, 72px); align-items: start; }
+  .buy-media { position: sticky; top: 80px; margin: 0; display: grid; gap: 10px; }
+  .buy-media img { width: 100%; aspect-ratio: 1; object-fit: cover; background: var(--stone-deep); }
+  .panel { display: grid; gap: 24px; }
+  .panel h1 { font-size: clamp(2.75rem, 2rem + 3vw, 5rem); font-stretch: 115%; }
+  .price-row { display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; }
+  .price { font-size: clamp(2rem, 1.6rem + 1.6vw, 3rem); font-weight: 700; letter-spacing: -0.03em; }
+  .per { color: var(--ink-soft); }
+  .step { border: 0; margin: 0; padding: 0; display: grid; gap: 12px; }
+  .step legend { font-weight: 700; margin-bottom: 12px; display: flex; gap: 12px; align-items: baseline; padding: 0; }
+  .hint { color: var(--ink-soft); }
+  .flavor-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+  .flavor-list li { display: flex; justify-content: space-between; align-items: center; padding: 6px 6px 6px 16px; background: var(--paper); }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  :global(.chip) { position: relative; min-height: 48px; padding: 6px 14px; border: 0; background: var(--paper); cursor: pointer; text-align: left; line-height: 1.2; font-weight: 600; transition: transform 140ms var(--ease-out), background-color 200ms ease; }
+  :global(.chip small) { display: block; font-weight: 400; color: var(--ink-soft); }
+  :global(.chip:active) { transform: scale(0.96); }
+  :global(.chip[aria-pressed="true"]) { background: var(--ink); color: var(--paper); }
+  :global(.chip[aria-pressed="true"] small) { color: var(--stone); }
+  :global(.chip[aria-pressed="true"]::after) { content: ''; position: absolute; top: 8px; right: 8px; width: 8px; height: 8px; border-radius: 50%; background: var(--dot); }
+  .deliv { font-weight: 600; min-height: 1.5em; }
+  .buy-acts { display: grid; grid-template-columns: 1.4fr 1fr; gap: 8px; }
+  .add, .buynow { min-height: 60px; }
+  .add { font-size: 1.0625rem; }
+  .deliv { display: flex; gap: 8px; align-items: center; }
+  .step legend { align-items: center; }
+  .acc summary span { display: inline-flex; gap: 8px; align-items: center; }
+  @media (max-width: 600px) { .buy-acts { grid-template-columns: 1fr; } }
+  .acc details { background: var(--paper); }
+  .acc details + details { margin-top: 4px; }
+  .acc summary { list-style: none; cursor: pointer; padding: 18px 20px; font-weight: 700; display: flex; justify-content: space-between; }
+  .acc summary::-webkit-details-marker { display: none; }
+  .acc summary::after { content: '+'; font-weight: 400; font-size: 22px; line-height: 1; transition: transform 200ms var(--ease-out); }
+  .acc details[open] summary::after { transform: rotate(45deg); }
+  .acc details > :not(summary) { padding: 0 20px 18px; }
+  .acc ul { margin: 0; padding-left: 20px; display: grid; gap: 4px; }
+  @media (max-width: 960px) {
+    .buy { padding-top: 80px; }
+    .buy-grid { grid-template-columns: 1fr; }
+    .buy-media { position: static; }
+  }
+
+  .claim h2 { font-size: clamp(3rem, 8vw, 8rem); font-stretch: 118%; max-width: 12ch; }
+  .nums { display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px 32px; margin: 72px 0 0; }
+  .nums dt { font-size: clamp(3rem, 6vw, 6rem); font-weight: 800; font-stretch: 116%; letter-spacing: -0.04em; line-height: 1; }
+  .nums dd { margin: 8px 0 0; max-width: 26ch; }
+  @media (max-width: 760px) { .nums { grid-template-columns: 1fr 1fr; } }
+
+  .inbox h2 { margin-bottom: 40px; }
+  .inbox-row { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 16px 8px; }
+  .inbox-row li { display: grid; gap: 8px; font-weight: 600; }
+  .inbox-row img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
+  .sched-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 32px; }
+  .timeline { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .timeline li { display: grid; grid-template-columns: 120px 1fr; column-gap: 24px; padding: 24px; background: var(--field); }
+  .timeline li[style*="gw"], .timeline li[style*="night"] { color: var(--stone); }
+  .timeline .t { grid-row: span 2; font-size: 40px; font-weight: 800; letter-spacing: -0.03em; line-height: 1; }
+  .timeline .n { font-weight: 700; font-size: var(--s-lead); }
+  .note { grid-column: 2; color: var(--ink-soft); }
+  @media (max-width: 860px) {
+    .sched-grid { grid-template-columns: 1fr; }
+    .note { grid-column: 1; }
+    .timeline li { grid-template-columns: 84px 1fr; padding: 18px; }
+    .timeline .t { font-size: 28px; }
+  }
+
+  .others-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 8px; margin-top: 48px; }
+  .other { display: grid; gap: 8px; text-decoration: none; padding-bottom: 16px; }
+  .other img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; mix-blend-mode: multiply; transition: transform 500ms var(--ease-out); }
+  .other:hover img { transform: scale(1.03); }
+
+  .added { border: 0; padding: 32px; width: min(440px, calc(100% - 32px)); background: var(--paper); color: var(--ink); display: grid; gap: 16px; opacity: 0; transform: translateY(12px) scale(0.98); transition: opacity 220ms var(--ease-out), transform 220ms var(--ease-out), overlay 220ms allow-discrete, display 220ms allow-discrete; box-shadow: 0 24px 60px -20px rgb(0 0 0 / 0.35); } /* taste-skill-ignore: real overlay (dialog) */
+  .added:not([open]) { display: none; }
+  .added[open] { opacity: 1; transform: none; }
+  @starting-style { .added[open] { opacity: 0; transform: translateY(12px) scale(0.98); } }
+  .added::backdrop { background: rgb(22 21 20 / 0.4); }
+  .added h2 { font-size: var(--s-h2); font-size: 2.25rem; }
+  .added-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+</style>
+
+<script>
+  import { add, earliestStart, isValidStart, deliveries, shortDate, longDate, addDays, iso, fromIso, cutoffSentence, rupiah } from '../scripts/cart';
+  import site from '../data/site.json';
+  import { icon } from '../scripts/icons';
+  const form = document.getElementById('buy') as HTMLFormElement;
+  const days = Number(form.dataset.days);
+  const picks = Number(form.dataset.picks);
+  const priceEl = form.querySelector('[data-price]')!;
+  const perEl = form.querySelector('.per')!;
+  const addBtn = form.querySelector<HTMLButtonElement>('[data-add]')!;
+  const buyNow = form.querySelector<HTMLButtonElement>('[data-buynow]')!;
+  let goAfter = false;
+  buyNow.addEventListener('click', () => { goAfter = true; form.requestSubmit(); });
+  const counts: Record<string, number> = {};
+  let start = '';
+
+  const formula = () => (form.querySelector<HTMLInputElement>('input[name="formula"]:checked')!.value as 'F' | 'M');
+  const price = () => Number(formula() === 'M' ? form.dataset.priceM : form.dataset.priceF);
+  const bottles = () => (formula() === 'M' ? form.dataset.bottlesM : form.dataset.bottlesF);
+  const auto = form.querySelector<HTMLInputElement>('input[name="auto"]')!;
+  const list = form.querySelector<HTMLElement>('[data-flavors]')!;
+  const pickCount = form.querySelector('[data-pick-count]')!;
+  const total = () => Object.values(counts).reduce((a, b) => a + b, 0);
+
+  function paintPrice() {
+    priceEl.textContent = rupiah(price());
+    const b = bottles();
+    perEl.innerHTML = `${rupiah(Math.round(price() / days / 100) * 100)} per hari${b ? ` · ${b} botol` : ''}`;
+  }
+  function paintFlavors() {
+    list.hidden = auto.checked;
+    pickCount.textContent = auto.checked ? 'dipilihkan tim' : `${total()} dari ${picks}`;
+    form.querySelectorAll<HTMLButtonElement>('[data-f]').forEach((b) => {
+      const f = b.dataset.f!; const n = counts[f] || 0;
+      b.disabled = b.dataset.d === '-1' ? n === 0 : total() >= picks;
+    });
+    form.querySelectorAll<HTMLOutputElement>('[data-out]').forEach((o) => (o.textContent = String(counts[o.dataset.out!] || 0)));
+    validate();
+  }
+  function validate() {
+    const flavOk = auto.checked || total() === picks;
+    const dateOk = !!start && isValidStart(start, site.cutoff);
+    addBtn.disabled = !(flavOk && dateOk);
+    buyNow.disabled = addBtn.disabled;
+    addBtn.innerHTML = !dateOk ? 'Pilih tanggal mulai dulu' : !flavOk ? `Pilih ${picks - total()} rasa lagi` : `${icon('basket-plus')} Tambah · ${rupiah(price())}`;
+  }
+
+  // dates
+  const chipsEl = form.querySelector('[data-date-chips]')!;
+  const input = form.querySelector<HTMLInputElement>('#start')!;
+  const err = form.querySelector<HTMLElement>('[data-date-err]')!;
+  const deliv = form.querySelector('[data-deliv]')!;
+  form.querySelector('[data-cutoff]')!.textContent = cutoffSentence(site.cutoff) + ' Atau pilih tanggal lain.';
+  const first = earliestStart(site.cutoff);
+  input.min = first;
+  input.max = addDays(first, 90);
+  const chipDates: string[] = [];
+  for (let d = first; chipDates.length < 4; d = addDays(d, 1)) if (isValidStart(d, site.cutoff)) chipDates.push(d);
+  chipsEl.innerHTML = chipDates.map((d) => {
+    const [day, rest] = [shortDate(d).split(' ')[0], shortDate(d).split(' ').slice(1).join(' ')];
+    return `<button type="button" class="chip" aria-pressed="false" data-date="${d}">${day}<small>${rest}</small></button>`;
+  }).join('');
+  function setStart(d: string) {
+    start = d;
+    chipsEl.querySelectorAll<HTMLButtonElement>('.chip').forEach((c) => c.setAttribute('aria-pressed', String(c.dataset.date === d)));
+    if (input.value !== d) input.value = d;
+    const ok = isValidStart(d, site.cutoff);
+    err.hidden = ok; input.setAttribute('aria-invalid', String(!ok));
+    if (!ok) { err.textContent = 'Tanggal ini sudah lewat batas pesan atau dapur libur. Pilih tanggal lain.'; deliv.textContent = ''; }
+    else {
+      const dv = deliveries(d, days);
+      deliv.textContent = dv.length > 1 ? `Mulai ${longDate(d)}. Dikirim ${shortDate(dv[0])} dan ${shortDate(dv[1])}.` : `Mulai ${longDate(d)}. Dikirim ${shortDate(dv[0])}.`;
+    }
+    validate();
+  }
+  chipsEl.addEventListener('click', (e) => { const c = (e.target as HTMLElement).closest<HTMLButtonElement>('.chip'); if (c) setStart(c.dataset.date!); });
+  input.addEventListener('change', () => input.value && setStart(input.value));
+
+  form.addEventListener('change', (e) => {
+    const t = e.target as HTMLInputElement;
+    if (t.name === 'formula') paintPrice();
+    if (t.name === 'auto') paintFlavors();
+    validate();
+  });
+  form.addEventListener('click', (e) => {
+    const b = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-f]');
+    if (!b) return;
+    const f = b.dataset.f!; counts[f] = Math.max(0, (counts[f] || 0) + Number(b.dataset.d));
+    paintFlavors();
+  });
+
+  const added = document.getElementById('added') as HTMLDialogElement;
+  added.addEventListener('click', (e) => { if (e.target === added || (e.target as HTMLElement).closest('[data-close-added]')) added.close(); });
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (addBtn.disabled) return;
+    const f = formula();
+    const variant = form.querySelector<HTMLInputElement>('input[name="variant"]:checked')?.value;
+    const flav = auto.checked ? 'Rasa: pilihkan tim' : 'Rasa: ' + Object.entries(counts).filter(([, n]) => n).map(([k, n]) => (n > 1 ? `${k} ×${n}` : k)).join(', ');
+    const meta = [`Formula ${f === 'M' ? 'laki-laki' : 'perempuan'}`, variant, flav].filter(Boolean).join(' · ');
+    const sku = (f === 'M' ? form.dataset.skuM : form.dataset.skuF)!;
+    const res = add({ id: `${sku}|${meta}`, sku, name: form.dataset.name!, meta, price: price(), img: form.dataset.img, kind: 'program' }, start, { silent: true });
+    if (!res.ok) {
+      err.hidden = false;
+      err.textContent = `Keranjangmu sudah berisi program yang mulai ${longDate(res.current)}. Satu tanggal mulai per pesanan: pilih tanggal yang sama, atau pesan terpisah.`;
+      return;
+    }
+    if (goAfter) { location.href = '/pesan'; return; }
+    added.querySelector('[data-added-text]')!.textContent = `${form.dataset.name}. ${meta}. Mulai ${longDate(start)}.`;
+    added.showModal();
+  });
+  void iso; void fromIso;
+  paintPrice(); paintFlavors();
+</script>

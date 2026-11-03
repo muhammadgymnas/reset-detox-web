@@ -1,0 +1,24 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Kebijakan privasi · Reset Detox" description="Data apa yang kami pakai, untuk apa, dan berapa lama.">
+  <section class="doc" data-field="paper" aria-labelledby="pv-title">
+    <h1 id="pv-title">Kebijakan privasi</h1>
+    <p class="lead">Draf untuk ditinjau legal sebelum tayang. Disusun mengikuti UU No. 27 Tahun 2022 tentang Pelindungan Data Pribadi.</p>
+    <h2>Data yang kami pakai</h2>
+    <p>Nama, nomor WhatsApp, area, alamat (jika kamu isi), isi pesanan, dan sumber kamu mengenal Reset Detox. Semuanya kamu kirim sendiri lewat WhatsApp saat menekan tombol kirim pesanan.</p>
+    <h2>Yang tidak kami simpan</h2>
+    <p>Jawaban cek kecocokan hanya diproses di perangkatmu. Tidak dikirim ke server kami, tidak masuk pesan WhatsApp, dan tidak masuk analytics.</p>
+    <h2>Untuk apa</h2>
+    <p>Memproses dan mengirim pesanan, mendampingi selama program, dan menyapa sesudahnya. Kami tidak menjual data kepada siapa pun.</p>
+    <h2>Keranjang di perangkatmu</h2>
+    <p>Isi keranjang disimpan di browser perangkatmu selama 7 hari, supaya tidak hilang saat kamu kembali.</p>
+    <h2>Hakmu</h2>
+    <p>Kamu bisa meminta salinan, perbaikan, atau penghapusan datamu lewat WhatsApp admin. Kami menindaklanjutinya dalam 3 hari kerja.</p>
+  </section>
+</Base>
+<style>
+  .doc { padding: 120px var(--m) 96px; background: var(--paper); display: grid; gap: 16px; max-width: 900px; }
+  .doc h1 { font-size: clamp(2.75rem, 6vw, 5rem); font-stretch: 115%; margin-bottom: 8px; }
+  .doc h2 { font-size: var(--s-lead); font-stretch: 100%; letter-spacing: -0.01em; margin-top: 24px; }
+</style>

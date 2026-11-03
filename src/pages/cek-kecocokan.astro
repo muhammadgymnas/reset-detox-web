@@ -1,0 +1,97 @@
+---
+import Base from '../layouts/Base.astro';
+import site from '../data/site.json';
+import { Image } from 'astro:assets';
+import { img } from '../lib/images';
+import Icon from '../components/Icon.astro';
+const qs = site.contraindications;
+---
+<Base title="Cek kecocokan · Reset Detox" description="Tujuh pertanyaan ya atau tidak, 60 detik. Jawabanmu tidak dikirim ke mana pun.">
+  <section class="quiz" data-field="broth" aria-labelledby="q-title">
+    <div class="quiz-head">
+      <h1 id="q-title">Cek kecocokan</h1>
+      <p class="lead">Tujuh pertanyaan, 60 detik. Jawabanmu hanya diproses di perangkat ini dan tidak dikirim ke mana pun.</p>
+      <Image src={img('reset-1d')} alt="Isi Reset 1 Hari" widths={[500, 900]} sizes="(max-width: 860px) 90vw, 44vw" class="quiz-img" />
+    </div>
+    <form class="quiz-body" id="quiz">
+      <progress max={qs.length} value="0" aria-label="Kemajuan" data-progress></progress>
+      {qs.map((q, i) => (
+        <fieldset class="q" data-q={i} data-yes={q.yes} hidden={i !== 0}>
+          <legend><span class="qq">{q.q}</span></legend>
+          <p class="visually-hidden">Pertanyaan {i + 1} dari {qs.length}</p>
+          <div class="answers">
+            <button class="btn" type="button" data-a="yes">Ya</button>
+            <button class="btn ghost" type="button" data-a="no">Tidak</button>
+          </div>
+          {i > 0 && <button class="link back" type="button" data-back>Kembali</button>}
+        </fieldset>
+      ))}
+      <div class="result" data-result="ok" hidden tabindex="-1">
+        <h2>Kamu bisa mulai<span class="dot">.</span></h2>
+        <p class="lead">Tidak ada yang menghalangi. Pilih program dan tanggal mulai.</p>
+        <a class="btn" href="/reset-detox-5-hari">Pilih Reset 5 Hari</a>
+        <a class="link" href="/program">Lihat semua program</a>
+      </div>
+      <div class="result" data-result="consult" hidden tabindex="-1">
+        <h2>Tanya admin dulu.</h2>
+        <p class="lead" data-notes>Ada kondisi yang perlu dibicarakan sebelum kamu mulai. Sering kali ada formula yang cocok.</p>
+        <a class="btn" target="_blank" rel="noopener" href={`https://wa.me/${site.whatsapp}?text=${encodeURIComponent('Halo Reset Detox, saya mau tanya dulu sebelum pesan. Hasil cek kecocokan saya: konsultasi dulu.')}`}><Icon name="chat" /> Tanya admin di WhatsApp</a>
+        <a class="link" href="/reset-detox-5-hari">Tetap lihat program</a>
+      </div>
+      <div class="result" data-result="no" hidden tabindex="-1">
+        <h2>Untuk sekarang, jangan dulu.</h2>
+        <p class="lead">Program reset tidak disarankan untuk kondisimu saat ini. Kalau kondisinya berubah, atau kamu ingin bertanya, admin kami siap menjelaskan.</p>
+        <a class="btn" target="_blank" rel="noopener" href={`https://wa.me/${site.whatsapp}?text=${encodeURIComponent('Halo Reset Detox, saya mau tanya soal kecocokan program.')}`}><Icon name="chat" /> Tanya admin</a>
+      </div>
+    </form>
+  </section>
+</Base>
+
+<style>
+  .quiz { min-height: 100svh; padding: 120px var(--m) 96px; background: var(--broth); display: grid; grid-template-columns: 1fr 1fr; gap: clamp(24px, 6vw, 96px); align-items: start; }
+  .quiz-head { display: grid; gap: 24px; }
+  .quiz-img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+  .quiz-head h1 { font-size: clamp(3rem, 7vw, 7rem); font-stretch: 116%; }
+  .quiz-body { display: grid; gap: 24px; background: var(--paper); padding: clamp(24px, 4vw, 48px); min-height: 420px; align-content: start; }
+  progress { width: 100%; height: 6px; appearance: none; border: 0; background: var(--stone); }
+  progress::-webkit-progress-bar { background: var(--stone); }
+  progress::-webkit-progress-value { background: var(--ink); transition: width 300ms var(--ease-out); }
+  progress::-moz-progress-bar { background: var(--ink); }
+  .q[hidden], .result[hidden] { display: none; }
+  .q { border: 0; padding: 0; margin: 0; display: grid; gap: 28px; animation: q-in 360ms var(--ease-out); }
+  .q legend { display: grid; gap: 12px; padding: 0; }
+  .qq { font-size: clamp(1.5rem, 1rem + 1.6vw, 2.5rem); font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; }
+  .answers { display: flex; gap: 8px; }
+  .answers .btn { min-width: 120px; }
+  .back { background: none; border: 0; padding: 0; justify-self: start; cursor: pointer; }
+  .result { display: grid; gap: 20px; justify-items: start; animation: q-in 420ms var(--ease-out); }
+  .result h2 { font-size: clamp(2.25rem, 4vw, 3.5rem); }
+  @keyframes q-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  @media (max-width: 860px) { .quiz { grid-template-columns: 1fr; } }
+</style>
+
+<script>
+  import site from '../data/site.json';
+  const form = document.getElementById('quiz')!;
+  const qs = Array.from(form.querySelectorAll<HTMLElement>('[data-q]'));
+  const prog = form.querySelector<HTMLProgressElement>('[data-progress]')!;
+  const answers: string[] = [];
+  let i = 0;
+  function show(n: number) { qs.forEach((q, j) => (q.hidden = j !== n)); prog.value = n; qs[n]?.querySelector<HTMLElement>('[data-a="yes"]')?.focus(); }
+  function finish() {
+    prog.value = qs.length; qs.forEach((q) => (q.hidden = true));
+    const res = answers.some((a, j) => a === 'yes' && qs[j].dataset.yes === 'no') ? 'no' : answers.some((a, j) => a === 'yes' && qs[j].dataset.yes === 'consult') ? 'consult' : 'ok';
+    if (res === 'consult') {
+      const notes = answers.map((a, j) => (a === 'yes' ? (site.contraindications[j] as any).note : '')).filter(Boolean);
+      if (notes.length) form.querySelector('[data-notes]')!.textContent = 'Ada kondisi yang perlu dibicarakan sebelum kamu mulai. ' + notes.join(' ');
+    }
+    try { sessionStorage.setItem('rd_fit', res === 'no' ? 'no' : res); } catch {}
+    const el = form.querySelector<HTMLElement>(`[data-result="${res}"]`)!; el.hidden = false; el.focus();
+  }
+  form.addEventListener('click', (e) => {
+    const t = (e.target as HTMLElement);
+    const a = t.closest<HTMLElement>('[data-a]');
+    if (a) { answers[i] = a.dataset.a!; i++; i < qs.length ? show(i) : finish(); }
+    if (t.closest('[data-back]')) { i = Math.max(0, i - 1); show(i); }
+  });
+</script>
