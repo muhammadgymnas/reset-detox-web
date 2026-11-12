@@ -13,10 +13,11 @@ const packs = [
 <Base title="Kontak & kerja sama · Reset Detox" description="WhatsApp untuk pesan dan pertanyaan, serta paket sampling, office wellness, dan partnership untuk kantor, gym, studio, dan event di Jabodetabek.">
   <section class="ch top" data-field="ink" aria-labelledby="k-title">
     <h1 id="k-title" data-rise>Kontak</h1>
-    <p class="lead">Satu nomor untuk pesan, pertanyaan, dan kerja sama. Pilih jalanmu.</p>
+    <p class="lead">Satu nomor untuk pesan, pertanyaan, kemitraan, dan kolaborasi. Pilih jalanmu.</p>
     <div class="paths">
       <a class="path" data-rise href="#pelanggan" style="--field:var(--stone)"><span class="pn">Pesan dan tanya</span><span>Untuk kamu yang ingin mulai, atau bertanya dulu.</span></a>
       <a class="path" data-rise href="#bisnis" style="--field:var(--broth)"><span class="pn">Kerja sama</span><span>Untuk kantor, gym, studio, komunitas, dan event.</span></a>
+      <a class="path" data-rise href="#kolaborasi" style="--field:var(--tonic)"><span class="pn">Kolaborasi brand</span><span>Untuk kreator, media, dan brand lain.</span></a>
     </div>
   </section>
 
@@ -34,7 +35,7 @@ const packs = [
       <dl class="b2c-facts" data-rise>
         <div><dt>Dapur</dt><dd>Sunter Mas Timur Blok Z No. 5, Jakarta Utara</dd></div>
         <div><dt>Kirim ke</dt><dd>Jakarta, Tangerang &amp; Tangsel, Depok, Bekasi, Bogor. Di luar itu, tanya dulu.</dd></div>
-        <div><dt>Instagram</dt><dd><a class="link" href="https://instagram.com/reset.detox" target="_blank" rel="noopener">@reset.detox</a></dd></div>
+        <div><dt>Instagram</dt><dd><a class="link" href={site.social.instagram} target="_blank" rel="noopener">@reset.detox</a></dd></div>
         <div><dt>Email</dt><dd><a class="link" href="mailto:hello@resetdetox.id">hello@resetdetox.id</a></dd></div>
         <div><dt>Sudah pesan?</dt><dd>Sebutkan nomor order RD-… di chat supaya admin langsung menemukannya.</dd></div>
       </dl>
@@ -67,9 +68,17 @@ const packs = [
       </form>
     </div>
   </section>
+  <section class="ch collab" id="kolaborasi" data-field="stone" aria-labelledby="collab-title">
+    <h2 id="collab-title" data-rise>Kolaborasi brand</h2>
+    <p class="lead" data-rise style="--i:1">Kreator, media, atau brand yang ingin bekerja sama dengan Reset Detox? Ceritakan idemu lewat WhatsApp atau email. Tim kami membalas dan membahas bentuk kerja samanya bersama.</p>
+    <div class="collab-acts" data-rise style="--i:2">
+      <a class="btn" href={`https://wa.me/${site.whatsapp}?text=${encodeURIComponent('Halo Reset Detox, saya mau tanya soal kolaborasi.')}`} target="_blank" rel="noopener"><Icon name="chat" /> Chat soal kolaborasi</a>
+      <a class="btn ghost" href="mailto:hello@resetdetox.id?subject=Kolaborasi%20brand">hello@resetdetox.id</a>
+    </div>
+  </section>
 </Base>
 <style>
-  .paths { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 40px; }
+  .paths { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 40px; }
   .path { display: grid; gap: 8px; padding: 28px; background: var(--field); color: var(--ink); text-decoration: none; transition: transform 200ms var(--ease-out); }
   .path:hover { transform: translateY(-4px); }
   .path:active { transform: scale(0.98); }
@@ -89,6 +98,9 @@ const packs = [
   @media (max-width: 860px) { .b2c-img { aspect-ratio: 1 / 1; object-position: 0% 100%; } }
   .b2b-head { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: end; }
   .b2b-head h2 { font-size: clamp(3rem, 8vw, 8rem); font-stretch: 116%; }
+  .collab { display: grid; gap: 24px; justify-items: start; }
+  .collab h2 { font-size: clamp(2rem, 0.9rem + 3.2vw, 4.25rem); }
+  .collab-acts { display: flex; gap: 8px; flex-wrap: wrap; }
   @media (max-width: 860px) { .paths, .b2c-grid, .b2b-head { grid-template-columns: 1fr; } .b2c-facts div { grid-template-columns: 1fr; gap: 2px; } }
   .top { min-height: 64svh; display: grid; align-content: end; gap: 20px; padding-top: 140px; }
   .top h1 { font-size: var(--s-hero); font-stretch: 118%; line-height: 0.85; letter-spacing: -0.035em; padding-bottom: 0.14em; } /* room for the descenders before the line below */

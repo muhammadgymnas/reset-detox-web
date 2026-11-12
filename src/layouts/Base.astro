@@ -14,6 +14,11 @@ const { title, description, canonical } = Astro.props;
 const logoD = await getImage({ src: logoDark, width: 320, format: 'webp' });
 const logoL = await getImage({ src: logoLight, width: 320, format: 'webp' });
 const year = new Date().getFullYear();
+const waConsult = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent('Halo Reset Detox, saya mau konsultasi dulu.')}`;
+// Search engines stay out until launch day: set PUBLIC_INDEXING=true in the host's build variables, then redeploy.
+const indexable = import.meta.env.PUBLIC_INDEXING === 'true';
+const pageUrl = canonical ?? new URL(Astro.url.pathname, Astro.site).href;
+const shareImage = new URL('/og.jpg', Astro.site).href;
 // everything the header search can find, with a small picture each
 const thumb = async (photo: string) => (await getImage({ src: img(photo), width: 112, height: 112, fit: 'cover', format: 'webp' })).src;
 const searchItems = [
@@ -30,10 +35,18 @@ const popular = catalog.bestSellers.skus.map((k) => catalog.support.find((s) => 
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>{title}</title>
   <meta name="description" content={description} />
-  {canonical && <link rel="canonical" href={canonical} />}
+  <link rel="canonical" href={pageUrl} />
+  {!indexable && <meta name="robots" content="noindex, nofollow" />}
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
   <meta property="og:type" content="website" />
+  <meta property="og:url" content={pageUrl} />
+  <meta property="og:locale" content="id_ID" />
+  <meta property="og:site_name" content="Reset Detox" />
+  <meta property="og:image" content={shareImage} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
   <meta name="theme-color" content="#161514" />
   <link rel="preload" href="/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
@@ -48,11 +61,12 @@ const popular = catalog.bestSellers.skus.map((k) => catalog.support.find((s) => 
       <img class="on-dark" src={logoL.src} width="140" height="24" alt="Reset Detox" />
     </a>
     <nav aria-label="Utama">
-      {[['/program', 'Program'], ['/shop', 'Shop'], ['/cerita', 'Cerita'], ['/cara-kerja', 'Cara Kerja'], ['/kontak', 'Kontak']].map(([href, label]) => (
+      {[['/program', 'Program'], ['/shop', 'Shop'], ['/tentang', 'Tentang'], ['/cara-kerja', 'Cara Kerja'], ['/kontak', 'Kontak']].map(([href, label]) => (
         <a href={href} aria-current={Astro.url.pathname.startsWith(href) ? 'page' : undefined}>{label}</a>
       ))}
     </nav>
     <div class="h-acts">
+      <a class="btn ghost h-wa" href={waConsult} target="_blank" rel="noopener"><Icon name="chat" /> Konsultasi</a>
       <button class="h-icon" type="button" data-open-search aria-label="Cari produk" aria-keyshortcuts="/"><Icon name="search" /></button>
       <button class="h-icon cart-btn" type="button" data-open-cart aria-label="Buka keranjang">
         <Icon name="basket" /><span class="count" data-cart-count data-zero>0</span>
@@ -90,6 +104,8 @@ const popular = catalog.bestSellers.skus.map((k) => catalog.support.find((s) => 
             <li><a href="/program">Semua program</a></li>
             <li><a href="/shop">Semua produk</a></li>
             <li><a href="/shop#best-seller">Best seller</a></li>
+            <li><a href={site.social.tokopedia} target="_blank" rel="noopener">Tokopedia</a></li>
+            <li><a href={site.social.shopee} target="_blank" rel="noopener">Shopee</a></li>
           </ul>
         </div>
         <div>
@@ -104,10 +120,11 @@ const popular = catalog.bestSellers.skus.map((k) => catalog.support.find((s) => 
         <div>
           <p class="f-h">Reset Detox</p>
           <ul>
-            <li><a href="/cerita">Cerita</a></li>
+            <li><a href="/tentang">Tentang</a></li>
+            <li><a href="/cerita">Testimoni</a></li>
             <li><a href="/kontak">Kontak</a></li>
             <li><a href="/kontak#bisnis">Kerja sama</a></li>
-            <li><a href="https://instagram.com/reset.detox" target="_blank" rel="noopener">Instagram</a></li>
+            <li><a href={site.social.instagram} target="_blank" rel="noopener">Instagram</a></li>
           </ul>
         </div>
       </nav>
@@ -130,11 +147,13 @@ const popular = catalog.bestSellers.skus.map((k) => catalog.support.find((s) => 
       <a href="/reset-detox-5-hari">Reset 5 Hari</a>
       <a href="/program">Program</a>
       <a href="/shop">Shop</a>
-      <a href="/cerita">Cerita</a>
+      <a href="/tentang">Tentang</a>
+      <a href="/cerita">Testimoni</a>
       <a href="/cara-kerja">Cara Kerja</a>
       <a href="/cek-kecocokan">Cek kecocokan</a>
       <a href="/kontak">Kontak & kerja sama</a>
-      <button class="btn light" type="button" data-open-cart style="margin-top:24px"><Icon name="basket" /> Keranjang · <span data-cart-count>0</span></button>
+      <a class="btn light wa-menu" href={waConsult} target="_blank" rel="noopener" style="margin-top:24px"><Icon name="chat" /> Konsultasi di WhatsApp</a>
+      <button class="btn light" type="button" data-open-cart style="margin-top:8px"><Icon name="basket" /> Keranjang · <span data-cart-count>0</span></button>
     </nav>
   </dialog>
 

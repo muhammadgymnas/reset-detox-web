@@ -3,7 +3,10 @@
 // usage: node scripts/viewport-check.mjs [baseUrl] [outDir]
 import { readdirSync, statSync, mkdirSync, writeFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
-import { Browser, sleep } from '../../.agents/skills/design-taste-frontend/scripts/lib/cdp.mjs';
+import { pathToFileURL } from 'node:url';
+// the browser driver ships with the taste skill; point TASTE_SKILL at its folder if it lives elsewhere
+const skill = process.env.TASTE_SKILL ?? 'C:/Users/gibra/Documents/Ade Gym/Design Skills/.agents/skills/design-taste-frontend';
+const { Browser, sleep } = await import(pathToFileURL(join(skill, 'scripts/lib/cdp.mjs')).href);
 
 const base = process.argv[2] || 'http://localhost:4321';
 const out = process.argv[3] || '.taste-skill/viewports';

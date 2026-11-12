@@ -1,0 +1,46 @@
+---
+import Base from '../layouts/Base.astro';
+import { Image } from 'astro:assets';
+import { img } from '../lib/images';
+import site from '../data/site.json';
+const ask = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent('Halo Reset Detox, saya mau tanya dulu.')}`;
+const ways = [
+  { h: '/shop', t: 'Lihat semua produk', d: '28 botol dengan harga dan foto, disusun menurut jam minumnya.' },
+  { h: '/program', t: 'Lihat program', d: 'Reset 1, 3, dan 5 hari, plus ReNourish untuk sesudahnya.' },
+  { h: '/cek-kecocokan', t: 'Cek kecocokan', d: 'Sebelas pertanyaan singkat, sekitar 90 detik.' },
+];
+---
+<Base title="Halaman tidak ditemukan · Reset Detox" description="Halaman yang kamu cari tidak ada atau sudah pindah.">
+  <section class="ch lost" data-field="ink" aria-labelledby="lost-title">
+    <div class="lost-text">
+      <h1 id="lost-title" data-rise>Halaman ini tidak ada<span class="dot">.</span></h1>
+      <p class="lead" data-rise style="--i:1">Alamatnya mungkin salah ketik, atau halamannya sudah pindah. Mulai lagi dari salah satu ini.</p>
+      <ul class="ways">
+        {ways.map((w, i) => (
+          <li data-rise style={`--i:${i + 2}`}><a href={w.h}><strong>{w.t}</strong><span>{w.d}</span></a></li>
+        ))}
+        <li data-rise style="--i:5"><a href={ask} target="_blank" rel="noopener"><strong>Tanya admin di WhatsApp</strong><span>Admin membalas {site.serviceHours}, setiap hari.</span></a></li>
+      </ul>
+      <p data-rise style="--i:6">Sampai sini dari link lama atau iklan? Kabari admin, supaya kami bisa memperbaikinya.</p>
+    </div>
+    <div class="lost-art">
+      <Image src={img('reset-3d')} alt="Botol Reset Detox tersusun di panggung" widths={[400, 700]} sizes="(max-width: 860px) 45vw, 20vw" loading="eager" class="lost-img" data-rise />
+      <Image src={img('fridge')} alt="Botol Reset Detox tersusun di kulkas" widths={[400, 700]} sizes="(max-width: 860px) 45vw, 20vw" loading="eager" class="lost-img low" data-rise style="--i:1" />
+    </div>
+  </section>
+</Base>
+<style>
+  .lost { min-height: 100svh; display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: clamp(32px, 6vw, 96px); align-items: end; padding-top: 140px; padding-bottom: 72px; }
+  .lost-text { display: grid; gap: 24px; justify-items: start; }
+  .lost h1 { font-size: clamp(3rem, 1rem + 5.4vw, 6.5rem); font-stretch: 118%; line-height: 0.88; letter-spacing: -0.035em; padding-bottom: 0.12em; }
+  .ways { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 4px; width: min(100%, 560px); }
+  .ways a { display: grid; gap: 2px; padding: 16px 20px; background: rgb(233 233 230 / 0.08); text-decoration: none; transition: background-color 200ms ease, transform 160ms var(--ease-out); }
+  .ways a:hover { background: rgb(233 233 230 / 0.16); }
+  .ways a:active { transform: scale(0.98); }
+  .ways strong { font-size: var(--s-lead); }
+  .ways span { color: rgb(233 233 230 / 0.78); }
+  .lost-art { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-items: end; }
+  .lost-img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
+  .lost-img.low { aspect-ratio: 3 / 4; }
+  @media (max-width: 860px) { .lost { grid-template-columns: 1fr; padding-top: 112px; } .lost-art { order: -1; } .lost-img, .lost-img.low { aspect-ratio: 1; } .lost h1 { font-size: 13vw; } }
+</style>

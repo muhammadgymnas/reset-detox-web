@@ -167,6 +167,18 @@
           "a": "Reset 1 Hari cukup untuk merasakan ritmenya tanpa komitmen panjang. Kalau sudah yakin, Reset 5 Hari adalah program lengkapnya. Reset 3 Hari ada di tengah-tengah."
         },
         {
+          "q": "Apa bedanya Reset 1 Hari dan 5 Hari?",
+          "a": "Reset 1 Hari adalah satu hari makan rendah gula dan karbo, untuk tahu apakah tubuhmu cocok menjalaninya. Tujuannya mencoba, bukan menurunkan berat badan, dan tidak ada janji hasil tertentu. Reset 5 Hari adalah programnya: lima hari dengan jadwal per jam, pengiriman dingin, dan pendampingan sampai selesai."
+        },
+        {
+          "q": "Apakah ini juice cleanse?",
+          "a": "Bukan. Isinya rangkaian rendah gula dan karbo yang disusun per jam: Golden Water Detox, Green Tonic, Body Reset Meal dengan protein dan serat, dan Chicken Bone Broth. Di hari 4 dan 5 ditambah Coco Iskiate, Sparkling Tea, dan Black Detox. Rangkaiannya tidak dirancang mengandalkan efek pencahar."
+        },
+        {
+          "q": "Hasilnya bertahan setelah selesai?",
+          "a": "Itu tergantung pola makan sesudahnya. Setelah Reset kamu mendapat panduan kembali makan, dan admin menyapa di hari kelima, ketujuh, dan keempat belas untuk membantumu melanjutkan. Hasil tiap orang berbeda."
+        },
+        {
           "q": "Selama program, boleh makan yang lain?",
           "a": "Sebaiknya tidak, supaya kebiasaan lama benar-benar berhenti sejenak. Air putih, teh tawar, dan kopi hitam tanpa gula boleh. Kalau lapar sekali di hari pertama, kabari pendamping di grup WhatsApp."
         },
@@ -276,5 +288,13 @@
         }
       ]
     }
-  ]
+  ],
+  "social": {
+    "instagram": "https://www.instagram.com/reset.detox/",
+    "instagramHandle": "@reset.detox",
+    "tokopedia": "https://www.tokopedia.com/resetdetox",
+    "shopee": "https://shopee.co.id/resetdetox"
+  },
+  "participants": "7.000+",
+  "since": 2018
 }

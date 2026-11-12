@@ -1,0 +1,135 @@
+---
+// Product knowledge for the 5-day Reset, from Ci Vivi's program brief, rewritten so every line can be backed up.
+// Rendered in parts so the page can interleave it with the box photos and the hourly schedule.
+import Icon from './Icon.astro';
+import site from '../data/site.json';
+
+interface Props { part: 'pain' | 'explain' | 'phases' | 'results' | 'cta'; }
+const { part } = Astro.props;
+const ask = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent('Halo Reset Detox, saya mau konsultasi dulu soal Reset 5 Hari.')}`;
+
+const changes = [
+  { t: 'Otot cenderung berkurang', d: 'Massa otot turun sekitar 3–8% tiap dekade setelah usia 30. Otot ikut menentukan berapa banyak energi yang dipakai tubuh.' },
+  { t: 'Lemak lebih mudah menumpuk di perut', d: 'Seiring usia, terutama setelah menopause pada perempuan, lemak cenderung menumpuk di area perut.' },
+  { t: 'Makanan manis dan olahan ada di mana-mana', d: 'Makin sering dimakan, makin mudah jadi kebiasaan yang sulit dilepas.' },
+];
+const phases = [
+  { d: 'Hari 1–2', t: 'Mulai mengurangi pemicu', p: 'Tubuh mulai beradaptasi dengan asupan yang lebih rendah gula dan karbohidrat. Rasa kembung dan penuh biasanya mulai berkurang.' },
+  { d: 'Hari 3', t: 'Perubahan mulai terlihat', p: 'Berat dan lingkar tubuh dapat mulai berubah. Badan biasanya terasa lebih ringan dibanding hari pertama.' },
+  { d: 'Hari 4–5', t: 'Membentuk ritme baru', p: 'Waktu yang lebih panjang untuk beradaptasi, mengatur keinginan ngemil, dan melihat perubahan bentuk tubuh yang lebih jelas.' },
+];
+const seen = ['Berat badan mulai turun', 'Lingkar perut mulai berkurang', 'Baju terasa lebih nyaman dipakai', 'Badan terlihat tidak terlalu penuh'];
+const felt = ['Tubuh terasa lebih ringan', 'Kembung mulai berkurang', 'Keinginan ngemil lebih mudah diatur', 'Pola makan terasa lebih terarah'];
+---
+
+{part === 'pain' && (
+  <section class="ch pain" data-field="paper" aria-labelledby="pain-title">
+    <div class="split">
+      <div class="lede">
+        <h2 id="pain-title" data-rise>Sudah usaha, tapi timbangan tetap?</h2>
+        <p class="lead" data-rise style="--i:1">Rutin olahraga dan jaga makan, tapi hasilnya tidak sebanding. Seiring usia, tubuh berubah. Cara yang dulu berhasil bisa berhenti bekerja, walau usahamu sama kerasnya.</p>
+      </div>
+      <div>
+        <ul class="changes">
+          {changes.map((c, i) => (
+            <li data-rise style={`--i:${i}`}><h3>{c.t}</h3><p>{c.d}</p></li>
+          ))}
+        </ul>
+        <p class="after" data-rise>Kalau hasilnya tidak sebanding dengan usahamu, tubuhmu sedang berubah. Usahamu tidak salah.</p>
+        <p class="src small">Sumber: <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC2804956/" target="_blank" rel="noopener">Muscle tissue changes with aging</a> (NIH) dan <a href="https://pubmed.ncbi.nlm.nih.gov/41598677/" target="_blank" rel="noopener">studi komposisi tubuh pada masa menopause</a> (2026).</p>
+      </div>
+    </div>
+  </section>
+)}
+
+{part === 'explain' && (
+  <section class="ch explain" data-field="broth" aria-labelledby="explain-title">
+    <div class="split">
+      <h2 id="explain-title" data-rise>Lima hari jeda dari gula dan karbo.</h2>
+      <div class="stack">
+        <p class="lead" data-rise style="--i:1">Makanan olahan, tinggi gula, dan tinggi karbo diganti rangkaian rendah gula dan karbo yang disusun per jam. Kamu nggak perlu menghitung kalori atau menyusun menu.</p>
+        <p data-rise style="--i:2">Makan siangmu berisi 26 g protein dan 5 g serat (menurut label Body Reset Meal Day), supaya kenyang lebih lama.</p>
+        <p data-rise style="--i:3">Setiap formula diracik sendiri di dapur kami di Sunter, dari bahan yang juga dikonsumsi founder dan keluarganya. Formulanya dikembangkan dan disempurnakan sejak 2018.</p>
+        <p class="small fine" data-rise style="--i:4">Ini juga bukan juice cleanse buah dan sayur, dan tidak dirancang mengandalkan efek pencahar. <a class="link" href="/faq#program-reset">Baca jawaban lengkapnya</a>.</p>
+      </div>
+    </div>
+  </section>
+)}
+
+{part === 'phases' && (
+  <section class="ch phases" data-field="day" aria-labelledby="phases-title">
+    <h2 id="phases-title" data-rise>Kenapa lima hari?</h2>
+    <p class="lead" data-rise style="--i:1">Cukup panjang untuk mengurangi gula dan karbo berlebih, melihat perubahan pada tubuh, lalu mulai membangun ritme makan yang lebih terkontrol. Hasil tiap orang berbeda.</p>
+    <ol class="ph-row">
+      {phases.map((p, i) => (
+        <li data-rise style={`--i:${i}`}><span class="ph-d num">{p.d}</span><h3>{p.t}</h3><p>{p.p}</p></li>
+      ))}
+    </ol>
+  </section>
+)}
+
+{part === 'results' && (
+  <section class="ch results" data-field="ink" aria-labelledby="results-title">
+    <h2 id="results-title" data-rise>Yang dicari peserta Reset.</h2>
+    <p class="lead" data-rise style="--i:1">Perubahan yang paling sering ingin dilihat dan dirasakan peserta.</p>
+    <div class="res-grid">
+      <div data-rise>
+        <h3>Yang terlihat</h3>
+        <ul>{seen.map((x) => <li>{x}</li>)}</ul>
+      </div>
+      <div data-rise style="--i:1">
+        <h3>Yang dirasakan</h3>
+        <ul>{felt.map((x) => <li>{x}</li>)}</ul>
+      </div>
+    </div>
+    <p class="small fine" data-rise>Setiap orang menjalani proses dan mendapat hasil yang berbeda. Reset Detox bukan pengobatan medis.</p>
+  </section>
+)}
+
+{part === 'cta' && (
+  <section class="ch cta" data-field="stone" aria-labelledby="cta-title">
+    <h2 id="cta-title" data-rise>Belum tahu harus mulai dari mana?</h2>
+    <p class="lead" data-rise style="--i:1">Pilih tanggal mulai dan lihat harganya, atau tanya admin dulu soal kondisimu.</p>
+    <div class="cta-acts" data-rise style="--i:2">
+      <a class="btn" href="#buy"><Icon name="calendar" /> Pilih tanggal mulai</a>
+      <a class="btn ghost" href={ask} target="_blank" rel="noopener"><Icon name="chat" /> Tanya admin di WhatsApp</a>
+    </div>
+    <p class="small fine" data-rise style="--i:3">Konsultasi awal gratis. Tanpa kewajiban membeli.</p>
+  </section>
+)}
+
+<style>
+  .split { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: clamp(40px, 7vw, 128px); align-items: start; }
+  .lede, .stack { display: grid; gap: 24px; align-content: start; }
+  .fine { color: var(--ink-soft); }
+  .results .fine { color: rgb(233 233 230 / 0.78); }
+
+  .pain h2, .explain h2, .results h2 { font-size: clamp(2rem, 0.9rem + 3.2vw, 4.25rem); }
+  .changes { list-style: none; margin: 0; padding: 0; display: grid; gap: 36px; }
+  .changes h3 { font-size: clamp(1.375rem, 1.1rem + 0.9vw, 2rem); margin-bottom: 8px; }
+  .after { margin-top: 48px; font-size: var(--s-lead); font-weight: 600; max-width: 34ch; }
+  .src { margin-top: 24px; color: var(--ink-soft); }
+
+  .phases h2, .results h2, .cta h2 { max-width: 20ch; }
+  .results .lead { margin-top: 24px; max-width: 46ch; }
+  .phases .lead { margin-top: 24px; max-width: 52ch; }
+  .ph-row { list-style: none; margin: 64px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px clamp(24px, 4vw, 64px); }
+  .ph-row li { display: grid; gap: 12px; align-content: start; }
+  .ph-d { font-size: clamp(2.75rem, 1.6rem + 3.6vw, 5rem); font-weight: 800; font-stretch: 116%; letter-spacing: -0.04em; line-height: 0.95; }
+  .ph-row h3 { font-size: var(--s-lead); }
+
+  .res-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 48px clamp(24px, 4vw, 64px); margin: 48px 0 40px; }
+  .res-grid h3 { font-size: var(--s-lead); margin-bottom: 20px; }
+  .res-grid ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; font-size: clamp(1.25rem, 1.05rem + 0.8vw, 1.75rem); font-weight: 600; line-height: 1.2; }
+
+  .cta { display: grid; gap: 24px; justify-items: start; }
+  .cta-acts { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  @media (max-width: 860px) {
+    .split { grid-template-columns: 1fr; }
+    .ph-row, .res-grid { grid-template-columns: 1fr; }
+    .ph-row { margin-top: 40px; }
+    .res-grid { margin-top: 40px; }
+    .cta-acts .btn { flex: 1 1 100%; }
+  }
+</style>

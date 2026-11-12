@@ -7,6 +7,7 @@ import site from '../data/site.json';
 import { rupiah } from '../scripts/cart';
 import Icon from '../components/Icon.astro';
 import { productUrl } from '../lib/product';
+import WhyDifferent from '../components/WhyDifferent.astro';
 
 const [p5, p3, p1] = catalog.programs;
 const mosaic = await getImage({ src: img('reset-5d'), width: 1800, height: 1200, fit: 'cover', position: 'bottom', format: 'webp' });
@@ -46,7 +47,7 @@ const supportList = [
         <span data-rise style="--i:1">Ini reset<span class="dot">.</span></span>
       </h1>
       <div class="hero-side" data-rise style="--i:2">
-        <p class="lead">Makan dan minum dalam botol, sehat tapi tetap enak. Program reset 1–5 hari dan botol untuk setiap hari, diantar dingin di Jabodetabek.</p>
+        <p class="lead"><strong>Not a diet. It's a reset.</strong> Makan dan minum dalam botol, sehat tapi tetap enak. Diantar dingin di Jabodetabek.</p>
         <div class="hero-actions">
           <a class="btn" href="/shop">See All Products &amp; Pricing <Icon name="arrow" /></a>
           <a class="btn ghost" href="/program/reset-1-hari">Coba Reset 1 Hari</a>
@@ -179,6 +180,9 @@ const supportList = [
     </ul>
   </section>
 
+  <!-- 5b. What sets us apart (Ci Vivi's brief, section 5) -->
+  <WhyDifferent field="broth" />
+
   <!-- 6. Stories that play -->
   <section class="ch vids" data-field="day" aria-labelledby="stories-title">
     <div class="vids-head">
@@ -191,11 +195,10 @@ const supportList = [
           <video data-src={v.src} muted loop playsinline preload="none" aria-label={`Video testimoni ${v.who}, ${v.when}`}></video>
           <button type="button" class="vid-sound" aria-pressed="false" aria-label="Nyalakan suara"><Icon name="volume-off" class="v-off" /><Icon name="volume" class="v-on" /></button>
           <p class="small"><strong>{v.who}</strong> · {v.when}</p>
-          <p class="draft small">Draf: menunggu izin tertulis</p>
         </li>
       ))}
     </ul>
-    <p><a class="btn" href="/cerita">Semua cerita</a></p>
+    <p class="vid-more"><a class="btn" href="/cerita">Semua testimoni</a><a class="btn ghost" href={site.social.instagram} target="_blank" rel="noopener">Lihat di {site.social.instagramHandle}</a></p>
   </section>
 
   <!-- 7. Questions -->
@@ -211,6 +214,17 @@ const supportList = [
         ))}
         <a class="btn ghost" href="/faq">Lihat semua pertanyaan</a>
       </div>
+    </div>
+  </section>
+
+  <!-- 7b. Where else to find us (brief, sections 8 and 9) -->
+  <section class="ch avail" data-field="stone" aria-labelledby="avail-title">
+    <h2 id="avail-title" data-rise>Juga ada di sini.</h2>
+    <p class="lead" data-rise style="--i:1">Belanja lewat marketplace, atau ikuti kami di Instagram.</p>
+    <div class="avail-links" data-rise style="--i:2">
+      <a class="btn ghost" href={site.social.tokopedia} target="_blank" rel="noopener">Tokopedia <Icon name="arrow" /></a>
+      <a class="btn ghost" href={site.social.shopee} target="_blank" rel="noopener">Shopee <Icon name="arrow" /></a>
+      <a class="btn ghost" href={site.social.instagram} target="_blank" rel="noopener">Instagram {site.social.instagramHandle} <Icon name="arrow" /></a>
     </div>
   </section>
 
@@ -378,6 +392,10 @@ const supportList = [
     .vid { scroll-snap-align: start; }
   }
 
+  .vid-more { display: flex; gap: 8px; flex-wrap: wrap; }
+  .avail { display: grid; gap: 24px; justify-items: start; }
+  .avail h2 { font-size: clamp(2rem, 0.9rem + 3.2vw, 4.25rem); }
+  .avail-links { display: flex; gap: 8px; flex-wrap: wrap; }
   .faq-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(40px, 7vw, 128px); align-items: start; }
   .faq-grid h2 { font-size: clamp(2.75rem, 4.4vw, 5.5rem); }
   .faq-list { display: grid; gap: 4px; }
@@ -393,7 +411,6 @@ const supportList = [
   .close { min-height: 90svh; display: grid; grid-template-rows: 1fr auto; }
   .close-title { font-size: clamp(3.5rem, 10vw, 10rem); font-stretch: 118%; line-height: 0.9; letter-spacing: -0.035em; }
   .close-foot { display: flex; justify-content: space-between; align-items: end; gap: 24px; flex-wrap: wrap; }
-  .btn.coral { --btn-bg: var(--dot); --btn-fg: var(--ink); --btn-hover: #f2876b; min-height: 56px; }
   @media (max-width: 860px) { .close { min-height: auto; gap: 48px; } .close-title { font-size: 12vw; font-stretch: 100%; } .close .btn { width: 100%; } }
 </style>
 

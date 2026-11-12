@@ -3,12 +3,15 @@ import Base from '../layouts/Base.astro';
 import { Image } from 'astro:assets';
 import { img } from '../lib/images';
 import site from '../data/site.json';
+// Written from the zones already on the site. The district-by-district list is still to come from Ci Vivi.
+const areas = ['DKI Jakarta', 'Tangerang', 'Tangerang Selatan', 'Depok', 'Bekasi', 'Bogor'];
+const ask = (n: string) => `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(`Halo Reset Detox, saya di ${n}. Apakah kecamatan saya terjangkau pengiriman dingin?`)}`;
 const steps = [
   { t: 'Pesan di website', d: 'Pilih program, formula, rasa, dan tanggal mulai. Pesanan terkirim ke WhatsApp admin dalam satu pesan bernomor.', field: 'stone', photo: 'reset-5d' },
   { t: 'Admin konfirmasi', d: 'Admin membalas dengan total, ongkir, dan cara bayar resmi. Kalau ada kondisi kesehatan, di sinilah ditanyakan.', field: 'paper', photo: 'fullmeal' },
   { t: 'Dikirim dingin, H-1', d: 'Botol diantar dalam cooler bag sehari sebelum kamu mulai. Program 5 hari dikirim lagi di H+2.', field: 'tonic', photo: 'reset-3d' },
   { t: 'Jalani jam demi jam', d: 'Setiap botol berlabel jamnya. Tim pendamping menyapa lewat grup WhatsApp setiap pagi dan sore.', field: 'day', photo: 'reset-1d' },
-  { t: 'Sesudahnya', d: 'Di hari kelima, ketujuh, dan keempat belas admin menyapa lagi. Tanpa paksaan untuk membeli apa pun.', field: 'broth', photo: 'renourish-3d' },
+  { t: 'Sesudahnya', d: 'Kamu mendapat panduan kembali makan, supaya pola barunya tidak langsung hilang. Admin menyapa lagi di hari kelima, ketujuh, dan keempat belas, tanpa paksaan membeli.', field: 'broth', photo: 'renourish-3d' },
 ];
 ---
 <Base title="Cara kerja, penyimpanan & FAQ · Reset Detox" description="Dari pesan sampai hari kelima: batas pesan, pengiriman dingin, penyimpanan, klaim kerusakan, dan jawaban pertanyaan yang sering muncul.">
@@ -36,6 +39,25 @@ const steps = [
         <p class="claim">Ada yang rusak? Rekam video saat membuka paket, kirim ke admin dalam 24 jam bersama foto semua botol.</p>
       </div>
       <Image src={img('fridge')} alt="Botol Reset Detox tersusun di kulkas" widths={[500, 900]} sizes="(max-width: 860px) 90vw, 40vw" loading="lazy" />
+    </div>
+  </section>
+  <section class="faq area" data-field="stone" aria-labelledby="area-h">
+    <div class="faq-side">
+      <h2 id="area-h" data-rise>Area pengantaran</h2>
+      <p class="lead" data-rise style="--i:1">Diantar dingin dalam cooler bag. Pesan {site.cutoff.daysBefore} hari sebelum tanggal mulai, sebelum jam {site.cutoff.hour}.00.</p>
+      <a class="btn ghost" href={ask('Jabodetabek')} target="_blank" rel="noopener" data-rise style="--i:2">Tanya kecamatanmu</a>
+    </div>
+    <div class="faq-list">
+      {areas.map((n) => (
+        <details>
+          <summary>{n}</summary>
+          <p>Dikirim sehari sebelum kamu mulai. Ongkir dihitung admin dari alamatmu, sebelum kamu bayar. Beberapa kecamatan di pinggir kota bisa jadi belum terjangkau pengiriman dingin, jadi cek kecamatanmu dulu lewat admin.</p>
+        </details>
+      ))}
+      <details>
+        <summary>Di luar Jabodetabek</summary>
+        <p>Tanya admin dulu apakah pengiriman dingin bisa sampai. Kalau bisa, ongkirnya dihitung dari alamatmu.</p>
+      </details>
     </div>
   </section>
   <section class="faq" data-field="paper" aria-labelledby="faq-h">
@@ -66,6 +88,9 @@ const steps = [
   .claim { padding: 20px; background: var(--broth); color: var(--ink); font-weight: 600; }
   .faq { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(40px, 7vw, 128px); padding: clamp(72px, 9vw, 128px) var(--m); background: var(--paper); }
   .faq-side { display: grid; gap: 24px; justify-items: start; align-content: start; }
+  .faq.area { background: var(--stone); }
+  .faq.area .faq-list details { background: var(--paper); }
+  .faq-side .lead { max-width: 30ch; }
   .faq-list { display: grid; gap: 4px; }
   .faq-list details { background: var(--stone); }
   .faq-list summary { list-style: none; cursor: pointer; padding: 22px 24px; font-weight: 700; font-size: 1.2rem; display: flex; justify-content: space-between; gap: 16px; }

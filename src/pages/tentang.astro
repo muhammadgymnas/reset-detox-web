@@ -1,0 +1,111 @@
+---
+// About page from Ci Vivi's brief (slides 19-20). The founder story ("Lahir karena mimpi, besar karena tetangga")
+// is left out until the text arrives; only lines already in the brief or on the site are used.
+import Base from '../layouts/Base.astro';
+import { Image } from 'astro:assets';
+import { img } from '../lib/images';
+import site from '../data/site.json';
+import Icon from '../components/Icon.astro';
+import WhyDifferent from '../components/WhyDifferent.astro';
+const ask = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent('Halo Reset Detox, saya mau ngobrol dulu.')}`;
+const pillars = [
+  { t: 'Accessible', d: 'Mudah dipesan dan praktis untuk rutinitas sehari-hari.' },
+  { t: 'Enjoyable', d: 'Rasa yang enak dan pengalaman yang memuaskan.' },
+  { t: 'Nourishing', d: 'Dikembangkan dengan matang, dengan nilai gizi yang berarti.' },
+];
+---
+<Base title="Tentang Reset Detox · sejak 2018" description="Reset Detox membantu orang menjalani hidup yang lebih sehat dengan cara yang lebih mudah dan menyenangkan. Dapur di Sunter, Jakarta Utara, sejak 2018.">
+  <section class="ch hero-about" data-field="ink" aria-labelledby="about-title">
+    <div class="ab-grid">
+      <div class="ab-text">
+        <h1 id="about-title" data-rise>Hidup sehat tanpa perjuangan harian.</h1>
+        <p class="lead" data-rise style="--i:1">Kami percaya wellness tidak hanya tentang apa yang dikonsumsi, tetapi juga tentang bagaimana kebiasaan sehat bisa menjadi bagian dari keseharian.</p>
+        <p class="en" data-rise style="--i:2">Helping people achieve healthier lives in a way that is easier, safer, and more enjoyable.</p>
+      </div>
+      <Image src={img('holding-bottle')} alt="Tangan memegang Body Reset Meal Day" widths={[600, 1000]} sizes="(max-width: 860px) 90vw, 40vw" loading="eager" class="ab-img" data-rise style="--i:1" />
+    </div>
+  </section>
+
+  <section class="ch believe" data-field="paper" aria-labelledby="believe-title">
+    <h2 id="believe-title" class="visually-hidden">Yang kami percaya dan janjikan</h2>
+    <div class="split">
+      <div data-rise>
+        <h3>Yang kami percaya</h3>
+        <p class="big">Hidup sehat tidak harus jadi perjuangan harian.</p>
+      </div>
+      <div data-rise style="--i:1">
+        <h3>Yang kami janjikan</h3>
+        <p class="big">Membuat hidup sehat lebih mudah, lebih aman, dan lebih menyenangkan. Membuat pilihan yang lebih sehat jadi bagian dari keseharian.</p>
+      </div>
+    </div>
+    <div class="ab-duo">
+      <Image src={img('reset-3d')} alt="Botol Reset Detox tersusun di panggung" widths={[600, 1000]} sizes="(max-width: 860px) 90vw, 45vw" loading="lazy" class="ab-wide" data-rise />
+      <Image src={img('fridge')} alt="Botol Reset Detox tersusun di kulkas" widths={[600, 1000]} sizes="(max-width: 860px) 90vw, 45vw" loading="lazy" class="ab-wide" data-rise style="--i:1" />
+    </div>
+    <ul class="pillars">
+      {pillars.map((p, i) => (
+        <li data-rise style={`--i:${i}`}><h3>{p.t}.</h3><p>{p.d}</p></li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="ch facts" data-field="night" aria-labelledby="facts-title">
+    <p class="lead" data-rise>Kamu tidak butuh lebih banyak aturan.</p>
+    <h2 id="facts-title" data-rise style="--i:1">Kamu butuh struktur yang lebih baik.</h2>
+    <dl class="nums">
+      <div data-rise><dt class="num">{site.since}</dt><dd>dapur kami mulai meracik</dd></div>
+      <div data-rise style="--i:1"><dt class="num">{site.participants}</dt><dd>orang sudah menjalani Reset</dd></div>
+      <div data-rise style="--i:2"><dt class="num">Sunter</dt><dd>dapur kami, di Jakarta Utara</dd></div>
+      <div data-rise style="--i:3"><dt class="num">Jabodetabek</dt><dd>diantar dingin ke rumahmu</dd></div>
+    </dl>
+  </section>
+
+  <WhyDifferent field="broth" />
+
+  <section class="ch talk" data-field="stone" aria-labelledby="talk-title">
+    <h2 id="talk-title" data-rise>Mau ngobrol dulu?</h2>
+    <p class="lead" data-rise style="--i:1">Admin menjelaskan dulu, tanpa paksaan membeli. Membalas {site.serviceHours}, setiap hari.</p>
+    <div class="talk-acts" data-rise style="--i:2">
+      <a class="btn" href={ask} target="_blank" rel="noopener"><Icon name="chat" /> Tanya di WhatsApp</a>
+      <a class="btn ghost" href="/cek-kecocokan">Cek kecocokan</a>
+      <a class="btn ghost" href="/kontak#bisnis">Jadi mitra</a>
+    </div>
+    <Image src={img('reset-1d')} alt="Isi Reset 1 Hari" widths={[500, 900]} sizes="(max-width: 860px) 90vw, 40vw" loading="lazy" class="talk-img" data-rise />
+  </section>
+</Base>
+
+<style>
+  .hero-about { padding-top: 140px; }
+  .ab-grid { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 6fr); gap: clamp(32px, 6vw, 96px); align-items: end; }
+  .ab-text { display: grid; gap: 24px; align-content: end; }
+  .ab-text h1 { font-size: clamp(2rem, 0.5rem + 2.8vw, 3.5rem); font-stretch: 112%; line-height: 0.92; letter-spacing: -0.035em; padding-bottom: 0.1em; }
+  .en { color: rgb(233 233 230 / 0.78); max-width: 44ch; }
+  .ab-img { width: 100%; aspect-ratio: 1; object-fit: cover; }
+
+  .split { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px clamp(32px, 6vw, 96px); }
+  .split h3 { margin-bottom: 16px; }
+  .big { font-size: var(--s-lead); font-weight: 700; line-height: 1.3; max-width: 34ch; }
+  .ab-duo { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: clamp(40px, 6vw, 80px); }
+  .ab-wide { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+  .pillars { list-style: none; margin: clamp(48px, 7vw, 96px) 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px clamp(24px, 4vw, 64px); }
+  .pillars h3 { font-size: clamp(1.75rem, 1.2rem + 1.6vw, 3rem); font-stretch: 112%; margin-bottom: 8px; }
+
+  .facts { display: grid; gap: 16px; }
+  .facts h2 { font-size: clamp(2rem, 0.9rem + 3.2vw, 4.25rem); max-width: 18ch; }
+  .nums { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px 32px; margin: clamp(32px, 5vw, 64px) 0 0; }
+  .nums dt { font-size: clamp(2rem, 1.2rem + 2.6vw, 4rem); overflow-wrap: anywhere; font-weight: 800; font-stretch: 116%; letter-spacing: -0.04em; line-height: 1; }
+  .nums dd { margin: 8px 0 0; max-width: 22ch; }
+
+  .talk { display: grid; gap: 24px; justify-items: start; }
+  .talk-img { width: min(100%, 720px); aspect-ratio: 4 / 3; object-fit: cover; margin-top: 16px; }
+  .talk h2 { font-size: clamp(2rem, 0.9rem + 3.2vw, 4.25rem); }
+  .talk-acts { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  @media (max-width: 860px) {
+    .ab-duo { grid-template-columns: 1fr; }
+    .hero-about { padding-top: 104px; }
+    .ab-grid, .split, .pillars { grid-template-columns: 1fr; }
+    .ab-img { order: -1; aspect-ratio: 4 / 3; object-position: 0% 85%; }
+    .talk-acts .btn { flex: 1 1 100%; }
+  }
+</style>

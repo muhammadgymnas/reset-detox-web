@@ -1,0 +1,39 @@
+---
+// "Kenapa kami berbeda?" from Ci Vivi's landing page brief (slides 9 and 20), used on Home and on Tentang.
+// The brief's third line, "not extreme calorie restriction", is left out until the calorie numbers are confirmed.
+import site from '../data/site.json';
+
+interface Props { field?: string; }
+const { field = 'broth' } = Astro.props;
+---
+<section class="ch diff" data-field={field} aria-labelledby="diff-title">
+  <div class="diff-head">
+    <h2 id="diff-title" data-rise>Kenapa kami berbeda?</h2>
+    <p class="lead" data-rise style="--i:1">Dipercaya {site.participants} orang sejak {site.since}.</p>
+  </div>
+  <ul class="diff-list">
+    <li data-rise>
+      <h3>Bukan juice cleanse biasa</h3>
+      <p>Isinya bukan cuma jus buah dan sayur. Ada kacang, biji-bijian, herbal, dan sumber protein, disusun per jam.</p>
+    </li>
+    <li data-rise style="--i:1">
+      <h3>Bukan fiber cleanse atau pencahar</h3>
+      <p>Seberapa sering kamu ke kamar mandi bukan ukuran program ini bekerja, jadi kami tidak memakainya sebagai tanda berhasil.</p>
+    </li>
+    <li data-rise style="--i:2">
+      <h3>Lebih dari sekumpulan botol</h3>
+      <p>Formulasi, kualitas bahan, jadwal per jam, panduan, dan pendampingan dari H-1 sampai program selesai.</p>
+    </li>
+  </ul>
+  <a class="link" href="/tentang" data-rise style="--i:3">Pelajari lebih lanjut</a>
+</section>
+
+<style>
+  .diff { display: grid; gap: clamp(32px, 5vw, 64px); justify-items: start; }
+  .diff-head { display: grid; gap: 20px; }
+  .diff-head h2 { font-size: clamp(2rem, 0.9rem + 3.2vw, 4.25rem); }
+  .diff-list { list-style: none; margin: 0; padding: 0; width: 100%; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px clamp(24px, 4vw, 64px); }
+  .diff-list li { display: grid; gap: 12px; align-content: start; }
+  .diff-list h3 { font-size: clamp(1.375rem, 1.1rem + 0.9vw, 2rem); }
+  @media (max-width: 860px) { .diff-list { grid-template-columns: 1fr; } }
+</style>

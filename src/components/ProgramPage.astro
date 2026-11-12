@@ -6,6 +6,7 @@ import catalog from '../data/catalog.json';
 import site from '../data/site.json';
 import { rupiah } from '../scripts/cart';
 import Icon from '../components/Icon.astro';
+import ProgramStory from '../components/ProgramStory.astro';
 
 interface Props { slug: string; }
 const p = catalog.programs.find((x) => x.slug === Astro.props.slug)!;
@@ -18,6 +19,7 @@ const isReset = p.line === 'reset-program';
 const boxPhotos = p.line === 'renourish'
   ? Object.entries((catalog as any).renourishFlavorPhotos as Record<string, string>).map(([n, ph]) => ({ n, ph }))
   : [{ n: 'Golden Water Detox', ph: 's-gw' }, { n: 'Green Tonic', ph: 's-gt' }, { n: 'Chicken Bone Broth', ph: 's-broth' }, { n: 'Refuel (laki-laki)', ph: 's-refuel' }, { n: 'Coco Iskiate (hari 4–5)', ph: 's-isk' }, { n: 'Night Burn Shot', ph: 's-night-shot' }].slice(0, p.days >= 5 ? 6 : 4);
+const isFive = p.slug === 'reset-5-hari';
 const title = p.slug === 'reset-5-hari' ? 'Reset Detox 5 Hari · program reset rendah gula, diantar dingin' : `${p.name} · Reset Detox`;
 ---
 <Base title={title} description={`${p.name}: ${p.lead} Mulai ${rupiah(p.formulas[0].price)}.`}>
@@ -107,7 +109,7 @@ const title = p.slug === 'reset-5-hari' ? 'Reset Detox 5 Hari · program reset r
             <p>Masukkan ke kulkas begitu sampai. Body Reset Meal ke freezer, Golden Water jangan dibekukan. Di chiller tahan sampai 5 hari.</p>
           </details>
         </div>
-        <p class="fit">Hamil, menyusui, atau punya kondisi medis? <a class="link" href="/cek-kecocokan">Cek kecocokan dulu, 60 detik</a>.</p>
+        <p class="fit">Hamil, menyusui, atau punya kondisi medis? <a class="link" href="/cek-kecocokan">Cek kecocokan dulu, sekitar 90 detik</a>.</p>
       </form>
     </div>
   </section>
@@ -115,6 +117,7 @@ const title = p.slug === 'reset-5-hari' ? 'Reset Detox 5 Hari · program reset r
   {isReset && (
     <section class="ch claim" data-field="ink" aria-labelledby="claim-title">
       <h2 id="claim-title" data-rise>Ini reset. Bukan diet.</h2>
+      {p.slug === 'reset-1-hari' && <p class="lead one" data-rise style="--i:1">Satu hari makan rendah gula dan karbo, untuk tahu apakah tubuhmu cocok menjalaninya. Tujuannya mencoba, bukan menurunkan berat badan, dan tidak ada janji hasil tertentu. Kalau cocok, lanjut ke 3 atau 5 hari.</p>}
       <dl class="nums">
         <div data-rise><dt class="num">{p.days}</dt><dd>hari tanpa pola lama</dd></div>
         <div data-rise><dt class="num">{p.formulas[0].bottles}</dt><dd>botol, formula perempuan</dd></div>
@@ -125,6 +128,9 @@ const title = p.slug === 'reset-5-hari' ? 'Reset Detox 5 Hari · program reset r
       </dl>
     </section>
   )}
+
+  {isFive && <ProgramStory part="pain" />}
+  {isFive && <ProgramStory part="explain" />}
 
   <section class="ch inbox" data-field="stone" aria-labelledby="inbox-title">
     <h2 id="inbox-title" data-rise>{p.line === 'renourish' ? 'Rasa ReNourish' : 'Di dalam box'}</h2>
@@ -150,6 +156,10 @@ const title = p.slug === 'reset-5-hari' ? 'Reset Detox 5 Hari · program reset r
       <p class="small note">{site.schedule.note}</p>
     </div>
   </section>
+
+  {isFive && <ProgramStory part="phases" />}
+  {isFive && <ProgramStory part="results" />}
+  {isFive && <ProgramStory part="cta" />}
 
   {others.length > 0 && (
     <section class="ch others" data-field="broth" aria-labelledby="others-title">
@@ -221,6 +231,7 @@ const title = p.slug === 'reset-5-hari' ? 'Reset Detox 5 Hari · program reset r
   }
 
   .claim h2 { font-size: clamp(3rem, 8vw, 8rem); font-stretch: 118%; max-width: 12ch; }
+  .claim .one { margin-top: 32px; max-width: 46ch; }
   .nums { display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px 32px; margin: 72px 0 0; }
   .nums dt { font-size: clamp(3rem, 6vw, 6rem); font-weight: 800; font-stretch: 116%; letter-spacing: -0.04em; line-height: 1; }
   .nums dd { margin: 8px 0 0; max-width: 26ch; }

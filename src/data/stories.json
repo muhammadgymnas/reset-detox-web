@@ -1,11 +1,65 @@
 {
-  "note": "Semua cerita di bawah berasal dari posting asli di folder 'testimony reset detox' dan 'Thousand faces'. consent=false berarti izin tertulis belum ada; jangan tayang di production sebelum true.",
+  "note": "Semua cerita berasal dari posting asli di folder 'testimony reset detox' dan 'Thousand faces'. consent=true: izin tayang sudah dikonfirmasi pemilik proyek lewat chat (November 2026). Simpan bukti tertulisnya; kalau ada yang menarik izin, ubah ke false dan cerita itu tampil sebagai draf.",
   "stories": [
-    { "id": "dian", "name": "Dian Sastro", "who": "Aktris", "when": "IG story", "photo": "dian-sastro", "quote": "Membagikan Body Reset Meal di story-nya, tanpa diminta.", "field": "day", "consent": false },
-    { "id": "frisca", "name": "Frisca Marietta", "who": "Kreator", "when": "Reels bersama @reset.detox", "photo": "frisca-marietta", "quote": "“Finally setelah bergelut dengan…” dan jam 12.30 adalah jam body replacement meal.", "field": "broth", "consent": false },
-    { "id": "sari", "name": "Sari Marety", "who": "Aktris", "when": "Reels bersama @reset.detox", "photo": "sari-marety", "quote": "“Saat berat badan makin naik…”, lalu ia memulai harinya dengan Golden Water.", "field": "tonic", "consent": false },
-    { "id": "intan", "name": "Intan Nuraini", "who": "Aktris", "when": "Reels bersama @reset.detox", "photo": "intan-nuraini", "quote": "“Supaya tubuh kita lebih sehat.” Terima kasih, #resetdetoxwarrior.", "field": "shot", "consent": false },
-    { "id": "moa", "name": "Moa & Lee Jong Hoon", "who": "Kreator", "when": "Sesi foto", "photo": "moa-lee", "quote": "Reset berdua, botol demi botol.", "field": "gw", "consent": false },
-    { "id": "shinta", "name": "Shinta Bachir", "who": "Aktris", "when": "IG story, 15 Nov 2019", "photo": "shinta-bachir", "quote": "Menandai @reset.detox dengan botol Body Replacement Meal di tangan.", "field": "night", "consent": false }
+    {
+      "id": "dian",
+      "name": "Dian Sastro",
+      "who": "Aktris",
+      "when": "IG story",
+      "photo": "dian-sastro",
+      "quote": "Membagikan Body Reset Meal di story-nya, tanpa diminta.",
+      "field": "day",
+      "consent": true
+    },
+    {
+      "id": "frisca",
+      "name": "Frisca Marietta",
+      "who": "Kreator",
+      "when": "Reels bersama @reset.detox",
+      "photo": "frisca-marietta",
+      "quote": "“Finally setelah bergelut dengan…” dan jam 12.30 adalah jam body replacement meal.",
+      "field": "broth",
+      "consent": true
+    },
+    {
+      "id": "sari",
+      "name": "Sari Marety",
+      "who": "Aktris",
+      "when": "Reels bersama @reset.detox",
+      "photo": "sari-marety",
+      "quote": "“Saat berat badan makin naik…”, lalu ia memulai harinya dengan Golden Water.",
+      "field": "tonic",
+      "consent": true
+    },
+    {
+      "id": "intan",
+      "name": "Intan Nuraini",
+      "who": "Aktris",
+      "when": "Reels bersama @reset.detox",
+      "photo": "intan-nuraini",
+      "quote": "“Supaya tubuh kita lebih sehat.” Terima kasih, #resetdetoxwarrior.",
+      "field": "shot",
+      "consent": true
+    },
+    {
+      "id": "moa",
+      "name": "Moa & Lee Jong Hoon",
+      "who": "Kreator",
+      "when": "Sesi foto",
+      "photo": "moa-lee",
+      "quote": "Reset berdua, botol demi botol.",
+      "field": "gw",
+      "consent": true
+    },
+    {
+      "id": "shinta",
+      "name": "Shinta Bachir",
+      "who": "Aktris",
+      "when": "IG story, 15 Nov 2019",
+      "photo": "shinta-bachir",
+      "quote": "Menandai @reset.detox dengan botol Body Replacement Meal di tangan.",
+      "field": "night",
+      "consent": true
+    }
   ]
 }

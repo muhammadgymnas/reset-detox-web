@@ -5,20 +5,28 @@ import { Image } from 'astro:assets';
 import { img } from '../lib/images';
 import Icon from '../components/Icon.astro';
 const qs = site.contraindications;
+// Seven safety questions first, then four about what the person needs, so admin can answer the right thing (brief, slide 17).
+const needs = [
+  { label: 'Mulai dari', q: 'Kamu mau mulai dari mana?', o: ['Coba 1 hari dulu', 'Langsung 3 atau 5 hari', 'Belum tahu, mau dijelaskan'] },
+  { label: 'Pengalaman', q: 'Pernah ikut Reset sebelumnya?', o: ['Belum pernah', 'Sudah pernah'] },
+  { label: 'Rencana mulai', q: 'Kapan kamu ingin mulai?', o: ['Minggu ini', 'Bulan ini', 'Belum tahu'] },
+  { label: 'Yang dicari', q: 'Apa yang paling kamu cari?', o: ['Berat badan', 'Lingkar perut dan bentuk badan', 'Mengurangi ngemil dan gula', 'Pola makan lebih terarah'] },
+];
+const total = qs.length + needs.length;
 ---
-<Base title="Cek kecocokan · Reset Detox" description="Tujuh pertanyaan ya atau tidak, 60 detik. Jawabanmu tidak dikirim ke mana pun.">
+<Base title="Cek kecocokan · Reset Detox" description="Sebelas pertanyaan singkat, sekitar 90 detik. Jawabanmu hanya diproses di perangkatmu dan baru terkirim kalau kamu menekan tombol WhatsApp.">
   <section class="quiz" data-field="broth" aria-labelledby="q-title">
     <div class="quiz-head">
       <h1 id="q-title">Cek kecocokan</h1>
-      <p class="lead">Tujuh pertanyaan, 60 detik. Jawabanmu hanya diproses di perangkat ini dan tidak dikirim ke mana pun.</p>
+      <p class="lead">Sebelas pertanyaan, sekitar 90 detik. Jawabanmu hanya diproses di perangkat ini. Ringkasannya baru terkirim kalau kamu sendiri menekan tombol WhatsApp.</p>
       <Image src={img('reset-1d')} alt="Isi Reset 1 Hari" widths={[500, 900]} sizes="(max-width: 860px) 90vw, 44vw" class="quiz-img" />
     </div>
-    <form class="quiz-body" id="quiz">
-      <progress max={qs.length} value="0" aria-label="Kemajuan" data-progress></progress>
+    <form class="quiz-body" id="quiz" data-safe={qs.length}>
+      <progress max={total} value="0" aria-label="Kemajuan" data-progress></progress>
       {qs.map((q, i) => (
         <fieldset class="q" data-q={i} data-yes={q.yes} hidden={i !== 0}>
           <legend><span class="qq">{q.q}</span></legend>
-          <p class="visually-hidden">Pertanyaan {i + 1} dari {qs.length}</p>
+          <p class="visually-hidden">Pertanyaan {i + 1} dari {total}</p>
           <div class="answers">
             <button class="btn" type="button" data-a="yes">Ya</button>
             <button class="btn ghost" type="button" data-a="no">Tidak</button>
@@ -26,23 +34,35 @@ const qs = site.contraindications;
           {i > 0 && <button class="link back" type="button" data-back>Kembali</button>}
         </fieldset>
       ))}
+      {needs.map((n, j) => (
+        <fieldset class="q" data-q={qs.length + j} data-label={n.label} hidden>
+          <legend><span class="qq">{n.q}</span></legend>
+          <p class="visually-hidden">Pertanyaan {qs.length + j + 1} dari {total}</p>
+          <div class="answers wrap">
+            {n.o.map((o) => <button class="btn ghost" type="button" data-a={o}>{o}</button>)}
+          </div>
+          <button class="link back" type="button" data-back>Kembali</button>
+        </fieldset>
+      ))}
       <div class="result" data-result="ok" hidden tabindex="-1">
         <h2>Kamu bisa mulai<span class="dot">.</span></h2>
         <p class="lead">Tidak ada yang menghalangi. Pilih program dan tanggal mulai.</p>
         <a class="btn" href="/reset-detox-5-hari">Pilih Reset 5 Hari</a>
+        <a class="btn ghost" data-wa target="_blank" rel="noopener" href={`https://wa.me/${site.whatsapp}`}><Icon name="chat" /> Kirim ringkasan ke admin</a>
         <a class="link" href="/program">Lihat semua program</a>
       </div>
       <div class="result" data-result="consult" hidden tabindex="-1">
         <h2>Tanya admin dulu.</h2>
         <p class="lead" data-notes>Ada kondisi yang perlu dibicarakan sebelum kamu mulai. Sering kali ada formula yang cocok.</p>
-        <a class="btn" target="_blank" rel="noopener" href={`https://wa.me/${site.whatsapp}?text=${encodeURIComponent('Halo Reset Detox, saya mau tanya dulu sebelum pesan. Hasil cek kecocokan saya: konsultasi dulu.')}`}><Icon name="chat" /> Tanya admin di WhatsApp</a>
+        <a class="btn" data-wa target="_blank" rel="noopener" href={`https://wa.me/${site.whatsapp}`}><Icon name="chat" /> Kirim ringkasan ke admin</a>
         <a class="link" href="/reset-detox-5-hari">Tetap lihat program</a>
       </div>
       <div class="result" data-result="no" hidden tabindex="-1">
         <h2>Untuk sekarang, jangan dulu.</h2>
         <p class="lead">Program reset tidak disarankan untuk kondisimu saat ini. Kalau kondisinya berubah, atau kamu ingin bertanya, admin kami siap menjelaskan.</p>
-        <a class="btn" target="_blank" rel="noopener" href={`https://wa.me/${site.whatsapp}?text=${encodeURIComponent('Halo Reset Detox, saya mau tanya soal kecocokan program.')}`}><Icon name="chat" /> Tanya admin</a>
+        <a class="btn" data-wa target="_blank" rel="noopener" href={`https://wa.me/${site.whatsapp}`}><Icon name="chat" /> Tanya admin</a>
       </div>
+      <p class="small fine" data-result-note hidden>Tombol WhatsApp membuka chat dengan ringkasan jawabanmu yang sudah tertulis. Kamu bisa mengubahnya sebelum dikirim.</p>
     </form>
   </section>
 </Base>
@@ -62,30 +82,49 @@ const qs = site.contraindications;
   .q legend { display: grid; gap: 12px; padding: 0; }
   .qq { font-size: clamp(1.5rem, 1rem + 1.6vw, 2.5rem); font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; }
   .answers { display: flex; gap: 8px; }
+  .answers.wrap { flex-wrap: wrap; }
   .answers .btn { min-width: 120px; }
   .back { background: none; border: 0; padding: 0; justify-self: start; cursor: pointer; }
   .result { display: grid; gap: 20px; justify-items: start; animation: q-in 420ms var(--ease-out); }
   .result h2 { font-size: clamp(2.25rem, 4vw, 3.5rem); }
+  .fine { color: var(--ink-soft); }
   @keyframes q-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
-  @media (max-width: 860px) { .quiz { grid-template-columns: 1fr; } }
+  @media (max-width: 860px) { .quiz { grid-template-columns: 1fr; } .answers .btn { flex: 1 1 100%; } }
 </style>
 
 <script>
   import site from '../data/site.json';
   const form = document.getElementById('quiz')!;
+  const safe = Number(form.dataset.safe);
   const qs = Array.from(form.querySelectorAll<HTMLElement>('[data-q]'));
   const prog = form.querySelector<HTMLProgressElement>('[data-progress]')!;
+  const note = form.querySelector<HTMLElement>('[data-result-note]')!;
   const answers: string[] = [];
   let i = 0;
-  function show(n: number) { qs.forEach((q, j) => (q.hidden = j !== n)); prog.value = n; qs[n]?.querySelector<HTMLElement>('[data-a="yes"]')?.focus(); }
+  function show(n: number) { qs.forEach((q, j) => (q.hidden = j !== n)); prog.value = n; qs[n]?.querySelector<HTMLElement>('.btn')?.focus(); }
+
+  // the message admin receives: result, what the person needs, and anything that needs a conversation first
+  function summary(res: string, flagged: string[]) {
+    const lines = ['Halo Reset Detox, ini ringkasan cek kecocokan saya:'];
+    lines.push(`- Hasil: ${res === 'ok' ? 'bisa mulai' : res === 'consult' ? 'perlu konsultasi dulu' : 'sebaiknya jangan dulu'}`);
+    qs.slice(safe).forEach((q, j) => lines.push(`- ${q.dataset.label}: ${answers[safe + j]}`));
+    if (flagged.length) lines.push(`- Perlu dibahas: ${flagged.join('; ')}`);
+    return lines.join('\n');
+  }
+
   function finish() {
     prog.value = qs.length; qs.forEach((q) => (q.hidden = true));
-    const res = answers.some((a, j) => a === 'yes' && qs[j].dataset.yes === 'no') ? 'no' : answers.some((a, j) => a === 'yes' && qs[j].dataset.yes === 'consult') ? 'consult' : 'ok';
+    const yes = answers.slice(0, safe).map((a, j) => a === 'yes' ? j : -1).filter((j) => j >= 0);
+    const res = yes.some((j) => qs[j].dataset.yes === 'no') ? 'no' : yes.some((j) => qs[j].dataset.yes === 'consult') ? 'consult' : 'ok';
+    const flagged = yes.map((j) => (site.contraindications[j] as any).q.replace(/\?$/, ''));
     if (res === 'consult') {
-      const notes = answers.map((a, j) => (a === 'yes' ? (site.contraindications[j] as any).note : '')).filter(Boolean);
+      const notes = yes.map((j) => (site.contraindications[j] as any).note).filter(Boolean);
       if (notes.length) form.querySelector('[data-notes]')!.textContent = 'Ada kondisi yang perlu dibicarakan sebelum kamu mulai. ' + notes.join(' ');
     }
     try { sessionStorage.setItem('rd_fit', res === 'no' ? 'no' : res); } catch {}
+    const href = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(summary(res, flagged))}`;
+    form.querySelectorAll<HTMLAnchorElement>('[data-wa]').forEach((a) => (a.href = href));
+    note.hidden = false;
     const el = form.querySelector<HTMLElement>(`[data-result="${res}"]`)!; el.hidden = false; el.focus();
   }
   form.addEventListener('click', (e) => {

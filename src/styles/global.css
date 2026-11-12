@@ -22,15 +22,16 @@
   --stone: #e9e9e6;
   --stone-deep: #d9d9d4;
   --paper: #ffffff;
+  /* the one accent: the full stop in the headlines and the cart count. Change it here, nowhere else. */
   --dot: #ec7050;
-  /* chapter fields: the label colours of the day's bottles */
-  --gw: #1f1d1a;
-  --gw-gold: #d8b062;
-  --tonic: #8e9a55;
-  --day: #e2804f;
-  --broth: #f2dc93;
-  --night: #242324;
-  --shot: #b48ac9;
+  /* chapter fields: black, greys, ivory and cream only (client direction: no green, cream at most).
+     The names stay from the label colours they replaced, so every page keeps working. */
+  --gw: #1f1d1a;       /* black */
+  --night: #2b2a28;    /* charcoal */
+  --tonic: #d6d3cc;    /* warm grey */
+  --shot: #c5c2bb;     /* stone grey */
+  --broth: #f4f0e7;    /* ivory */
+  --day: #ece4d3;      /* cream, the warmest it goes */
 
   --f: "Archivo", "Helvetica Neue", Arial, sans-serif;
   --s-sm: 0.875rem;          /* 14 */
@@ -103,7 +104,7 @@ p { margin: 0; max-width: 62ch; text-wrap: pretty; }
 .toast.dragging { transition: none; }
 .toast img { width: 88px; height: 88px; object-fit: cover; background: var(--stone); }
 .toast .t-ok { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 1.125rem; }
-.toast .t-ok .ico { width: 22px; height: 22px; padding: 3px; background: var(--tonic); color: var(--ink); border-radius: 999px; }
+.toast .t-ok .ico { width: 22px; height: 22px; padding: 3px; background: var(--ink); color: var(--paper); }
 .toast .t-name { font-weight: 600; margin-top: 4px; }
 .toast .t-meta { color: var(--ink-soft); font-size: 0.9375rem; }
 .toast .t-acts { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
@@ -176,6 +177,8 @@ p { margin: 0; max-width: 62ch; text-wrap: pretty; }
 /* the other links step back a little while one is pointed at */
 @media (hover: hover) { .site-header nav:hover a:not(:hover) { opacity: 0.55; } }
 .h-acts { justify-self: end; display: flex; align-items: center; gap: 8px; margin-right: -10px; }
+.h-wa { min-height: 44px; padding: 0 16px; margin-right: 8px; font-size: 0.9375rem; white-space: nowrap; }
+@media (max-width: 1099px) { .h-wa { display: none; } }
 .h-icon {
   position: relative; display: inline-grid; place-items: center; width: 48px; height: 48px; padding: 0;
   background: none; border: 0; color: inherit; cursor: pointer; transition: transform 160ms var(--ease-out);
@@ -244,6 +247,7 @@ p { margin: 0; max-width: 62ch; text-wrap: pretty; }
 .menu-dialog::backdrop { background: transparent; }
 .menu-dialog nav { display: grid; gap: 4px; padding: 88px var(--m) 32px; }
 .menu-dialog nav a { font-size: clamp(2.25rem, 10vw, 3.5rem); font-weight: 700; font-stretch: 115%; letter-spacing: -0.03em; text-decoration: none; line-height: 1.1; }
+.menu-dialog nav a.btn { font-size: 1rem; font-stretch: 100%; letter-spacing: 0; line-height: 1.2; font-weight: 600; }
 .menu-dialog .close { position: absolute; top: 12px; right: var(--m); }
 
 /* cart drawer */
